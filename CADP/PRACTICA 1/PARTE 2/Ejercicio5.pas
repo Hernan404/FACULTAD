@@ -5,7 +5,7 @@ var
 	num,min,max,suma:integer;
 
 begin
-	max:= -9999;
+	max:= -1;
 	min:= 9999;
 	suma:= 0;
 
@@ -15,16 +15,16 @@ begin
 		suma:= suma+num;
 		
 		if (num > max) then
-			max:= max+num;
+			max:= num;
 		if (num < min) then
-			min:= min+num;
+			min:= num;
 		
 	
 	until num = 100;
 
-	writeln('el maximo es ' max);
-	writeln('el minimo es ' min);
-	writeln('la suma total es ' suma);
+	writeln('el maximo es ', max);
+	writeln('el minimo es ', min);
+	writeln('la suma total es ', suma);
 	
 
-end
+end.
