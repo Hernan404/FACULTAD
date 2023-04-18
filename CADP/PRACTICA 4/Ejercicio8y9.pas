@@ -15,9 +15,10 @@ vector = array [1..dimf] of informacion;
 
 procedure leer (var v:vector; var c:informacion);
 begin
-	writeln('numero');
+    writeln('numero');
     readln(c.num);
     writeln('DNI');
+    while (c.DNI <> -1) do begin
     readln(c.DNI);
     writeln('apellido');
     readln(c.apellido);
@@ -25,6 +26,7 @@ begin
     readln(c.nombre);
     writeln('anio');
     readln(c.anio);
+    end;
 end;
 
 procedure pares (var v:vector; var c:informacion; var DNIpares:integer; var dig:integer);
