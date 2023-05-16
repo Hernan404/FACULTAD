@@ -1,0 +1,15 @@
+1) ¿Qué se define como memoria estática?
+memoria estatica es el valor de la variable puntero
+
+2) ¿Qué se define como memoria dinámica?
+memoria dinamica es el valor de a donde apunta la variable puntero
+
+3) ¿Qué es una variable de tipo puntero?
+una variable que apunta a una memoria, un dato que apunta a otro dato
+
+4) ¿Qué hace la operación “NEW” aplicada en una variable del tipo puntero?
+reserva el espacio en la memoria para ingresar datos dinamicos
+
+
+5) ¿Qué hace la operación “DISPOSE” aplicada en una variable del tipo puntero?
+libera el espacio en la memoria, si es en el dinamico borra el dato, si libera el estatico el dinamico queda inaccesible
