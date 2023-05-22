@@ -1,4 +1,7 @@
-pri = el puntero que se dispone
+pri = el puntero a la lista que se dispone
+
+
+
 
 type 
     
