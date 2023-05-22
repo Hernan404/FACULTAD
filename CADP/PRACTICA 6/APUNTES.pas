@@ -1,3 +1,5 @@
+pri = el puntero que se dispone
+
 type 
     
     lista = ^nodo;
