@@ -1,3 +1,111 @@
+------------------------------------------
+VECTOR CON DIML 
+program EJ3P4;
+
+const 
+    dimf = 5;
+type 
+	rango = 1..dimf;
+	
+    vector = array [rango] of integer;
+
+procedure cargar (v:vector; diml:integer);
+var 
+	n:integer;
+begin 
+	diml:= 0;
+	read(n);
+	while (diml < dimf) do begin
+		diml:= diml +1;
+		read(n);
+		v[diml]:= n;
+	end;
+	
+end;
+
+
+procedure procesar (var v:vector; var diml:integer);
+var 
+	i:rango;
+begin 
+	for i:= 1 to dimf do begin 
+		writeln(v[i]);
+	end;
+end;
+
+
+var 
+	v:vector;
+	diml:integer;
+	
+begin 
+
+		cargar(v,diml);
+		procesar(v,diml);
+
+end.
+
+
+---------------------------------------------------------------
+VECTOR SIN DIML
+
+program EJ3P4;
+
+const 
+    dimf = 5;
+type 
+	rango = 1..dimf;
+	
+    vector = array [rango] of integer;
+
+
+procedure cargar (var v:vector); {CARGO LOS DATOS}
+var 
+	i:rango;
+begin 
+		for i:=1 to dimf do begin 
+			readln(v[i]);
+		end;
+end;
+
+
+procedure procesar (var v:vector);  {HAGO LA CUENTA QUE TENGA QUE HACER EN EL VECTOR}
+var 
+	i:rango;
+begin 
+	for i:= 1 to dimf do begin 
+		writeln(v[i]);
+	end;
+end;
+
+
+var 
+	v:vector;
+	
+begin 
+
+		cargar(v);
+		procesar(v);
+
+end.
+
+--------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 HACER 2 MINIMOS 
 
 if (num < min1) then begin
