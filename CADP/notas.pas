@@ -28,9 +28,11 @@ procedure procesar (var v:vector; var diml:integer);
 var 
 	i:rango;
 begin 
-	for i:= 1 to dimf do begin 
-		writeln(v[i]);
-	end;
+	i:= 1;
+	while (i <= diml) do begin
+		if (v[i] > 50) then 
+			writeln('el numero en la posicion' i ' es '50');
+	i:= i+1;
 end;
 
 
