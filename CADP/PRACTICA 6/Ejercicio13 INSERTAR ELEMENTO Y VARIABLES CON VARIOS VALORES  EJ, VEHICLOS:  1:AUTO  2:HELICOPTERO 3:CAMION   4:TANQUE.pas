@@ -1,3 +1,14 @@
+ej13
+3600 usuarios
+email,
+rol 1 a 4, 
+revista en la que participa
+cant de dias desde ultimo acceso
+
+1. imprimir nombre y cantiad de dias de todos los de revista economia
+2. informar cantiada de usuarios por cada rol para todas las revistas
+3.informar los email de los dos usuarios que hace mas tiempo no ingresan
+
 program EJ13P6;
 
 program Ejercico11;
