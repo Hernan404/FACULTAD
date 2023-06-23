@@ -12,24 +12,24 @@ program EJadicional;
 type 
     empleado = record 
         codigo: 1..2000;
-        pais: 1..25;
+        pais: string;
         antiguedad:integer;
         sueldo:1..25;
     end;
     vector = array [1..2000] of integer;
+    vector3 = array [1..25] of integer;
     vector2 = array [1..25] of string;
-    vector3 = array [1..25] of real;
 
-procedure InicializarVector (v:vector; v2:vector2; v3:vector3);
+procedure InicializarVector (var v2:vector2; var v:vector; var v3:vector3);
 var 
-    i,f:integer;
+    i,f,b:integer;
 begin 
     for i:=1 to 2000 do begin 
         v[i]:= 0;
     end;
-
-   
-
+	for b:=1 to 25 do begin 
+		v2[b]:= '';
+	end;
     for f:= 1 to 25 do begin 
         v3[f]:= 0;
     end;
@@ -44,25 +44,35 @@ begin
     end;
 end;
 
-procedure leer (d:empleado; var v3:vector3);
+procedure cargarPais (var v2:vector2; var d:empleado);
+var 
+	b:integer;
+begin 
+	for b:=1 to 25 do begin 
+		v2[b]:= d.pais;
+	end;
+end;
+procedure leer (var v2:vector2; d:empleado; var v3:vector3);
 begin 
     with d do begin 
-        readln(codigo);
+        writeln('pais');
         readln(pais);
+        writeln('antiguedad');
         readln(antiguedad);
+        writeln('sueldo');
         readln(sueldo);
-        cargarSueldo(v3,d);
+        
     end;
 end;
 
-procedure paismayor (var d:empleado; var v:vector; var max:integer; mayor_cantidad:integer);
+procedure paismayor (var d:empleado; var v3:vector3; var max:integer; mayor_cantidad:string);
 var 
-	i:integer;
+	b:integer;
 begin 
-    for i:=1 to 25 do begin 
-        if (v[i] > max) then
-            max:= v[i];
-            mayor_cantidad:= d.pais
+    for b:=1 to 25 do begin 
+        if (v3[b] > max) then
+            max:= v3[b];
+            mayor_cantidad:= d.pais;
     end;
 end;
 
@@ -80,20 +90,23 @@ begin
    
     for i:=1 to 2000 do begin
         for f:= 1 to 25 do begin  
-            if (v[i] > v3[sueldo]) then 
-                v3[sueldo]:= v[i];
-            
-        end;
+            if (v[i] > v3[f]) then 
+                v3[f]:= v[i];
+            end;
     end;
-end; 
-
-procedure procesarDatos (var d:empleado; var max:integer; var mejorsueldo:integer; var maxSueldo:integer);
+end;
+procedure procesarDatos (var v2:vector2; var v:vector; var v3:vector3; var d:empleado; var max:integer; var mejorsueldo:integer; var maxSueldo:integer; var mayor_cantidad:string);
 begin 
+	InicializarVector(v2,v,v3);
     repeat
-        leer(d);
-        paismayor(d,max);
+		writeln('codigo');
+		readln(d.codigo);
+        leer(v2,d,v3);
+        cargarSueldo(v3,d);
+        cargarPais(v2,d);
+        paismayor(d,v3,max,mayor_cantidad);
         empleadoscant(d,mejorsueldo);
-        empleadoMejorP(d,maxSueldo);    
+        empleadoMejorP(v,v3,d,maxSueldo);    
     until (d.codigo = 1);
 end;
 
@@ -101,19 +114,21 @@ var
     maxSueldo:integer;
     d:empleado;
     v:vector;
+    v2:vector2;
+    v3:vector3;
     max:integer;
-    masTiempo:integer;
     mejorsueldo:integer;
-    codigoMejor:integer;
-    mayor_cantidad:integer;
+    mayor_cantidad:string;
+    {f:integer;}
 begin 
+	mayor_cantidad:= '';
     maxSueldo:= -1;
     mejorsueldo:= 0;
     max:= -1;
-    InicializarVector(v,v2);
-    procesarDatos(d,max,mejorsueldo,maxSueldo);
+    procesarDatos(v2,v,v3,d,max,mejorsueldo,maxSueldo,mayor_cantidad);
 
-    writeln('pais con mayor cantidad de empleados ', mayor_cantidad);
-    writeln('cantidad de empleados de mas de 10 años con sueldo de 1500: ', mejorsueldo);
-    writeln('codigos de los empleados que cobran mejor sueldo' v3[sueldo]);
-end;
+    writeln('pais con mayor cantidad de empleados: ', mayor_cantidad);
+    writeln('cantidad de empleados de mas de 10 anios con sueldo de 1500: ', mejorsueldo);
+    {writeln('codigos de los empleados que cobran mejor sueldo: ', v3[f]);}
+    
+end.
