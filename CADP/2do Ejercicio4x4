@@ -1,0 +1,118 @@
+program EJ4X42;
+type
+    empleado = record
+        codigo:1..1200;
+        codigoPais:1..25;
+        antiguedad:integer;
+        sueldo:real;
+    end;
+vector = array [1..1200] of integer;
+vector2 = array [1..25] of integer;
+
+procedure iniVectores (var v:vector; var v2:vector2);
+var 
+    i,p:integer;
+begin 
+    for i:=1 to 1200 do  
+        v[i]:= 0;
+    
+    for p:=1 to 25 do  
+        v[p]:= 0;
+end;
+
+procedure leer (var d:empleado);
+begin 
+	with d do begin 
+		writeln('codigo');
+		readln(codigo);
+		writeln('condigoPais');
+		readln(codigoPais);
+		writeln('antiguedad');
+		readln(antiguedad);
+		writeln('sueldo');
+		readln(sueldo);
+	end;
+end;
+
+procedure cargarVector(var d:empleado; var v:vector; var v2:vector2);
+var 
+    i,p:integer;
+begin 
+    for i:=1 to 1200 do begin 
+        v[i]:= v[i] + d.codigo;
+    end;
+    for p:= 1 to 25 do begin 
+        v[p]:= v[p] + d.codigoPais;
+    end;
+end;
+
+procedure paismayor (var d:empleado; var max:integer; var cantEmpleados:integer; var puntoA:integer; var v:vector; var v2:vector2);
+var 
+    i:integer;
+begin 
+    for i:=1 to 25 do begin 
+        if (cantEmpleados > max) then begin 
+            max:= cantEmpleados;
+            puntoA:= v2[i];
+        end;
+    end;
+end;
+
+procedure puntoB (var d:empleado; var cantEmpleadosB:integer);
+begin 
+    if (d.antiguedad > 10) and (d.sueldo < 1500) then begin 
+        cantEmpleadosB:= cantEmpleadosB +1;
+    end;
+end;    
+
+procedure puntoC (var d:empleado; var maxsueldo:real; var v:vector; var v2:vector2; var mejorSueldo:integer);
+var 
+    i,p:integer;
+begin 
+    for i:=1 to 25 do begin
+        for p:= 1 to 1200 do   
+            if (v[i] > maxsueldo) then
+                mejorSueldo:= v[p];  
+    end;
+end;
+
+procedure procesarDatos (var mejorSueldo:integer; var d:empleado; var v:vector; var v2:vector2; var max:integer; var maxsueldo:real; var cantEmpleados:integer; cantEmpleadosB:integer; var puntoA:integer);
+var 
+	pais_actual:integer;
+begin
+	pais_actual:= d.codigoPais;
+	IniVectores(v,v2);
+    while (d.codigo <> 0) and (pais_actual = d.codigoPais) do begin 
+    leer(d);
+    cargarVector(d,v,v2);
+    paismayor(d,max,cantEmpleados,puntoA,v,v2);
+    puntoB(d,cantEmpleadosB);
+    puntoC(d,maxsueldo,v,v2,mejorSueldo);
+    end;
+
+	writeln(puntoA);
+    writeln(cantEmpleadosB);
+    writeln(mejorSueldo);
+    
+end;
+var 
+    v:vector;
+    v2:vector2;
+    d:empleado;
+    puntoA:integer;
+    cantEmpleados:integer;
+    cantEmpleadosB:integer;
+    max:integer;
+    maxsueldo:real;
+    mejorSueldo:integer;
+begin 
+    max:= -1;
+    maxsueldo:= -1;
+    cantEmpleados:= 0;
+    cantEmpleadosB:= 0;
+    iniVectores(v,v2);
+    procesarDatos(mejorSueldo,d,v,v2,max,maxsueldo,cantEmpleados,cantEmpleadosB,puntoA);
+    
+    
+	
+end.
