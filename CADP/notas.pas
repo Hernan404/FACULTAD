@@ -1,20 +1,15 @@
-SACAR DIGITOS PARA SABER SI SON PARES 
-procedure subru (numerosF:longint;   var sumapar,cantimpar:integer );
-var
+SACAR DIGITOS PARES IMPARES
+procedure par (num:longint; var par,impar:integer);
+var 
     digitos:integer;
-    
-begin
-    while (numerosF <> 123456) do begin
-		
-        digitos:= numerosF mod 10;
-
+begin 
+    digitos:= DNI mod 10;
         if (digitos div 2 = 0) then 
-            sumapar:= sumapar + digitos
-        else
-            cantimpar:= cantimpar +1;
-            
-        numerosF:= numerosF DIV 10
-    end;
+            par:= digitos;
+        else 
+            impar:= impar +1;
+        
+    DNI:= DNI DIV 10;
 end;
 --------------------------------------------------------
 
