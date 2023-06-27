@@ -1,70 +1,34 @@
-program esj;
+
+program parcial;
 type 
-    codigo_avion = 1000..2500;
-    anio_viaje = 2015..2020;
-
-    viaje = record 
-        codigo:codigo_avion;
-        anio:anio_viaje;
-        cant_pasajeros:integer;
-        ciudad_destino:string;
-    end;
-    
-    lista = ^nodo; 
-    nodo = record 
-        datos:viaje;
-        sig:lista;
+    viajes = record 
+        codigo:integer;
+        num_coche:1..2500;
+        mes:1..12;
+        cantPasajes:integer;
+        dni:integer;
     end;
 
-    vector = array [codigo_avion] of integer;
-    vector2 = array [anio_viaje] of integer;
+    lista = ^nodo;
+    nodo = record;
+        datos:lista;
+    end;
 
-procedure leer (d:viajes);
+    vector = array [1..2500] of integer;
+    vectorMes = array [1..12] of integer;
+
+procedure masviajes ();
 begin 
-    writeln('codigo');
-    readln(codigo);
-    writeln('anio');
-    readln(anio);
-    writeln('cantidad de pasajeros');
-    readln(cant_pasajeros);
-    writeln('ciudad de destno');
-    readln(ciudad_destino);
-end;
+    for i:= 1 to 1200 do begin
+        if (cantviajes > max) then 
+            max:= cantviajes;
+            puntoA := v[i];
+    end;
+end; 
 
-procedure cargarVector(v:vector; v2:vector2);
+procedure listaviaje ();
 var 
-    i:integer;
-begin 
-    for i:=1000 to 2500 do begin 
-        v[i]:= d.codigo;
-    end;
-
-    for i:=2015 to 2020 do begin 
-        v2[i]:= d.anio;
-    end;
-end;
-
-procedure inicializar_vector(v:vector; v2:vector2);
-var 
-    i:integer;
-begin 
-    for i:=1 to 2500 do begin 
-        v[i]:= 0;
-    end;
-
-    for i:= 2015 to 2020 do begin 
-        v[i]:= 0;
-    end;
-end;
-
-procedure masviajes (var v:vector; var max:integer; var d:viaje; var cantViajes:integer);
-begin 
-    if (cantViajes > max) then 
-        mas_viajes:=v[i];
-        max:=cantViajes;
-end;
-
-procedure listaA(var L:lista; d:viajes);
+    aux:lista;
 begin 
     new(aux);
     aux^.datos:= d;
@@ -72,40 +36,41 @@ begin
     L:= sig;
 end;
 
-procedure lista (var v2:vector2; d:viajes; L:lista);
-var 
-    i:integer;
+function cumple (d:viaje; v:vector):boolean;
 begin 
-    for i:= 2015 to 2020 do begin 
-    if (v2[i] * 10 / 2 = 0) then  
-        listaA(L,d);
-    end;
+    cumple:=  (d.dni mod 10 = 0) and (d.mes = 2) and (d.cantPasajes < v[cod_coche]);
 end;
 
-procedure procesarDatos (var v:vector; var max:integer; var d:viaje; var L:lista );
+
+procedure procesarDatos ();
 begin 
-    inicializar_vector(v,v2); 
-    while (L <> 0) do begin 
-        leer(d);
-        cargarVector(v,v2);
-        masviajes(max,d,cantViajes); 
-        listaA(L,d);
-        lista(v2,d,L);
+    inivector();
+    while (L <> nil) do begin 
+        leer();
+        masviajes();
+        cumple();
+        if (cumple = true) then 
+            listaviaje();
+        end;
     end;
+
+    writeln('puntoA', puntoA);
+    writeln('promedio: ', promeido);
+end;
+
+function promedios (v:vector);
+begin 
+    promedio := cantviajes/cantPasajes;
+else 
+    promedio := 0;
 end;
 
 var 
-    v2:vector2
     v:vector;
-    d:viajes;
+    v:vectorMes;
     L:lista;
-    cantViajes:integer;
-
+    d:viajes;
 begin 
     L:= nil;
-    cantViajes:= 0;
-    max:= -1;
-
-    writeln('codigo con mayor cantidad de viajes', mas_viajes);
-    writeln('promedio ', cant_pasajeros/cantViajes);
+    procesarDatos(v,d,cantviajes)
 end.
