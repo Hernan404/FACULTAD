@@ -59,6 +59,8 @@ begin
             par:= digitos;
         else 
             impar:= impar +1;
+    if (par > impar) then 
+        writeln('nombre con mas pares' apellidoYnombre);
         
     DNI:= DNI DIV 10;
 end;
