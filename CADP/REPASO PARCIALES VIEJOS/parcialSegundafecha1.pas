@@ -27,7 +27,29 @@ type
     end;
 
     vector = array [4..10] of integer;
-    vpresente = array [1..12] of boolean;
+    vpresente = array [1..12] of integer;
+
+procedure inivector(v:vector; vp:vpresente);
+var 
+    i:integer;
+begin 
+    for i:=1 to 4 do begin 
+        v[i]:= 0;
+    end;
+    for i:=1 to 12 do begin 
+        vp[i] := 0;
+    end;
+end;
+
+procedure cargarLista (L:lista; d:alumnos);
+begin 
+    leer(d);
+    while (d.DNI <> 0) do begin 
+        leer(d);
+        armarnodo(d,L);
+    end;
+
+end;
 
 procedure listaAlumnos (L:lista; d:alumnos);
 var 
@@ -37,6 +59,21 @@ begin
     aux^.datos:= d;
     aux^.sig:= L;
     L:= sig;
+end;
+
+procedure cargarvector (v,vc:integer;);
+var 
+    i:integer;
+begin 
+    for i:=1 to 4 do begin 
+        v[i]:= d.nota;
+        vc[i]:= d.turno;
+    end;
+
+    if (d.presente = 'presente') then begin 
+        for i:=1 to 12 do 
+        vp[i]:= v[i] +1;
+
 end;
 
 procedure puntoA(vp:vpresente; L:lista; d:alumnos);
@@ -49,7 +86,7 @@ begin
     end;
 end;
 
-procedure puntoB(L:lista);
+procedure puntoB(var L:lista);
 begin 
     while (L <> nil) do begin 
         writeln(L^.datos);
@@ -57,7 +94,7 @@ begin
     end;
 end;
 
-procedure punto1 (d:alumnos);
+procedure punto1 (d:alumnos; var nombre_cumple1:integer; var dni_cumple:integer;);
 begin 
     if (d.nota >= 8) then begin 
         nombre_cumple1:= d.nombreYapellido;
@@ -65,7 +102,7 @@ begin
     end;
 end;
 
-procedure punto2 (v:vector);
+procedure punto2 (vc:vector; v:vector; L:lista; cumple2:integer);
 begin 
     for i:=1 to 4 do begin 
         if (v[i] = L^.datos.turno)
@@ -91,29 +128,37 @@ end;
 
 procedure procesarDatos (L:lista);
 var 
-    max:integer;
-    cumpleA:
-    cumpleB:
-    cumple1:
-    cumple2:
-    cumple3:
-begin 
+    d:alumnos;
+    v:vector;
+    vc:vector;
+    L:lista;
 
-    inivector();
+    max:integer;
+    nombre_cumple1:string;
+    dni_cumple:integer;
+
+    cumple2:integer;
+    cumple3:integer;
+begin 
+    cumple2:= 0;
+    cumple3:= 0;
+    max:= -1;
+    inivector(v);
     while (L <> nil) do begin 
     cantAlumnos:= cantAlumnos +1;
     
-    puntoA();
-    puntoB();
+    puntoA(vp,L,d);
+    puntoB(L);
 
     L:=L^.sig;
-    punto1();
-    punto2();
-    punto3();
+    punto1(d,nombre_cumple1,dni_cumple);
+    punto2(vc,v,L,cumple2);
+    punto3(cumple3,d);
     end;
-    {writes}
-    {writes}
-    {writes}
+    
+    writeln('punto 1 ', nombre_cumple1 , dni_cumple)
+    writeln('punto 2 ', cumple2);
+    writeln('punto 3 ', cumple3);
 end;
 
 var 
