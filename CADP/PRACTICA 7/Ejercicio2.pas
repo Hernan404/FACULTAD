@@ -1,140 +1,146 @@
 program EJ2P7;
+type
+    cliente = record 
+    codigo:integer;
+    DNI:integer;
+    apellidoYnombre:string;
+    codigoPoliza:1..6;
+    montoBasico:real;
+    end;
 
-type 
-	data = record 
-		DNI:integer;
-		APELLIDO:string;
-		NOMBRE:string;
-		CODIGO:integer;
-		MONTO:real;
-	end;
+    lista = ^nodo; 
+    nodo = record 
+        datos:cliente;
+        sig:lista;
+    end;
 
-	lista = ^nodo
-	nodo = record 
-		D:data;
-		sig:lista;
-	end;
+    vector = array [1..6] of integer;
 
-vector = array [1..7] of CODIGO;
- 
+procedure leer (var d:cliente);
+begin 
+    with d do begin 
+		writeln('codigo');
+        readln(codigo);
+        writeln('DNI');
+        readln(DNI);
+        writeln('apellido y nombre');
+        readln(apellidoYnombre);
+        writeln('codigo poliza');
+        readln(codigoPoliza);
+        writeln('monto basico');
+        readln(montoBasico);
+    end;
+end;
 
-procedure iniVector (var v:vector);
+procedure armarlista (L:lista; d:cliente);
 var 
-	i:integer;
+    aux:lista;
 begin 
-	for i:=1 to 7 do begin 
-		v[i]:= 0;
-	end;
+    new(aux);
+    aux^.datos:= d;
+    aux^.sig:= L;
+    L:= aux;
 end;
 
-procedure leer(D:data);
-begin 
-	with D do begin 
-		readln(DNI);
-		readln(APELLIDO);
-		readln(NOMBRE);
-		readln(CODIGO);
-		readln(MONTO);
-		
-	end;
-end;
-
-procedure agregarfinal (var pri:lista; D:data);
+procedure inivector (var v:vector);
 var 
-	act, nue:lista;
+    i:integer;
 begin 
-	new(nue);
-	nue^.dato:= D;
-	nue^.sig:= nil;
-	if pri <> nil begin 
-		act:= pri;
-		while (act^.sig <> NIL) do 
-			act := act^.sig;
-		act^.sig := nue;
-	end;
-	else 
-		pri:= nue;
-end;
+    for i:=1 to 6 do begin 
+        v[i]:= 0;
+    end;
+end; 
+
+procedure cargarLista (var L:lista; var  d:cliente);
+begin 
+    repeat  
+        leer(d);
+        armarlista(L,d);
+    until (d.codigo = 1122)
 end;
 
-procedure informar (L:lista; var maximo,minimo:integer);
+procedure puntoA (var d:cliente; var montoAD:real);
 begin 
-	while (L <> nil) do begin 
-		writeln(L^.D.DNI);
-		writeln(L^.D.APELLIDO);
-		writeln(L^.D.NOMBRE);
-		L.^.D.MONTO:= randomRange(minimo,maximo + D.MONTO);
-		writeln(L^.D.MONTO);	
-		L:= L^.sig;
-	end;
+    writeln('Estos son sus datos');
+    writeln('DNI: ', d.DNI);
+    writeln('Apellido y nombre', d.apellidoYnombre);
+    writeln('Monto completo que paga mensual: ', d.montoBasico + montoAD);
 end;
 
-procedure digito(var L:lista);
+procedure puntoB (var d:cliente; var nomcumple:string);
 var 
-	dig:integer;
-	contNueve:integer;
-	cumple:boolean;
+    cant9,digitos:integer;
 begin 
-	cumple:= false;
-	contNueve:= 0;
+    cant9:= 0;
+    digitos:= 0;
 
-	while (L^datos.dni <> 0) and (cumple <> true) do begin 
-		dig:= ^.datos.DNI mod 10;
-		if (dig = 9) then begin 
-			contNueve:= contNueve +1;
-		end;
-		if (contNueve = 2) then begin 
-			cumple:= true;
-		end;
-		dig:= dig div 10;
-	end;
+    digitos := d.DNI mod 10;
+    
+    if (digitos = 9) then begin 
+        cant9:= +1;
+    end;
+
+    d.DNI:= d.DNI div 10;
+
+    if (cant9 > 2) then 
+    nomcumple:= d.apellidoYnombre;
 end;
 
-procedure eliminar(var L:lista; CODIGO:integer; var exito:boolean);
+procedure eliminar (var L:lista; d:cliente; var exito:boolean);
 var 
-	ant, act:lista;
+    ant,act:lista;
 begin 
-	exito:= false;
-	act:= L;
-	while (act <> nil) and (act^.D.CODIGO<> CODIGO) do begin 
-		ant:=act;
-		act:= act^.sig;
-	end;
+    exito:= false;
+    act:= L;
 
-	exito:= true;
-	if (act = L) then begin 
-		L:= act^.sig;
-	end;
-else 
-	begin 
-		ant^.sig:= act^.sig;
-	end;
-	dispose(act);
+    while (act <> nil) and (L^.datos.codigo <> d.codigo) do begin 
+        ant:= act;
+        act:= act^.sig;
+    end;
+
+    if (act <> nil) then begin 
+        exito := true;
+        if (act = L) then 
+            L:= act^.sig
+           
+        else 
+            ant^.sig:= act^.sig;
+        dispose (act);
+    end;
 end;
 
-procedure cargar (var L:lista; var D:data; var v:vector;)
+procedure procesarDatos (L:lista);
+var 
+	exito:boolean;
+	d:cliente;
+    v:vector;
+    montoAD:real;
+    nomcumple:string;
+    dnidel:integer;
 begin 
-	repeat 
-		leer(D);
-		agregarfinal(L,D);
-	until CODIGO = 1122
-	informar(L:lista; D:data);
-	digito(D:data);
+	montoAD:= 0;
+	nomcumple:= '';
+    inivector(v);
+    while (L <> nil) do begin
+        puntoA(d,montoAD);
+        puntoB(d,nomcumple);
+        
+    end;
+
+     writeln('nombre de los que tienen al menos 2 digitos 9', nomcumple);
+   
+    writeln('ingrese dni a borrar');
+    readln(dnidel);
+    if (dnidel <> 0) then begin 
+        eliminar(L,d,exito);
+    end;
+   
 end;
 
 var 
-	L:lista;
-	D:data;
-	v:vector;
-	maximo,minimo:integer;
-begin
-	minimo:=100;
-	maximo:=900;
-
-	L:= nil;
-	iniVector(v);
-	cargar(L,D,v);
-	eliminar(L,CODIGO,exito)
-	writeln('punto A) ', );
-	writeln('punto B) ', );
-end;
+	d:cliente;
+    L:lista;
+begin 
+    cargarLista(L,d);
+    procesarDatos(L);
+end.
