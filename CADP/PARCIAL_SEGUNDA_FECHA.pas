@@ -21,7 +21,7 @@ type
 procedure inivector (var v:vector);
 var 
     i:integer;
-begin 
+begin
     for i:=1 to 5 do begin 
         v[i]:= 0;
     end;
@@ -30,6 +30,27 @@ end;
 procedure armarnodo();
 procedure leer();
 procedure cargarLista();
+
+function paresimpares (num:integer):boolean;
+var 
+    pares,impares, digito:integer;
+begin 
+    pares:= 0;
+    impares:= 0;
+    while (num <> 0) do begin 
+        digito:= (num mod 10);
+        if (digito mod 2 = 0) then 
+            pares := pares +1
+        else 
+            impares := impares +1;
+        num:= num div 10;
+    end;
+    paresimpares:= (pares = impares);
+end;
+procedure cumple (s:sesion):boolean;
+begin 
+    cumple:= (s.genero = 2) and (paresImpares(s.visualizaciones));
+end;
 
 procedure maximos (v:vector; var cod1,cod2:rangoGenero);
 var 
