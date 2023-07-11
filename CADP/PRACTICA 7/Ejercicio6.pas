@@ -20,117 +20,164 @@ información:
 impares
 
 
-procedure EJ6P7;
+program EJ6P7;
 type 
+    rangoCategoria = 1..7;
     objetos = record 
         codigo:integer;
-        categoria:1..7;
-        nombre:string;
+        categoria:rangoCategoria;
+        nombre_planeta:string;
         distancia:integer;
-        nombreDescubri:string;
-        anioDescubri:integer;
+        nombre_descubridor:string;
+        aniodesc:integer;
     end;
 
-    lista = nodo 
+    vector = array [rangoCategoria] of integer;
+
+    lista = ^nodo;
     nodo = record 
         datos:objetos;
+        sig:lista;
     end;
 
-    vCategoria = array [1..7] of integer;
+procedure leer(var o:objetos);
+begin 
+    with o do begin 
+    readln(codigo);
+    readln(categoria);
+    readln(nombre_planeta);
+    readln(distancia);
+    readln(nombre_descubridor);
+    readln(aniodesc);
+    end;
+end;
 
-
-procedure iniVector(v:vector);
+procedure armarnodo (var pri:lista; o:objetos);
 var 
-    i:integer;
+    act,aux:lista;
+begin 
+    new(aux);
+    aux^.datos:= o;
+    aux^.sig:= nil;
+    if (pri <> nil) then begin 
+        act:= pri;
+        while (act^.sig <> nil) do 
+            act := act^.sig;
+        act^.sig := aux;
+    end
+    else 
+        pri:= aux;
+end;
+
+procedure inivector (var v,vc:vector);
+var
+    i:rangoCategoria;
 begin 
     for i:=1 to 7 do begin 
         v[i]:= 0;
     end;
 end;
 
-procedure leer ();
-
-procedure cargarVector();
-begin 
-    for i:=1 to 7 do begin 
-        v[i]:= L^.datos.categoria;
-    end;
-end;    
-procedure cargarLista (d:objetos);
-begin 
-    leer();
-    while (d.codigo <> -1) do begin 
-        armarnodo();
-        leer();
-    end;
-end;
-
-procedure punto1 (var cumpleA:integer; var max:integer; d:objetos);
-begin 
-    if (d.distancia > max) then begin
-        max:= d.distancia;
-        cumpleA:= d.codigo;
-    end;
-end;
-
-procedure punto2 (L:lista; d:objetos; var planetas:integer);
+procedure cargarlista (L:lista);
 var 
-    i:integer;
+    o:objetos;
 begin 
-        if (L^.datos.nombreDescubri = 'galileo galilei') and (L^.datos.anioDescubri < 1600) then begin 
-            planetas := planetas +1;  
-        end;
-end; 
-
-procedure punto3 (L:lista; cate:integer);
-var 
-    i:integer;
-begin 
-    cate:= L^.datos.categoria;
-        v[cate]:= v[cate]+1
+    leer(o);
+    while (o.codigo <> -1) do begin 
+        leer(o);
+        armarnodo(L,o);
+    end;
 end;
 
-procedure punto4 (L:lista; d:objetos);
+procedure punto1 (var o:objetos; var cumplemax2,cumplemax1:integer; var max1,max2:integer);
+begin 
+    if (o.distancia > max1) then begin 
+        max2:= max1;
+        cumplemax2:= cumplemax1;
+        cumplemax1:= o.codigo;
+        max1:= o.distancia;
+    end
+        else if (o.distancia > max2) then begin 
+                    max2:= o.distancia;
+                    cumplemax1:= o.codigo;
+        end;           
+end;
+
+
+function cumple2 (o:objetos):boolean;
+begin 
+    cumple2:= (o.nombre_descubridor = 'galileo galilei') and (o.aniodesc < 1600);
+end;
+
+function punto4 (var o:objetos):boolean;
 var 
     digitos,par,impar:integer;
 begin 
     par:= 0;
     impar:= 0;
-    digitos:= 0;
 
-    digitos:= L^.datos.codigo mod 10
+    digitos:= o.codigo mod 10;
 
-    if (digitos mod 2 = 0) then begin 
-        par:= par+1
+    if ((digitos mod 2) = 0) then begin 
+        par:= par +1;
+    end
     else 
         impar:= impar +1;
-    end;
     
-    if (par > impar) then 
-        writeln(L^.datos.nombre);
+    o.codigo:= o.codigo div 10;
+    
+        punto4:= (par > impar);
+
 end;
 
-procedure procesarDatos ();
+
+procedure procesarLista (L:lista);
+var 
+    vc:vector;
+    v:vector;
+    o:objetos;
+    max1,max2:integer;
+    cantcumple2:integer;
+    cumple4:string;
+    cumplemax1:integer;
+    cumplemax2:integer;
+    i:integer;
 begin 
-    iniVector();
+    cantcumple2:= 0;
+    max1:= -1;
+    max2:= -1;
+    cumplemax1:= 0;
+    cumplemax2:= 0;
+
+
+    inivector(v,vc);
     while (L <> nil) do begin 
-        cargarVector();
-        punto1();
-        punto2();
-        punto3();       
+      
+        vc[L^.datos.categoria]:= vc[L^.datos.categoria] +1;
+
+        punto1(o,cumplemax1,cumplemax2,max1,max2);
+
+        if (cumple2(L^.datos)) then begin 
+            cantcumple2:= cantcumple2 +1;
+        end;
+
+        if (punto4(L^.datos)) then begin 
+            cumple4:= L^.datos.nombre_planeta;
+        end;
+        L:= l^.sig;
     end;
-end;    
+
+    writeln('los codigos de los dos objetos mas lejanos ', cumplemax1 , cumplemax2);
+    writeln('la cantidad de planetas descubiertos por galileo antes del 1600 ', cantcumple2);
+    for i:=1 to 7 do 
+        writeln('la cantidad de objetos ', i ,':', vc[i]);
+    writeln('el nombre de la estrella con codigo mas pares que impar', cumple4);
+end;
 
 var 
-    v:vCategoria;
-    d:objetos;
     L:lista;
-
-begin
-    cargarLista(d);
-    procesarDatos()
-
-    writeln(cumpleA);
-    writeln(planetas);
-
-end;
+begin 
+	L:= nil;
+    cargarlista(L);
+    procesarLista(L);
+end.
