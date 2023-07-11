@@ -27,9 +27,45 @@ begin
     end;
 end;
 
-procedure armarnodo();
-procedure leer();
-procedure cargarLista();
+procedure armarnodo(var L:lista; s:sesiones);
+var 
+    ant,aux,act:lista;
+begin 
+    new(aux);
+    aux^.datos:= d;
+    act := L;
+    ant := L;
+
+    while (act <> nil) and (act^.datos.titulo < d.titulo) do begin 
+    begin
+        ant := act;
+        act := act^.sig;
+    end;
+    if (ant = act) then 
+        L:= nue;
+    else 
+        ant^.sig := nue;
+    nue^.sig := act;
+end;
+
+procedure leer(var s:sesiones);
+begin 
+    readln(titulo);
+    readln(artista);
+    readln(genero);
+    readln(visualizaciones);
+end;
+
+procedure cargarLista(L:lista);
+var 
+    s:sesiones;
+begin 
+    leer(s);
+        repeat 
+            leer(s);
+            armarnodo(L,s);
+        until
+end;
 
 function paresimpares (num:integer):boolean;
 var 
@@ -98,6 +134,4 @@ begin
     maximos(v,codmax1,codmax2);
     writeln(codmax1,codmax2);
 
-    readln(titulo);
-    eliminar(L);
-end.
+END.
