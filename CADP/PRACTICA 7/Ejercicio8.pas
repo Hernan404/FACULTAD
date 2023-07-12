@@ -1,124 +1,104 @@
-program ej8p7;
-type 
-    rangoAnio= 1900..2021;
-    F = record 
-        dia:1..31;
-        mes:1..11;
-    end;
+8. Una entidad bancaria de la ciudad de La Plata solicita realizar un programa destinado a la 
+administración de transferencias de dinero entre cuentas bancarias, efectuadas entre los meses de 
+Enero y Noviembre del año 2018.
+El banco dispone de una lista de transferencias realizadas entre Enero y Noviembre del 2018. De cada 
+transferencia se conoce: número de cuenta origen, DNI de titular de cuenta origen, número de cuenta 
+destino, DNI de titular de cuenta destino, fecha, hora, monto y el código del motivo de la transferencia 
 
+(1: alquiler, 2: expensas, 3: facturas, 4: préstamo, 5: seguro, 6: honorarios y 7: varios). Esta estructura 
+no posee orden alguno. 
+Se pide:
+
+a) Generar una nueva estructura que contenga sólo las transferencias a terceros (son aquellas en las 
+que las cuentas origen y destino no pertenecen al mismo titular). Esta nueva estructura debe estar 
+ordenada por número de cuenta origen.
+Una vez generada la estructura del inciso a), utilizar dicha estructura para:
+
+b) Calcular e informar para cada cuenta de origen el monto total transferido a terceros.
+
+c) Calcular e informar cuál es el código de motivo que más transferencias a terceros tuvo. 
+
+d) Calcular e informar la cantidad de transferencias a terceros realizadas en el mes de Junio en las 
+cuales el número de cuenta destino posea menos dígitos pares que impares.
+
+
+
+
+program EJ8P7;
+type 
+    rangomotivo = 1..7;
     transferencia = record 
         numero_origen:integer;
-        dni_origen:integer;
+        DNI_origen:integer;
         numero_destino:integer;
-        dni_destino:integer;
-        fecha:F;
+        DNI_destino:integer;
+        fecha:integer;
         hora:integer;
         monto:real;
-        codmotivo:1..7;
+        codmotivo:rangomotivo;
     end;
 
-    lista = ^nodo
+    lista = nodo 
     nodo = record 
         datos:transferencia;
         sig:lista;
     end;
-    vector = array [1..7] of integer;
+
+    vector = array [rangomotivo] of integer;
+
+procedure cargarlista(L:lista); {se dispone}
 
 
-procedure ordenarTerceros(var terceros:lista; T:transferencia);
+Procedure InsertarElemento ( var pri: lista; per: persona);
 var 
-    ant,nue,act:lista;
-begin 
-    new(nue);
-    nue^.datos:= T;
-    act:= terceros;
-    ant:= terceros;
-    while (act <> nil) and (act^.datos.numero_origen < T.numero_origen) do begin 
-        ant:= act;
-        act:= act^.sig;
+    ant, nue, act: lista;
+begin
+    new (nue);
+    nue^.datos := per;
+    act := pri;
+    ant := pri;
+    {Recorro mientras no se termine la lista y no encuentro la posición correcta}
+    while (act<>NIL) and (act^.datos.nombre < per.nombre) do //De menor a mayor
+    begin
+        ant := act;
+        act := act^.sig ;
     end;
-    if (ant = act) then begin 
-        L:= nue; 
-    end;
-    else 
-    begin 
-        ant^.sig:= nue;
-    end;
-    nue^.sig:= act;
-end; 
-
-procedure informarMasAlto (v:vector_contador; var alto:integer);
-var 
-    i:integer;
-begin 
-    for i:=1 to 7 do begin 
-        if(v[i] > alto) then begin 
-            alto:=v[i];
-        end;
-    end;
+    if (ant = act)  then 
+        pri := nue   {el dato va al principio}
+    else  
+        ant^.sig  := nue; {va entre otros dos o al final}
+    nue^.sig := act ;
 end;
 
-procedure recorrerLista(L:lista);
+procedure puntoB ();
+begin 
+    montoTotal:= montoTotal + v[L.datos.monto]
+    vc[L.datos.numero_origen] 
+end;
+procedure procesarlista (L:lista);
 var 
-    terceros:lista;
-    montoTransT:real;
     v:vector;
-    tipo:integer;
-    alto:integer;
-    cumple:boolean;
-    cantC:integer;
+    t:transferencia;
 begin 
-    cantC:= 0;
-    alto:= 1;
-    terceros:= nil;
-
+    inivector(v);
     while (L <> nil) do begin 
-        montoTransT:= 0;
-        if(L^.datos.dni_origen <> L^.datos.dni_destino) then begin
-            ordenarTerceros(terceros,L^.datos);
-            montoTransT:= montoTransT + L^.datos.monto;
-        end;
-    end;
 
-    tipo:= L^.datos.codmotivo;
-    v[tipo]:= v[tipo] +1:
-    if (L^.datos.fecha.mes = 7) then begin 
-        cumple:= leerDigitos(L^.datos.numero_origen);
-        if (cumple) then begin 
-            cantC:= cantC+1;
-        end;
-    end;
-    L:= L^.sig;
-    end;
-    informarMasAlto(v,alto);
-end;
 
-function leerDigitos(numero:integer):boolean;
-var 
-    dig:integer;
-    par:integer;
-    impar:integer;
-begin 
-    par:= 0;
-    impar:= 0;
-    while (numero <> 0) do begin 
-        dig:= numero mod 10;
-        if ((dig mod 2)= 0) then begin 
-            par:= par+1;
+
+
+        if (t.DNI_destino <> t.DNI_origen) then begin 
+            armarlistaA(L,t);
         end;
-        else begin 
-            impar:= impar +1;
-        end;
-    end;
-    if (par > impar) then begin 
-        leerDigitos:= true;
     end;
 end;
-
 
 var 
     L:lista;
 begin 
-    L:= nil;
-    recorrerLista(L);
+    cargarlista(L);
+    procesarlista(L);
 end.
+
+
+
+
