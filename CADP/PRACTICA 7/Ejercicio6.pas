@@ -21,163 +21,165 @@ impares
 
 
 program EJ6P7;
-type 
-    rangoCategoria = 1..7;
-    objetos = record 
-        codigo:integer;
-        categoria:rangoCategoria;
-        nombre_planeta:string;
-        distancia:integer;
-        nombre_descubridor:string;
-        aniodesc:integer;
-    end;
 
-    vector = array [rangoCategoria] of integer;
+type
+  rangoCategoria = 1..7;
 
-    lista = ^nodo;
-    nodo = record 
-        datos:objetos;
-        sig:lista;
-    end;
+  objetos = record
+    codigo: integer;
+    categoria: rangoCategoria;
+    nombre_planeta: string;
+    distancia: integer;
+    nombre_descubridor: string;
+    aniodesc: integer;
+  end;
 
-procedure leer(var o:objetos);
-begin 
-    with o do begin 
+  vector = array [rangoCategoria] of integer;
+
+  lista = ^nodo;
+  nodo = record
+    datos: objetos;
+    sig: lista;
+  end;
+
+procedure leer(var o: objetos);
+begin
+  with o do
+  begin
     readln(codigo);
     readln(categoria);
     readln(nombre_planeta);
     readln(distancia);
     readln(nombre_descubridor);
     readln(aniodesc);
-    end;
+  end;
 end;
 
-procedure armarnodo (var pri:lista; o:objetos);
-var 
-    act,aux:lista;
-begin 
-    new(aux);
-    aux^.datos:= o;
-    aux^.sig:= nil;
-    if (pri <> nil) then begin 
-        act:= pri;
-        while (act^.sig <> nil) do 
-            act := act^.sig;
-        act^.sig := aux;
-    end
-    else 
-        pri:= aux;
-end;
-
-procedure inivector (var v,vc:vector);
+procedure armarnodo(var pri: lista; o: objetos);
 var
-    i:rangoCategoria;
-begin 
-    for i:=1 to 7 do begin 
-        v[i]:= 0;
-    end;
+  act, aux: lista;
+begin
+  new(aux);
+  aux^.datos := o;
+  aux^.sig := nil;
+  if (pri <> nil) then
+  begin
+    act := pri;
+    while (act^.sig <> nil) do
+      act := act^.sig;
+    act^.sig := aux;
+  end
+  else
+    pri := aux;
 end;
 
-procedure cargarlista (L:lista);
-var 
-    o:objetos;
-begin 
+procedure inivector(var v, vc: vector);
+var
+  i: rangoCategoria;
+begin
+  for i := 1 to 7 do
+  begin
+    v[i] := 0;
+    vc[i] := 0;
+  end;
+end;
+
+procedure cargarlista(var L: lista);
+var
+  o: objetos;
+begin
+  leer(o);
+  while (o.codigo <> -1) do
+  begin
+    armarnodo(L, o);
     leer(o);
-    while (o.codigo <> -1) do begin 
-        leer(o);
-        armarnodo(L,o);
-    end;
+  end;
 end;
 
-procedure punto1 (var o:objetos; var cumplemax2,cumplemax1:integer; var max1,max2:integer);
-begin 
-    if (o.distancia > max1) then begin 
-        max2:= max1;
-        cumplemax2:= cumplemax1;
-        cumplemax1:= o.codigo;
-        max1:= o.distancia;
-    end
-        else if (o.distancia > max2) then begin 
-                    max2:= o.distancia;
-                    cumplemax1:= o.codigo;
-        end;           
+procedure punto1(var o: objetos; var cumplemax2, cumplemax1: integer; var max1, max2: integer);
+begin
+  if (o.distancia > max1) then
+  begin
+    max2 := max1;
+    cumplemax2 := cumplemax1;
+    cumplemax1 := o.codigo;
+    max1 := o.distancia;
+  end
+  else if (o.distancia > max2) then
+  begin
+    max2 := o.distancia;
+    cumplemax2 := o.codigo;
+  end;
 end;
 
-
-function cumple2 (o:objetos):boolean;
-begin 
-    cumple2:= (o.nombre_descubridor = 'galileo galilei') and (o.aniodesc < 1600);
+function cumple2(o: objetos): boolean;
+begin
+  cumple2 := (o.nombre_descubridor = 'galileo galilei') and (o.aniodesc < 1600);
 end;
 
-function punto4 (var o:objetos):boolean;
-var 
-    digitos,par,impar:integer;
-begin 
-    par:= 0;
-    impar:= 0;
+function punto4(o: objetos): boolean;
+var
+  digitos, par: integer;
+begin
+  par := 0;
 
-    digitos:= o.codigo mod 10;
+  while (o.codigo <> 0) do
+  begin
+    digitos := o.codigo mod 10;
+    if (digitos mod 2 = 0) then
+      par := par + 1;
+    o.codigo := o.codigo div 10;
+  end;
 
-    if ((digitos mod 2) = 0) then begin 
-        par:= par +1;
-    end
-    else 
-        impar:= impar +1;
-    
-    o.codigo:= o.codigo div 10;
-    
-        punto4:= (par > impar);
-
+  punto4 := (par > (8 - par));
 end;
 
+procedure procesarLista(L: lista);
+var
+  vc: vector;
+  v: vector;
+  {o: objetos;}
+  max1, max2: integer;
+  cantcumple2: integer;
+  cumple4: string;
+  cumplemax1: integer;
+  cumplemax2: integer;
+  i: integer;
+begin
+  cantcumple2 := 0;
+  max1 := -1;
+  max2 := -1;
+  cumplemax1 := 0;
+  cumplemax2 := 0;
 
-procedure procesarLista (L:lista);
-var 
-    vc:vector;
-    v:vector;
-    o:objetos;
-    max1,max2:integer;
-    cantcumple2:integer;
-    cumple4:string;
-    cumplemax1:integer;
-    cumplemax2:integer;
-    i:integer;
-begin 
-    cantcumple2:= 0;
-    max1:= -1;
-    max2:= -1;
-    cumplemax1:= 0;
-    cumplemax2:= 0;
+  inivector(v, vc);
+  while (L <> nil) do
+  begin
+    vc[L^.datos.categoria] := vc[L^.datos.categoria] + 1;
 
+    punto1(L^.datos, cumplemax1, cumplemax2, max1, max2);
 
-    inivector(v,vc);
-    while (L <> nil) do begin 
-      
-        vc[L^.datos.categoria]:= vc[L^.datos.categoria] +1;
+    if (cumple2(L^.datos)) then
+      cantcumple2 := cantcumple2 + 1;
 
-        punto1(o,cumplemax1,cumplemax2,max1,max2);
+    if (punto4(L^.datos)) then
+      cumple4 := L^.datos.nombre_planeta;
 
-        if (cumple2(L^.datos)) then begin 
-            cantcumple2:= cantcumple2 +1;
-        end;
+    L := L^.sig;
+  end;
 
-        if (punto4(L^.datos)) then begin 
-            cumple4:= L^.datos.nombre_planeta;
-        end;
-        L:= l^.sig;
-    end;
-
-    writeln('los codigos de los dos objetos mas lejanos ', cumplemax1 , cumplemax2);
-    writeln('la cantidad de planetas descubiertos por galileo antes del 1600 ', cantcumple2);
-    for i:=1 to 7 do 
-        writeln('la cantidad de objetos ', i ,':', vc[i]);
-    writeln('el nombre de la estrella con codigo mas pares que impar', cumple4);
+  writeln('Los códigos de los dos objetos más lejanos son: ', cumplemax1, ' ', cumplemax2);
+  writeln('La cantidad de planetas descubiertos por Galileo Galilei antes del año 1600 es: ', cantcumple2);
+  for i := 1 to 7 do
+    writeln('La cantidad de objetos en la categoría ', i, ': ', vc[i]);
+  writeln('El nombre de las estrellas con más dígitos pares que impares: ', cumple4);
 end;
 
-var 
-    L:lista;
-begin 
-	L:= nil;
-    cargarlista(L);
-    procesarLista(L);
+var
+  L: lista;
+begin
+  L := nil;
+  cargarlista(L);
+  procesarLista(L);
 end.
+
