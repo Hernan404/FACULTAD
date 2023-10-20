@@ -51,12 +51,15 @@ begin
     end;
 end; 
 
-procedure cargarLista (var L:lista; var  d:cliente);
+procedure cargarLista (var L:lista);
+var 
+	d:cliente;
 begin 
     repeat  
         leer(d);
         armarlista(L,d);
-    until (d.codigo = 1122)
+        
+    until (d.codigo = 1122);
 end;
 
 procedure puntoA (var d:cliente; var montoAD:real);
@@ -67,42 +70,42 @@ begin
     writeln('Monto completo que paga mensual: ', d.montoBasico + montoAD);
 end;
 
-procedure puntoB (var d:cliente; var nomcumple:string);
-var 
-    cant9,digitos:integer;
-begin 
-    cant9:= 0;
-    digitos:= 0;
 
-    digitos := d.DNI mod 10;
-    
-    if (digitos = 9) then begin 
-        cant9:= +1;
-    end;
+function puntoB (DNI:integer): boolean;
+  var
+    cant: integer;
+  begin
+    puntoB:= false;
+    cant:= 0;
+    while (dni > 0) and not(puntoB) do
+      begin
+        if ((dni mod 10) = 9) then
+          cant:= cant + 1;
+        if (cant = 2) then
+          puntoB:= true
+        else
+          dni:= dni div 10;
+      end;
+      puntoB:= (cant >=2);
+     
+  end;
 
-    d.DNI:= d.DNI div 10;
-
-    if (cant9 > 2) then 
-    nomcumple:= d.apellidoYnombre;
-end;
-
-procedure eliminar (var L:lista; d:cliente; var exito:boolean);
+procedure eliminar (var pri:lista; d:cliente; var exito:boolean);
 var 
     ant,act:lista;
 begin 
     exito:= false;
-    act:= L;
+    act:= pri;
 
-    while (act <> nil) and (L^.datos.codigo <> d.codigo) do begin 
+    while (act <> nil) and (pri^.datos.codigo <> d.codigo) do begin 
         ant:= act;
         act:= act^.sig;
     end;
 
     if (act <> nil) then begin 
         exito := true;
-        if (act = L) then 
-            L:= act^.sig
-           
+        if (act = pri) then 
+            pri:= act^.sig
         else 
             ant^.sig:= act^.sig;
         dispose (act);
@@ -115,19 +118,21 @@ var
 	d:cliente;
     v:vector;
     montoAD:real;
-    nomcumple:string;
     dnidel:integer;
+    cumpleB:string;
 begin 
 	montoAD:= 0;
-	nomcumple:= '';
+	cumpleB:= '';
     inivector(v);
     while (L <> nil) do begin
         puntoA(d,montoAD);
-        puntoB(d,nomcumple);
         
+        if puntoB(L^.datos.DNI) then 
+			writeln(L^.datos.apellidoYnombre);
+	L:= L^.sig;
     end;
 
-     writeln('nombre de los que tienen al menos 2 digitos 9', nomcumple);
+     writeln('nombre de los que tienen al menos 2 digitos 9', cumpleB);
    
     writeln('ingrese dni a borrar');
     readln(dnidel);
@@ -138,9 +143,8 @@ begin
 end;
 
 var 
-	d:cliente;
     L:lista;
 begin 
-    cargarLista(L,d);
+    cargarLista(L);
     procesarDatos(L);
 end.
