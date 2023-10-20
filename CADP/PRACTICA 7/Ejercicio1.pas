@@ -47,9 +47,10 @@ end;
 procedure cargardatos(L:lista; c:casting);
 begin 
     leer(c);
-    while (c.DNI <> 3355) do begin 
+     repeat
         leer(c);
         armarlista(L,c);
+     until (c.DNI <> 3355); 
     end;
 end;
 
