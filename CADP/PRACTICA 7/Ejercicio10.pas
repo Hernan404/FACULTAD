@@ -1,113 +1,76 @@
 program EJ10P7;
+const 
+    dimf = 20;
 type 
     empresa = record 
         codigo:integer;
         nombre:string;
-        estado:string;
-        nombreCiudad:string;
-        cultivos:1..20;
+        est_o_priv:string;
+        nombre_ciudad:string;
+        tipocultivo:vector;
     end;
 
     cultivo = record 
-        tipo:lista;
+        tipo:string;
         cantHec:integer;
         cantMeses:integer;
     end;
 
-    vCultivos = array [1..20] of string;
+    vector = array [1..dimf] of cultivo;
 
-procedure cargarLista ();
+procedure leer(var e:empresa);
 var 
-    aux:lista;
+    ha:integer;
 begin 
-    new(aux)
-    aux^.datos:= d;
-    aux^.sig:= L;
-    sig:=lista;
-end;
+    with e do begin 
+        writeln('codigo empresa');
+        readln(codigo);
+        if (codigo <> -1) then begin 
+            writeln('nombre empresa');
+            readln(nombre);
+            writeln('privada o estatal');
+            readln(est_o_priv);
+            writeln('ciudad');
+            readln(nombre_ciudad);
 
-procedure puntoB (L:lista; v:vCultivos; d:empresa; var cumple:boolean);
-begin 
-    cumple:= false;
-    for i:=1 to 20 do begin 
-    if (d.nombreCiudad = 'San Miguel del monte') and (v[i] = 'trigo') then
-        cargarLista();
-        cumple:= true;
+        diml:= 0;
+
+        writeln('cantidad hectareas');
+        readln(ha);
+    
+        while (diml <= dimf) and (ha <> 0) do begin 
+            diml:= diml +1;
+            writeln('tipo de cultivo');
+            readln(cultivo[diml].tipo);
+            writeln('cantida de meses');
+            readln(cultivo[diml].meses);
+
+            cultivo[diml].hectareas:= ha;
+
+            writeln('cant hectareas');
+            readln(ha);
+        end;
     end;
 end;
 
-procedure imprimirNombresA (var L:lista);
+end;
+
+
+procedure cargardatos (L:lista); 
 var 
-    act:lista;
+    e:empresa;
 begin 
-    act:= lista;
-    if (cumple = true) then begin
-        while (L <> nil) do  
-
-            writeln('Nombres de empresas que cumplen A', act^.datos.nombre);
-            act:= act^.sig;
+    leer(e);
+    while (e.codigo <> -1) do begin 
+        armarlista(L,e);
+        leer(e);
     end;
 end;
 
-procedure puntoC (representa:real; cantHectareas:integer; d:empresa; v:vCultivos);
-
-begin 
-    if (v[i] = 'soja') then begin 
-        cantHectareas:= cantHectareas +1;
-        representa:=cantHectareas/d.cantHec;
-    end;
-end;
-
-procedure puntoD (p:cultivo; d:empresa; max:integer; v:vCultivos);
-var 
-    i:integer;
-begin 
-    for i:=1 to 20 do begin 
-    if (v[i] = 'maiz') then  
-        if (d.cantMeses > max) then 
-            max:=d.cantMeses;
-            mastiempo:= d.nombre
-    end;
-end;
-
-procedure puntoE (p:cultivo; d:empresa; v:vCultivos; var cantDias:integer);
-begin 
-    for i:=1 to 20 do begin 
-        if (p.cantHec < 5) and (v[i] = 'girasol') and (d.estado = 'estatal') then begin 
-            cantDias:= cantDias + 30;
-    end;
-end;
-
-procedure procesarDatos ();
-begin 
-    inivector();
-    while (d.codigo <> -1) and (c.cantHec <> 0) do begin 
-        leerEmpresa();
-        leerCultivo();
-        cargarVector();
-
-        puntoB();
-        puntoC();
-        puntoD();
-        puntoE();
-    end;
-        writeln('punto C ', representa);
-        writeln('punto D ',  )
-    end;
-end;
 
 var 
-    cantDias,mastiempo:integer;
-    representa:= real;
+    L:lista;
 begin 
-    representa:= 0;
-    cantDias:= 0;
-    mastiempo:= 0;
-end;
-
-
-
-
-
-
-
+    cargardatos(L);
+    procesardatos(L);
+end.
