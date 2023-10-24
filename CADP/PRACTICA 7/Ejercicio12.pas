@@ -19,8 +19,23 @@ type
     vector = array [rango_subs] of integer;
 
 procedure leer(r:cliente);
+begin 
+    with r do begin 
+        readln(DNI);
+        readln(edad);
+        readln(tipo);
+    end;
+end;
 
 procedure armarlista (L:lista; r:cliente);
+var 
+    aux:lista;
+begin 
+    new(aux);
+    aux^.data:= r;
+    aux^.sig:= L;
+    L:= aux;
+end;
 
 procedure cargardatos(L:lista);
 var 
