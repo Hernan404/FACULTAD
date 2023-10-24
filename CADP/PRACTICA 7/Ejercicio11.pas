@@ -15,113 +15,153 @@ c. Si la cantidad de entradas vendidas para el evento número 50 alcanzó la can
 personas permitidas
 
 
+
 program EJ11P7;
+const 
+    evento = 100;
+    tipo = 5;
 type 
-    ventas = record 
-        codigo:integer;
-        numEvento:1..100;
-        DNI:integer;
-        cantEntradas:integer;
+    rango_evento = 1..100;
+    rango_tipo = 1..5;
+    event = record 
+        nombre:string;
+        tipo:1..5;
+        lugar:string;
+        cantpersonas:integer;
+        costo:real;
     end;
 
-    lista = ^nodo
+    ventas = record 
+        codigo:integer;
+        numero:rango_evento;
+        dni:integer;
+        cantentradas:integer;
+    end;
+
+    vEvento = array [rango_evento] of integer;
+
+    lista =  ^nodo 
     nodo = record 
-        datos:ventas;
+        data:ventas;
         sig:lista;
     end;
 
-    vEvento = array [1..100] of integer;
-
-
-procedure agregarAdelante ();
+procedure armarlista(L:lista; r:ventas);
 var 
     aux:lista;
 begin 
-    new(aux)
-    aux^.datos:= d;
+    new(aux);
+    aux^.data:= r;
     aux^.sig:= L;
-    L:= sig;
-end;
-
-procedure cargarLista(var L:lista);
-var 
-    v:venta;
-begin 
-    leerVenta(d);
-    while d.codigo <> -1 do begin 
-        agregarAdelante(L,d);
-        leerVenta(d);
-    end;
+    L:= aux;
 end; 
 
-procedure puntoA (d:ventas; L:lista; min:integer; nombre_cumpleA,lugar_cumpleA:string);
+procedure cargardatos (L:lista);
+var 
+    r:ventas;
 begin 
-    if (costo < min) then begin 
-        min:= costo;
-        nombre_cumpleA:= d.nombre;
-        lugar_cumpleA:= d.lugar;
+    leer(r);
+    repeat 
+        leer(r);
+        armarlista(L,r);
+    until (r.codigo = -1);
+end; 
+
+
+procedure inivector (var v:vector);
+var 
+    i:rango_evento;
+begin 
+    for i:=1 to evento do begin 
+        v[i]:= 0;
     end;
-    else 
-        begin 
-            if (costo < min) then begin 
-                min:= costo;
-                nombre_cumpleA2:= d.nombre;
-                lugar_cumpleA2:= d.lugar;
+end;
+
+
+
+procedure puntoA(ve:evento; var min,p1,p2:integer; recaudacion:real);
+begin 
+    for i:=1 to evento do begin 
+        if (v[i].costo < min) then begin 
+            min2:= min1;
+            p2:= p1;
+            min1:= v[i];
+            p1:= i;
+        end
+        else 
+            if (min2 < min1) then begin 
+                min2:= v[i];
+                p2:= i; 
             end;
         end;
+    end;
 end;
 
-procedure puntoB (var par,impar:integer);
+
+function pares (num:integer):boolean;
 var 
-    digitos:integer;
+    digito,par,impar:integer;
 begin 
-    digitos:= L^.datos.DNI mod 10;
-        if (digitos div 2 = 0) then 
-            par:= digitos;
+    par:= 0;
+    impar:= 0;
+
+    while (digito > 0) do begin 
+        digito:= num mod 10;
+        if (digito mod 2 = 0) then begin  
+            par := par +1;
+        
         else 
             impar:= impar +1;
-    if (par > impar) then 
-        cumpleB:= L^.datos.dni;
+        end 
+        num:= digito div 10;
+    end;
+    pares:= (par > impar);
 end;
 
-function puntoC (v:vEvento; vc:vEvento; cumple:boolean);
-
+function puntoB (r:ventas; ve:evento):boolean;
 begin 
-    cumple:= false; 
-
-    if (v[i] = 50) then begin 
-        if (vc[L^.datos.cantEntradas] > entradasMax ) then begin
-            cumple:true;
-        end;
-    end;
+    puntoB:= (pares(L^.data.DNI)) and (v[L^.data.numero].tipo = 3);
 end;
 
-procedure procesarDatos (); 
-begin
-    while (d.codigo <> -1) do begin 
-    inivector();
-    leer();
-    agregarAdelante();
-    cargarLista();
-    
+function puntoC (r:ventas; v:vevento):boolean;
+begin 
+    puntoC := (v[i].cantpersonas = r.cantentradas)
+end;
 
-    menosA ();
-    puntoB ();
-    puntoC ();
+procedure procesarDatos(L:lista);
+var 
+    r:ventas;
+    e:evento;
+    v:vector;
+    ve:vevento;
+    entradas2b,p1,p2:integer;
+begin 
+    p1:= 0;
+    p2:= 0;
+    entradas2b:= 0;
+    inivector(v);
+    while (L <> nil) do begin
+        recaudacion:= r.cantentradas + costo 
+        puntoA(ve,min,p1,p2,recaudacion);
+        if puntoB(e,r);
+        entradas2b:= entradas2b + L^.data.cantentradas;
+
+        if (L^.data.numero = 50) and (puntoC(L^.data,ve)) then 
+            evento50:= evento50 + L^.data.cantentradas;
     end;
-    writeln('nombre de los dos eventos con menos recaudacion: ' nombre_cumpleA , nombre_cumpleA2 , 'lugar: ' lugar_cumpleA , lugar_cumpleA2);
-    writeln('cant de entradas cumplen b: ', cumpleB);
-    if (cumple = true) then 
-        writeln('cumple punto C ')
+    writeln('punto A los eventos con menos recaudacion: ', p1,p2);
+    writeln('punto B', entradas2b);
+    if (v[50].capacidad < evento50) then 
+        writeln('punto C no supero');
     else 
-        writeln('No cumple punto C');
-
+        writeln('punto C, supero');
 end;
 
 var 
-    
+    L:lista;
 begin 
-    procesarDatos();
-end.
-
+    L:= nil;
+    cargardatos(L);
+    procesardatos(L);
+end. 
 
