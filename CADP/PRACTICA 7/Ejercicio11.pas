@@ -46,6 +46,16 @@ type
         sig:lista;
     end;
 
+procedure leer(r:ventas);
+begin 
+    with r do begin 
+        readln(codigo);
+        readln(numero);
+        readln(dni);
+        readln(cantentradas);
+    end;
+end;
+
 procedure armarlista(L:lista; r:ventas);
 var 
     aux:lista;
