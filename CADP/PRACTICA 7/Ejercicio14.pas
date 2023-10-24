@@ -20,10 +20,43 @@ type
     vector = array [rango_dia] of integer;
 
 procedure leer(r:prestamo);
+with r do begin 
+    readln(numero);
+    readln(ISBN);
+    readln(numero_socio);
+    readln(diaprestamo);
+end;
+end;
 
-procedure armarlista(L:lista; r:prestamo);
+Procedure InsertarElemento ( var pri: lista; r: prestamo);
+var 
+    ant, nue, act: lista;
+begin
+    new (nue);
+    nue^.datos := per;
+    act := pri;
+    ant := pri;
+    {Recorro mientras no se termine la lista y no encuentro la posición correcta}
+    while (act<>NIL) and (act^.datos.ISBN < r.ISBN) do //De menor a mayor
+    begin
+        ant := act;
+        act := act^.sig ;
+    end;
+    if (ant = act)  then 
+        pri := nue   {el dato va al principio}
+    else  
+        ant^.sig  := nue; {va entre otros dos o al final}
+    nue^.sig := act ;
+end;
 
 procedure inivector (var v:vector); 
+var 
+    i:rango_dia;
+begin 
+    for i:=1 to dia do begin 
+        v[i]:= 0;
+    end;
+end;
 
 procedure cargardatos (L:lista);
 var 
