@@ -36,11 +36,33 @@ type
     vector = array [rango_areas] of integer; 
 
 procedure leer(var r:libro);
+begin 
+    with r do begin 
+        readln(titulo);
+        readln(nombre);
+        readln(cantpaginas);
+        readln(anio_edicion);
+        readln(cantventas);
+        readln(codigo);
+    end;
+end;
 
 procedure armarlista (var L:Lista; r:libro);
+var 
+    aux:lista;
+begin 
+    new(aux);
+    aux
+end;
 
 procedure inivector (var v:vector);
-
+var 
+    i:integer;
+begin 
+    for i:=1 to areas do begin 
+        v[i]:= 0;
+    end;
+end;
 procedure cargardatos (L:lista);
 var 
     r:libro;
