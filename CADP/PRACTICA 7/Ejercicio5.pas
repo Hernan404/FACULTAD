@@ -10,6 +10,8 @@ Una vez leída y almacenada la información, se pide:
 Nota: Los códigos de viaje no se repiten.
 
 }
+
+
 program EJ5P7;
 type
     camion = record 
@@ -35,7 +37,7 @@ type
 
     vector = array [1..100] of integer;
 
-procedure leer(d:viaje; c:camion);
+procedure leer(var d:viaje; var c:camion);
 begin 
     with c do begin 
         writeln('==DATOS DE CAMION==');
@@ -51,29 +53,33 @@ begin
         writeln('==DATOS DE VIAJE==');
         writeln('codigo viaje');
         readln(codigo_viaje);
-        writeln('codigo camion');
-        readln(codigo_camion);
-        writeln('distanciaKM');
-        readln(distanciaKM);
-        writeln('ciudad destino');
-        readln(ciudad_destino);
-        writeln('anio de viaje');
-        readln(anio_viaje);
-        writeln('DNI');
-        readln(DNI);
+        if (codigo_viaje <> -1) do begin 
+            writeln('codigo camion');
+            readln(codigo_camion);
+            writeln('distanciaKM');
+            readln(distanciaKM);
+            writeln('ciudad destino');
+            readln(ciudad_destino);
+            writeln('anio de viaje');
+            readln(anio_viaje);
+            writeln('DNI');
+            readln(DNI);
+        end;
     end;
 end;
 
 procedure cargardatos(L:lista);
+var 
+    d:viaje;
+    c:camion;
 begin 
-    leer(d,c);
     repeat 
         leer(d,c);
         armarlista(L,d);
-    until codigo_viaje = -1;
+    until (d.codigo_viaje = -1);
 end;
 
-procedure armarlista(L:lista);
+procedure armarlista(var L:lista; d:viaje);
 begin 
     new(aux);
     aux^.data:= d;  
@@ -81,7 +87,7 @@ begin
     L:= aux;
 end;
 
-procedure inivector(v:vector);
+procedure inivector(var v:vector);
 var 
     i:integer;
 begin 
@@ -90,12 +96,14 @@ begin
     end;
 end;
 
-procedure punto1 (c:camion; d:viaje; var max:integer; var cumpleMAX,cumpleMIN:integer);
+procedure punto1 (c:camion; d:viaje; var max,min:integer; var cumpleMAX,cumpleMIN:integer);
 begin 
     if (d.distanciaKM > max) then 
+        max:= d.distanciaKM;
         cumpleMAX:= c.patente;
     
-    if (d.distanciaKM < min) then 
+    if (d.distanciaKM < min) then
+        min:= d.distanciaKM; 
         cumpleMIN:= c.patente;
 end;
 
@@ -110,10 +118,9 @@ var
 begin 
     par:= 0;
     impar:= 0;
-
-    digito:= d.DNI mod 10;
-
     while (digito <> 0) do begin 
+        digito:= d.DNI mod 10;
+
         if (digito mod 10 = 2) then 
             par:= par +1;
         else 
@@ -121,16 +128,15 @@ begin
         
         digito:= digito div 10;
     end;
-    if (par = 0) then 
-        punto3 = true;
-    else 
-        punto3:= false;
+    punto3:= (par = 0); 
+    
 end;
 
 procedure procesarDatos(L:lista);
 var 
     c:camion;
     max:integer;
+    cumpletres:integer;
     cumpleMAX:integer;
     cumpleMIN:integer;
     cumpledos:integer;
@@ -146,11 +152,12 @@ begin
         cumpleMAX:= 0;
         cumpleMIN:= 0;
         cumpledos:= 0;
+        cumpletres:= 0;
         codactual:= L^.data.codigo_camion;
         while (L <> nil) and (L^.data.codigo_camion = codactual);
             punto1(c,max,cumpleMAX,cumpleMIN);
 
-            if punto2(c,L^.data) then 
+            if punto2(L^.data,c) then 
                 cumpledos:= cumpledos +1;
 
             for i:= 1 to 100 do begin 
@@ -169,6 +176,6 @@ var
     v:vector;
 begin 
     L:= nil;
-    cargardatos(L,d);
+    cargardatos(L);
     procesarDatos(L);
 end.
