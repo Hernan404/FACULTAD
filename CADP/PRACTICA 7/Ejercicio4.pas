@@ -6,12 +6,12 @@ a. Para cada embarazada, la semana con mayor aumento de peso.
 b. El aumento de peso total de cada embarazada durante el embarazo.
 
 
+
 program EJ4P7; 
 type 
     pacientes = record 
         Nya:string;
-        pesoprimerdia:vsemana;
-
+        pesoprimerdia:integer;
     end;
 
     lista = nodo 
@@ -24,38 +24,45 @@ type
 
 procedure inicializarVector(); {se dispone}
 procedure leer (); {se dispone}
-procedure cargarvector (); {se dispone}
+procedure cargardatos (); {se dispone}
 
-procedure maspeso (vs:vsemana);
+procedure puntoA (v:vsemana; var max,p1:integer);
 var 
     i:integer;
 begin 
     for i:=1 to 42 do begin 
-    if (v[i] > max) then 
-        max:=vs[i];
-        
+        if (v[i] > max) then begin 
+            max:=v[i];
+            p1:= i;
+        end;
     end;
 end;
 
-procedure recorrolista (L:lista; p:lista);
+procedure procesardatos (L:lista);
+var 
+    r:pacientes;
+    max,p1:integer;
+    pesoInicial,aumentopeso:integer;
 begin 
+    
+    max:= -1;
+    p1:= 0;
     while (L <> nil) do begin 
-    pesoInicial:= L.p.pesoprimerdia;
-    maspeso(vs);
-    aumentopeso:= max - pesoInicial;
-    end; 
+        pesoInicial:= L^.data.pesoprimerdia;
 
+        puntoA(v,max1,p1);
+        aumentopeso:= max - pesoInicial;
+    L:= L^.sig;
+    end; 
+    writeln('punto A', p1);
+    writeln('punto B', aumentopeso);
 end;
 
 var 
-    v:vector;
     L:lista;
-    p:pacientes;
-    max:integer;
 begin 
-    max:= -1;
-    recorroLista(L:lista; p:lista);
-    writeln('para la embarazada ', L.datos.nombre, esta es la semana con mayor peso);
+   L:= nil;
+   cargardatos(L);
+   procesardatos(L);
 end.
-
 
