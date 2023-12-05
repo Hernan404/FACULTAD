@@ -13,6 +13,8 @@ c) informar el porcentaje de reservas de eventos que inicien antes de las 12 hs 
 
 
 
+
+
 program EJ;
 const
   TablaPrecios: array[1..4] of PrecioPorHora = (
@@ -21,6 +23,7 @@ const
     (Categoria: 3; Precio: 20.0),
     (Categoria: 4; Precio: 25.0)
   );
+  
 type 
     reservas = record 
         numero:integer;
@@ -125,21 +128,72 @@ begin
   r.precio := r.duracion * TablaPrecios[r.categoria].Precio;
 end;
 
+function cumpleB (dni:integer):boolean;
+var 
+    digito,par,impar:integer;
+begin 
+    par:= 0;
+    impar:= 0;
+
+    while (digito > 1) do begin 
+        digito:= num mod 10;
+
+        if (digito mod 2 = 0) then 
+            par:= par +1;
+        else 
+            impar:= impar +1;
+        digito:= digito div 10;
+    end;
+    
+    cumpleB:= (par >= 1) and (impar = 0);
+end;
+
+procedure puntoB (var max1,max2,p1,p2:integer; r:reservas; v:vector);
+var 
+    i:integer;
+begin 
+    for i:=1 to 30 do 
+            if (cumpleB(r.DNI)) then begin 
+                    if (max1 > v[i]) then 
+                        max2:= max1;
+                        p2:= p1;
+                        max1:= v[i];
+                        p1:= i;
+                    else 
+                        if (max1 > max2) then 
+                            max2:= v[i];
+                            p2:= i;
+            end;
+    end;
+end;
+
 procedure procesardatos (L:lista);
 var 
     v:vector;
     r:reservas;
     rA:reservaA;
+    max1,max2,p1,p2:integer;
+    porcentaje,porcentaje12:integer;
+
 begin 
     inivector(v);
-
+    porcentaje:= 0;
+    porcentaje12:= 0;
     while (L <> nil) do begin 
         numACT:= L^.data.numero;
         calcularDuracionYPrecio(L^.data);
+        porcentajes:= porcentajes +1;
         while (L <> nil) and (L^.data.numero = numACT) do begin 
             puntoA(rA,r);
+            puntoB(max1,max2,p1,p2,r,v);
+            if (L^.data.hora_inicio < 12) and (v[dia] <  15) then
+                porcentaje12:= porcentaje12 +1;
+            end;
 
         end;
+
+        writeln('punto B: ', p1,p2);
+        writeln('punto C: ', (porcentaje/porcentaje12)*100);
     end;
 end;
 
@@ -150,9 +204,3 @@ begin
     cargardatos(L);
     procesardatos(L);
 end.
-
-
-
-
-
-
