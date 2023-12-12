@@ -14,7 +14,6 @@ c) informar el porcentaje de reservas de eventos que inicien antes de las 12 hs 
 
 
 
-
 program EJ;
 const
   TablaPrecios: array[1..4] of PrecioPorHora = (
@@ -100,7 +99,7 @@ var
     ant, nue, act: lista;
 begin
     new (nue);
-    nue^.datos := per;
+    nue^.datos := rA;
     act := pri;
     ant := pri;
     {Recorro mientras no se termine la lista y no encuentro la posición correcta}
@@ -134,7 +133,7 @@ var
 begin 
     par:= 0;
     impar:= 0;
-
+    digito:= 0;
     while (digito > 1) do begin 
         digito:= num mod 10;
 
@@ -159,10 +158,11 @@ begin
                         p2:= p1;
                         max1:= v[i];
                         p1:= i;
-                    else 
+                    else begin 
                         if (max1 > max2) then 
                             max2:= v[i];
                             p2:= i;
+                    end;
             end;
     end;
 end;
@@ -173,9 +173,10 @@ var
     r:reservas;
     rA:reservaA;
     max1,max2,p1,p2:integer;
-    porcentaje,porcentaje12:integer;
-
+    porcentaje,porcentaje12:real;
+    numACT:integer;
 begin 
+    numACT:= 0;
     inivector(v);
     porcentaje:= 0;
     porcentaje12:= 0;
@@ -186,7 +187,7 @@ begin
         while (L <> nil) and (L^.data.numero = numACT) do begin 
             puntoA(rA,r);
             puntoB(max1,max2,p1,p2,r,v);
-            if (L^.data.hora_inicio < 12) and (v[dia] <  15) then
+            if (L^.data.hora_inicio < 12) and (v[L^.data.dia] <  15) then
                 porcentaje12:= porcentaje12 +1;
             end;
 
