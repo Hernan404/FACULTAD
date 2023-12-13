@@ -138,8 +138,10 @@ begin
         //punto 1
         for i:=1 to 24 do begin  
             notasTotal:= v[i];
+            promedio:= notasTotal/24;
+            writeln('promedio de notas:',promedio);
         end;
-        promedio:= notasTotal/24;
+        
         //punto 2
         if punto2(L^.data) then 
             cant2:= cant2 +1;
@@ -148,7 +150,6 @@ begin
 
         L:= L.sig;
     end;
-    writeln('promedio de notas: ', promedio);
     writeln('cantidad de alumnos que cumplen punto 2: ', cant2);
     writeln('los que mas rapido se recibieron', 'apellido:'  p1,'apellido', p2)
 end;
