@@ -1,0 +1,93 @@
+
+program EJ16P7; 
+const 
+    tipo = 5;
+type 
+    rango_tipo = 1..5;
+
+    clientes = record 
+        codigo:integer;
+        tipo:rango_tipo;
+        cantKW:real;
+    end;
+
+    lista = ^nodo
+    nodo = record 
+        data:clientes;
+        sig:lista;
+    end;
+
+    vector = array [rango_tipo] of integer;
+
+procedure puntoA (var vc:vector; var cumpleA:integer);
+begin 
+    vc[L^.data.tipo]:= vc[L^.data.tipo] +1;
+
+    for i:=1 to 5 do begin 
+        writeln('actualmente el tipo ', i,'tiene ', v[i],'cantidad de clientes');
+    end;
+end;
+
+procedure puntoB (var vc:vector; var cumpleB:string var max:integer; var p1:string;);
+begin 
+        for i:=1 to 5 do begin 
+            if (vc[i] > max) then
+                max:= vc[i];
+                p1:= r.localidad
+        end;
+        writeln('puntoB: ', p1);
+    end;
+end;
+
+procedure puntoC (r:clientes);
+begin 
+    if (r.cantKW > 1000) then 
+        writeln('este cliente consumo mas de 1000KW en los ultimos 6 meses: ', r.cantKW);
+end;
+
+procedure puntoD (var p1:string; num:integer);
+var 
+    cumple:boolean;
+    par,impar:integer;
+begin   
+    par:= 0;
+    impar:= 0;
+    cumple:= false;
+    while (num > 0) do begin 
+        if (num mod 2 = 0) then 
+            par:= par +1;
+        else 
+            impar:= impar +1
+        
+        num:= num div 10;
+    end;
+    cumple:= (par = impar);
+    if (cumple) then 
+        writeln('domicilio con dni par e impar: ', p1);
+end;
+
+
+procedure procesarDatos (L:lista);
+var 
+    v:vector;
+    r:clientes;
+    cumpleA:integer;
+    max:integer;
+    p1:string;
+begin 
+    max:= -1;
+    p1:= '';
+    while (L <> nil) do begin 
+        puntoA(vc,cumpleA);
+        puntoB(vc,cumpleB);
+        puntoC(p1,L^data.codigo);
+    end;
+end;
+
+var 
+    L:lista;
+begin 
+    L:= nil;
+    cargardatos(L);
+    procesarDatos(L);
+end.
