@@ -1,8 +1,10 @@
-CLAVES DE ESTE PARCIAL 
+CLAVES Y TRAMPAS DE ESTE PARCIAL 
+
+TENES UNA TABLA QUE SE DISPONE, DE PRECIO POR HORA, ESTA TABLA ES UN VECTOR.
 
 CALCULACION DE PRECIO POR HORA: 
-  calculo la duracion restando hora fin - hora inicio
-  multiplico la duracion por el valor en la tabla que se dispone (que es un vector)
+  calculo la duracion restando la hora en la que termina por la hora en la que comienza.
+  luego multiplico la duracion por el valor en la tabla que se dispone.
           
 procedure calcularDuracionYPrecio(var r: reservas);
 begin
