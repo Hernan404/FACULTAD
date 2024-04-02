@@ -1,39 +1,27 @@
-
-
 program EJ9P1;
+var 
+    total,num:integer;
+    car:char;
+    
+begin 
+	writeln('ingrese caracter "+" o "-" ');
+	readln(car);
+    if (car <> '+') and (car > '-') then  
+         write('error')
+    else begin
+        write ('ingrese numero ');
+        read(num);
+        total:=num;
 
-var
-	car1:char;
-	num:integer;
-	resultado:integer;
-	primeraVez:boolean;
-	
-begin
-	resultado:= 0;
-	primeraVez:= true;
-	
-	readln(car1);
-	
-	if (car1 = '+') or (car1 = '-') then begin
-		readln(num);
-		while (num <> 0) do begin
-			if (car1 = '+') then
-				resultado:= resultado+num
-			else if (primeraVez) then begin
-				resultado:=num;
-				primeraVez:=false;
-			end
-			else
-			resultado:= resultado-num;
-			readln(num);
-	
-		end;
-			
-		writeln('el resultado es: ', resultado);
-	
-	
-	
+            while (num <> 0) do begin 
+                write('ingrese numero ');
+                read(num);
+
+                if (car = '+') then 
+                    total:= total + num
+                else
+					total:= total - num;
+            end;
+		writeln('el resultado es: ', total);
 	end;
-	
-	writeln('error');
 end.
