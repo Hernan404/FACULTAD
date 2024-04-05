@@ -10,12 +10,9 @@ var
 
 begin
 	writeln('ingrese numero');
-	readln(primernumero);
-	
-	while (primernumero <> primernumero*2) do begin
+	readln(num1);
+	doble:= num*2;
+	while (num1 <> doble) do begin
 		readln(num1);
-		
-		if (num1 = primernumero*2) then
-			writeln('el valor doble es ', num1)
 	end
-end.
+ end.
