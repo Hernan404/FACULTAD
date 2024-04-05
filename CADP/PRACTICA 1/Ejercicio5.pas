@@ -3,30 +3,27 @@ reales. La lectura deberá finalizar al ingresar un valor que sea el doble de X,
 número, en cuyo caso deberá informarse “No se ha ingresado el doble de X”.}
 
 program ej5p1;
+const 
+	limite = 10;
 
 var
 	num1:real;
-	primernumero:real;
-	limite:real;
+	doble:real;
+	cant:real;
 
 begin
-	limite:= 0;
-	
+	cant:= 0;
 	writeln('ingrese numero');
-	readln(primernumero);
+	readln(num1);
+ 	
 	
-	
-	
-	while (primernumero <> primernumero*2) and (limite < 10) do begin
+	while (num <> doble) and (cant < limite) do begin
 		readln(num1);
-		limite:= limite +1;
-		
-		if (num1 = primernumero*2) and (limite < 10) then
-			writeln('el valor doble es ', num1);
-		
+		cant:= cant +1;
 	end;
-	
-	writeln('no se ha ingresado el numero doble');
+
+	if (num1 = doble) and (cant < limite) then
+	    writeln('no se ha ingresado el numero doble');
 		
 
 end.
