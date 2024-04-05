@@ -103,12 +103,13 @@ end;
 function cumpleA(DNI: integer): boolean;
 var 
     digito: integer;
+    esimpar: boolean;
 begin 
+    esimpar:= true
     while (DNI > 0) do begin 
         digito := DNI mod 10;
-        if (digito mod 2 <> 0) then begin  
-            cumpleA := false;
-            exit;  { Sale del bucle si encuentra un dígito impar }
+        if (digito mod 2 = 0) then begin  
+            esimpar := false;
         end;
         DNI := DNI div 10;
     end;
