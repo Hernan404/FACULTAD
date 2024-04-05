@@ -5,7 +5,7 @@ program ej4p1;
 
 var
 	num1:real;
-	num:real;
+	doble:real;
 	
 
 begin
