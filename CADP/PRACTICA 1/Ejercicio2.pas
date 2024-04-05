@@ -2,13 +2,17 @@ program EJ2P1;
 
 
 var
-num1:integer;
-
+num1:real;
+absoluto:real;
 begin
 	writeln('ingrese un numero');
 	readln(num1);
-	
-	writeln ('el valor absoluto es ', num1*-1);
+	if (num1 < 0) then 
+	    absoluto:= (num1 * -1);
+        else 
+            absoluto:= num;
+
+ 	writeln('el valor absoluto es', absoluto);
 	
 
 end.
