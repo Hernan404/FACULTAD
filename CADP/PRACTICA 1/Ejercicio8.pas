@@ -1,21 +1,18 @@
-program EJ8P1;
+program EJ8P1P1;
+var 
+    a:char;
+    b:char;
+    c:char;
+begin 
+    read(a);
+    read(b);
+    read(c);
 
-var
-	car1,car2,car3:char;
-	voc1,voc2,voc3:boolean; 
-
-begin
-	read(car1);
-	read(car2);
-	read(car3);
-	
-	voc1 := (car1 = 'a') or  (car1 = 'e') or  (car1 = 'i') or  (car1 = 'o') or  (car1 = 'u'); 
-	voc2 := (car2 = 'a') or  (car1 = 'e') or  (car2 = 'i') or  (car2 = 'o') or  (car2 = 'u'); 
-	voc3 := (car3 = 'a') or  (car1 = 'e') or  (car3 = 'i') or  (car3 = 'o') or  (car3 = 'u'); 
-
-	if (voc1 and voc2 and voc3) then
-		writeln('los tres son vocales')
-	else
-		writeln('al menos un caracter no era vocal');
+    if (a = 'a') or (a = 'e') or (a = 'i') or (a = 'o') or (a = 'u') then begin 
+        if (b = 'a') or (b = 'e') or (b = 'i') or (b = 'o') or (b = 'u') then 
+            if (c = 'a') or (c = 'e') or (c = 'i') or (c = 'o') or (c = 'u') then 
+                write('las tes son vocales');
+    end
+    else 
+        write('al menos una no era vocal');
 end.
-
