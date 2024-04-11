@@ -12,6 +12,8 @@ lectura, el programa debe informar:
 - Cantidad de tanques cuyo alto sea menor a 1.40 metros
 - Cantidad de tanques cuyo volumen sea menor a 800 metros cúbicos
 
+
+
 program EJ3P1P3;
 var 
 	tanque:char;
@@ -37,13 +39,14 @@ begin
 	maxC:= -1;
 	cantVentasC:= 0;
 	cantVentasR:= 0;
+    pC:=0;
+    pR:=0;
 	
-	writeln('====INGRESE TIPO DE TANQUE====  (R)  (C) (Z)');
-		readln(tanque);
+	writeln('====INGRESE TIPO DE TANQUE====  (R)  (C)  (Z)');
+	readln(tanque);
 		
 	while (tanque <> 'Z') do begin
-		writeln('====INGRESE TIPO DE TANQUE====  (R)  (C) (Z)');
-		readln(tanque);
+		
 		
 		if (tanque = 'R') then begin 
 			writeln('ANCHO');
@@ -52,32 +55,45 @@ begin
 			readln(largo);
 			writeln('ALTO');
 			readln(alto);
+
+            volumenR:= ancho * largo * alto;
+			cantVentasR:= cantVentasR +1;	
+
+            if (volumenR > maxR) then
+				maxR:= volumenR;
+				pR:= maxR;
+            
+            if (alto > 1.40) then 
+                cantMenoresALTO:= cantMenoresALTO +1;
+
+            if (volumenR < 800) then
+                cantmenoresCUB:= cantmenoresCUB +1;
+
 		end
 		else if (tanque = 'C') then begin 
 			writeln('RADIO');
 			readln(radioC);
 			writeln('ALTO');
 			readln(altoC);
-		end;
-		
-			volumenC:= altoC * radioC *2;
-			volumenR:= ancho * largo * alto;
-			cantVentasC:= cantventasC +1;
-			cantVentasR:= cantVentasR +1;	
-			
-			if (radioC > maxC) then 
-				maxC:= radioC;
-				pC:= volumenC;
-			
-			if (ancho > maxR) then
-				maxR:= ancho;
-				pR:= volumenR;
-			
-			if (alto > 1.40) or (altoC < 1.40) then 
-				cantMenoresALTO:= cantMenoresALTO +1;
-			
-			if (volumenR < 800) or (volumenC < 800) then 
+
+            volumenC:= altoC * radioC *2;
+            cantVentasC:= cantventasC +1;
+
+            if (volumenC > maxC) then 
+				maxC:= volumenC;
+				pC:= maxC;
+
+            if (volumenC < 800) then 
 				cantmenoresCUB:= cantmenoresCUB +1;
+
+
+            if (altoC < 1.40) then 
+				cantMenoresALTO:= cantMenoresALTO +1;
+		end;
+
+
+		writeln('====INGRESE TIPO DE TANQUE====  (R)  (C)  (Z)');
+		readln(tanque);	 
 	end;
 	writeln('volumen de los mayores tanques vendidos ', pC , ' para cubicos ', pR, ' para rectangulares');
 	writeln('volumen promedio de todos los cilindricos vendidos: ', volumenC/cantVentasC:2:0);
@@ -86,84 +102,4 @@ begin
 	writeln('cantidad de tanques cuyo volumen son menor a 800 metros: ', cantmenoresCUB);
  	
 end.
-	
-	
-	
-	
-	
-program EJ3P1P3;
 
-var 
-    tanque: char;
-    ancho, largo, alto: real;
-    radioC, altoC: real;
-    pC, pR, volumenR, cantVentasR, cantVentasC: real;
-    maxR, maxC: real;
-    cantMenoresALTO, cantMenoresCUB: integer;
-
-begin
-    cantMenoresALTO := 0;
-    cantMenoresCUB := 0;
-    maxR := -1;
-    maxC := -1;
-    cantVentasC := 0;
-    cantVentasR := 0;
-    pC := 0;
-    pR := 0;
-
-    writeln('====INGRESE TIPO DE TANQUE==== (R) (C) (Z)');
-    readln(tanque);
-
-    while (tanque <> 'Z') do begin
-        if (tanque = 'R') then begin 
-            writeln('ANCHO');
-            readln(ancho);
-            writeln('LARGO');
-            readln(largo);
-            writeln('ALTO');
-            readln(alto);
-
-            volumenR := ancho * largo * alto;
-            cantVentasR := cantVentasR + 1;
-            pR := pR + volumenR;
-
-            if (volumenR > maxR) then 
-                maxR := volumenR;
-
-            if (alto < 1.40) then 
-                cantMenoresALTO := cantMenoresALTO + 1;
-        end
-        else if (tanque = 'C') then begin 
-            writeln('RADIO');
-            readln(radioC);
-            writeln('ALTO');
-            readln(altoC);
-
-            volumenC := Pi * radioC * radioC * altoC;
-            cantVentasC := cantVentasC + 1;
-            pC := pC + volumenC;
-
-            if (volumenC > maxC) then 
-                maxC := volumenC;
-
-            if (altoC < 1.40) then 
-                cantMenoresALTO := cantMenoresALTO + 1;
-        end;
-
-        if (volumenR < 800) or (volumenC < 800) then 
-            cantMenoresCUB := cantMenoresCUB + 1;
-
-        writeln('====INGRESE TIPO DE TANQUE==== (R) (C) (Z)');
-        readln(tanque);
-    end;
-
-    writeln('Volumen de los dos mayores tanques vendidos:');
-    writeln('Para tanques cilíndricos: ', maxC:0:2);
-    writeln('Para tanques rectangulares: ', maxR:0:2);
-
-    writeln('Volumen promedio de todos los tanques cilíndricos vendidos: ', pC / cantVentasC:0:2);
-    writeln('Volumen promedio de todos los tanques rectangulares vendidos: ', pR / cantVentasR:0:2);
-
-    writeln('Cantidad de tanques cuyo alto es menor a 1.40 metros: ', cantMenoresALTO);
-    writeln('Cantidad de tanques cuyo volumen es menor a 800 metros cúbicos: ', cantMenoresCUB);
-end.
