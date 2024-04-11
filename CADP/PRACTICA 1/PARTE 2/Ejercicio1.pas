@@ -11,7 +11,7 @@ begin
 	resultado:=0;
 	mayor:= 0;
 	
-	for i:= 0 to 2 do begin
+	for i:= 1 to 10 do begin
 		readln(num1);
 		if (num1 > 5) then begin
 			mayor:= mayor+1;
