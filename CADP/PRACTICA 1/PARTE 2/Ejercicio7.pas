@@ -12,12 +12,9 @@ begin
     min1:= 9999;
     min2:= 9999;
     
-    
-
-    for i:=1 to 4 do begin 
-    
-		readln(nombre);
-		readln(tiempo);
+    for i:=1 to 100 do begin 
+	readln(nombre);
+	readln(tiempo);
 		
         if (tiempo > max1) then begin 
             max2:= max1;
@@ -25,7 +22,7 @@ begin
             max1:= tiempo;
             p1:= nombre;
         end 
-        else if (max2 < max1) then begin 
+        else if (max2 > max1) then begin 
                 max2:= tiempo;
                 p2:= nombre;
         end;
@@ -36,7 +33,7 @@ begin
             min1:= tiempo;
             u1:= nombre;
         end 
-        else  if (tim1 < min2) then begin  
+        else  if (min1 < min2) then begin  
                 min2:= tiempo;
                 u2:= nombre;
         end;
