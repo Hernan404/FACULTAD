@@ -23,7 +23,7 @@ repeat
 		
 			
 		
-until nombre = 'zidane';		
+until nombre = 'Zidane Zinedine';		
 	
 writeln('cantidad de aprobados ', aprobado);
 writeln('cantidad con 7 ', con7);
