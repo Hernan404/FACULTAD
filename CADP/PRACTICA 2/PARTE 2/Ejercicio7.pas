@@ -1,30 +1,33 @@
-program EJ7P2P2;
+program EJ7P2P1;
 
-procedure cantidad (var sumaD:integer; var num:integer; var cantdigitos:integer);
+procedure proceso (var num,suma,total,cant:integer);
 var 
-    digitos:integer;
+	digito:integer;
 begin 
-	digitos:= 0;
-    
-		digitos:= num mod 10;
-        cantdigitos:= cantdigitos +1;
-        sumaD:= sumaD + digitos;
+	cant:= 0;
+	while (num > 0) do begin 
+		digito:= num mod 10;
+		suma:= suma + digito;
+		cant:= cant +1;
+		total:= total + 1;
 		num:= num div 10;
-		
-  
-    
+	end;
+	writeln('cantidad de digitos que posee: ', cant);
+	writeln('suma de los digitos: ', suma);
 end;
 
+
 var 
-    num,cantdigitos,sumaD:integer;
+	num,suma:integer;
+	total,cant:integer;
 begin 
-	
-		cantdigitos:= 0;
-		sumaD:= 0;
-		writeln('ingrese numero');
+	repeat 
+		suma:= 0;
+		cant:= 0;
+		writeln('INGRESE NUMERO');
 		readln(num);
-	 
-		cantidad(sumaD,num,cantdigitos);
-		
-		writeln('cantidad de digitos: ', cantdigitos);
+		proceso(num,suma,total,cant);
+	until suma = 10;
+	
+	writeln('cantidad total de digitos leidos: ', total);
 end.
