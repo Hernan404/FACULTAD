@@ -19,21 +19,23 @@ begin
 	ventas:= 0;
 
 	for dia:= 1 to 31 do begin 
+	     writeln('INGRESE MONTO');
+	     readln(monto);
+	     while (monto <> 0) do begin 
+		    ventas:= ventas +1;
+		    total:= total + monto;
+			
+		  if (ventas > max) then begin 
+		      max:= ventas;
+		      p1:= dia;
+		  end;
+    
 		writeln('INGRESE MONTO');
 		readln(monto);
-		while (monto <> 0) do begin 
-			ventas:= ventas +1;
-			total:= total + monto;
-			
-			if (ventas > max) then begin 
-				max:= ventas;
-				p1:= dia;
-			end;
-			writeln('INGRESE MONTO');
-			readln(monto);
-		end;
-		writeln('ventas del dia: ', ventas);
-		ventas:=0;
+  
+	     end;
+	  writeln('ventas del dia: ', ventas);
+	  ventas:=0;
 	end;
 	writeln('monto total: ', total:2:0);
 	writeln('dia con mas ventas: ', p1);
