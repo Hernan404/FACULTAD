@@ -1,33 +1,40 @@
-program EJ6P1P2;
+Realizar un programa que lea información de 200 productos de un supermercado. De cada producto se lee
+código y precio (cada código es un número entre 1 y 200). Informar en pantalla:
+● Los códigos de los dos productos más baratos.
+● La cantidad de productos de más de 16 pesos con código par.
 
-type
-	codigos=0..200;
+program EJ3P1P2;
 
 var
-	i,codi,pares_mayores:codigos;
-	precio,precio_promedio, promedio:real;
-	productos:integer;
-begin
-	productos:=0;
-	precio:=0;
-	promedio:=0;
-	codi:=0;
-	precio_promedio:=0;
-	pares_mayores:=0;
-	for i:=1 to 10 do 
-		begin
-			write('Codigo del producto: ');
-			read(codi);
-			write('Precio del producto: ');
-			read(precio);
-			productos:=productos+1;
-			precio_promedio:=precio_promedio+precio;
-			if ((codi mod 2=0)) and (precio>16) then	
-				pares_mayores:=pares_mayores+1;
-				
-		end;
-	promedio:= precio_promedio/productos;
-	writeln('el promedio es: ', promedio:3:3);
-	writeln('La cantidad de productos de mas de 16 pesos con codigo par es: ', pares_mayores);
+	i,codigo,cod1,cod2:integer;
+	precio,min1,min2:real;
+	cantpar:integer;
+begin 
+	min1:=9999;
+	min2:=9999;
+	cantpar:= 0;
 	
+	for i:=1 to 200 do begin 
+		writeln('INGRESE CODIGO');
+		readln(codigo);
+		writeln('INGRESE PRECIO');
+		readln(precio);
+		
+		if (precio < min1) then begin 
+			min2:= min1;
+			cod2:= cod1;
+			min1:= precio;
+			cod1:= codigo;
+		end
+		else if (min1 < min2) then begin
+			min2:= precio;
+			cod2:= codigo;
+		end;
+		
+		if (precio > 16) and ((codigo mod 2)=0) then 
+			cantpar:= cantpar +1;
+	end;
+	writeln('CODIGO DE LOS PRODUCTOS MAS BARATOS: ', cod1, 'y ', cod2);
+	writeln('CANTIDAD DE PRODUCTOS CON CODIGO PAR Y PRECIO MAYOR A 16: ', cantpar);
 end.
+		
