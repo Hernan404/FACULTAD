@@ -1,37 +1,52 @@
+{Realizar un programa modularizado que lea una secuencia de caracteres y verifique si cumple con el
+patrón A$B#, donde:
+- A es una secuencia de sólo letras vocales
+- B es una secuencia de sólo caracteres alfabéticos sin letras vocales
+- los caracteres $ y # seguro existen
+Nota: en caso de no cumplir, informar que parte del patrón no se cumplió.}
+
 program EJ10P2P2;
 
-procedure subru (numerosF:longint;   var sumapar,cantimpar:integer );
-var
-    digitos:integer;
-    
-begin
-    while (numerosF <> 123456) do begin
-		
-        digitos:= numerosF mod 10;
-
-        if (digitos div 2 = 0) then 
-            sumapar:= sumapar + digitos
-        else
-            cantimpar:= cantimpar +1;
-            
-        numerosF:= numerosF DIV 10
-    end;
+	
+function puntoA(sec:char):boolean;
+begin 
+	if (sec = 'A') or (sec = 'E') or (sec = 'I') or (sec = 'O') or (sec = 'U') then 
+		puntoA:= true;
 end;
 
-
+function puntoB(sec:char):boolean;
+begin 
+	if (sec <> 'A') and (sec <> 'E') and (sec <> 'I') and (sec <> 'O') and (sec <> 'U') then 
+		puntoB:= true;
+end;
 var 
-    sumapar,cantimpar:integer;
-	numeros:longint;
-
-begin
-    cantimpar:= 0;
-    
-    sumapar:= 0;
-    
-	readln(numeros);
+	sec:char;
+	cumple:integer;
+	i:integer;
+begin 
+	cumple:= 0;
 	
-    subru(numeros,sumapar,cantimpar);
-
-    writeln('suma de pares', sumapar);
-    writeln('cantidad de impares', cantimpar);
+	for i:=1 to 4 do begin 
+		writeln('INGRESE CARACTERES');
+		readln(sec);
+		
+		if (i = 1) then 
+			if (puntoA(sec)) then  
+				cumple:= cumple +1;
+		if (i = 3) then 
+			if (puntoB(sec)) then 
+				cumple:= cumple +1;
+		if (i = 2) then
+			if (sec = '$') then 
+				cumple:= cumple +1;
+		if (i = 4) then 
+			if (sec = '#') then 
+				cumple:= cumple +1;
+	end;
+	
+		if (cumple = 4) then  
+			writeln('cumple la secuencia')
+		else 
+			writeln('no cumplio la secuencia');
 end.
+
