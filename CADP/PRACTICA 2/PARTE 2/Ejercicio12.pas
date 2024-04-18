@@ -1,3 +1,15 @@
+ Realizar un módulo que calcule el rendimiento económico de una plantación de soja. El módulo debe
+recibir la cantidad de hectáreas (ha) sembradas, el tipo de zona de siembra (1: zona muy fértil, 2: zona
+estándar, 3: zona árida) y el precio en U$S de la tonelada de soja; y devolver el rendimiento económico
+esperado de dicha plantación. Para calcular el rendimiento económico esperado debe considerar el siguiente
+rendimiento por tipo de zona:
+
+Tipo de zona Rendimiento por ha
+1 6 toneladas por ha
+2 2,6 toneladas por ha
+3 1,4 toneladas por ha
+
+
 program EJ12P2P2;
 
 
