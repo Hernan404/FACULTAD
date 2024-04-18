@@ -1,52 +1,41 @@
-{Realizar un programa modularizado que lea una secuencia de caracteres y verifique si cumple con el
+Realizar un programa modularizado que lea una secuencia de caracteres y verifique si cumple con el
 patrón A$B#, donde:
 - A es una secuencia de sólo letras vocales
 - B es una secuencia de sólo caracteres alfabéticos sin letras vocales
 - los caracteres $ y # seguro existen
-Nota: en caso de no cumplir, informar que parte del patrón no se cumplió.}
+Nota: en caso de no cumplir, informar que parte del patrón no se cumplió.
+
 
 program EJ10P2P2;
 
-	
-function puntoA(sec:char):boolean;
-begin 
-	if (sec = 'A') or (sec = 'E') or (sec = 'I') or (sec = 'O') or (sec = 'U') then 
-		puntoA:= true;
-end;
-
-function puntoB(sec:char):boolean;
-begin 
-	if (sec <> 'A') and (sec <> 'E') and (sec <> 'I') and (sec <> 'O') and (sec <> 'U') then 
-		puntoB:= true;
-end;
+procedure proceso(s:char);
 var 
-	sec:char;
-	cumple:integer;
-	i:integer;
+    cumple:boolean;
 begin 
-	cumple:= 0;
-	
-	for i:=1 to 4 do begin 
-		writeln('INGRESE CARACTERES');
-		readln(sec);
-		
-		if (i = 1) then 
-			if (puntoA(sec)) then  
-				cumple:= cumple +1;
-		if (i = 3) then 
-			if (puntoB(sec)) then 
-				cumple:= cumple +1;
-		if (i = 2) then
-			if (sec = '$') then 
-				cumple:= cumple +1;
-		if (i = 4) then 
-			if (sec = '#') then 
-				cumple:= cumple +1;
-	end;
-	
-		if (cumple = 4) then  
-			writeln('cumple la secuencia')
-		else 
-			writeln('no cumplio la secuencia');
-end.
+    while(cumple) and (s <> '#') do begin 
+        while (s <> '$') and ((s = 'a') or (s = 'e') or (s = 'i') or (s = 'o') or (s = 'u') or (s = 'A') or (s = 'E') or (s = 'I') or (s = 'O') or (s = 'U')) do
+            readln(s);
+        if (s <> '$') and (cumple) then begin 
+            cumple:= false;
+            writeln('NO CUMPLIO LAS MINUSCULAS')
+        end;
 
+        while (s<> '#') and (cumple) and  ((s <> 'a') and (s <> 'e') and (s <> 'i') and (s <> 'o') and (s <> 'u') and (s <> 'A') and (s <> 'E') and (s <> 'I') and (s <> 'O') and (s <> 'U')) do
+            readln(s);
+        if (s <> '#') and (cumple) then begin 
+            cumple:= false;
+            writeln('NO CUMPLIO LAS MAYUSCULAS')
+        end;
+    end;
+end;
+
+
+
+var 
+    s:char;
+begin 
+    writeln('INGRESE SECUENCIA');
+    readln(s);
+
+    proceso(s);
+end.
