@@ -1,3 +1,37 @@
+1. Dado el siguiente programa:
+program Registros;
+type
+str20 = string[20];
+alumno = record
+codigo : integer;
+nombre : str20;
+promedio : real;
+end;
+procedure leer(var alu : alumno);
+begin
+writeln(‘Ingrese el código del alumno’);
+read(alu.codigo);
+if (alu.codigo <> 0) then begin
+writeln(‘Ingrese el nombre del alumno’); read(alu.nombre);
+writeln(‘Ingrese el promedio del alumno’); read(alu.promedio);
+end;
+end;
+{ declaración de variables del programa principal }
+var
+a : alumno;
+{ cuerpo del programa principal }
+begin
+...
+end.
+a. Completar el programa principal para que lea información de alumnos (código, nombre, promedio) e
+informe la cantidad de alumnos leídos. La lectura finaliza cuando ingresa un alumno con código 0, que
+no debe procesarse. Nota: utilizar el módulo leer.
+b. Modificar al programa anterior para que, al finalizar la lectura de todos los alumnos, se informe
+también el nombre del alumno con mejor promedio.
+
+
+====================================================================
+
 program Registros;
 type
 	str20 = string[20];
@@ -5,39 +39,43 @@ type
 	codigo : integer;
 	nombre : str20;
 	promedio : real;
-	mejor_promedio: real;
 end;
-procedure leer(var alu : alumno; var cantAlu: integer);
-begin
 
-	writeln('Ingrese el codigo del alumno');
+procedure leer(var alu : alumno);
+
+begin
+	writeln('Ingrese el código del alumno');
 	readln(alu.codigo);
-	if (alu.codigo <> 0) then begin
-	cantAlu:= cantAlu +1;
 	
-	writeln('Ingrese el nombre del alumno'); 
-	readln(alu.nombre);
-	
-	writeln('Ingrese el promedio del alumno'); 
-	read(alu.promedio);
+	if (alu.codigo <> 0) then begin 
+		writeln('Ingrese el nombre del alumno'); 
+		readln(alu.nombre);
+		
+		writeln('Ingrese el promedio del alumno');
+		readln(alu.promedio);	
 	end;
+
 end;
-	
-end;
+{ declaración de variables del programa principal }
+
 
 var
 	a : alumno;
-	cantAlu:integer;
+	cant:integer;
+	max:real;
 { cuerpo del programa principal }
 begin
-	cantAlu:= 0;
-	a.mejor_promedio:= -1;
-	while (alu.codigo <> 0) do begin
-	leer(a,cantAlu);
-	if (a.promedio > a.mejor_promedio) then
-		a.mejor_promedio:= a.promedio;
+	max:= -1;
+	cant:= 0;
+	leer(a);
+	while (a.codigo <> 0) do begin
+		cant:= cant +1; 
+		
+		if (a.promedio > max) then 
+			max:= a.promedio;
+		
+		leer(a);
 	end;
-	
-	writeln('la cantidad de alumnos es: ', cantAlu);
-	writeln('mejor promedio: ', a.mejor_promedio);
+	writeln('cantidad de alumnos: ', cant);
+	writeln('alumno con mejor promedio: ', max:2:0);
 end.
