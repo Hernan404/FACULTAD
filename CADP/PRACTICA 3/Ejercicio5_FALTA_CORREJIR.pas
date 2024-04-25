@@ -46,15 +46,17 @@ begin
 		promedio:= 0;
 		cant:= 0;
 		marcaACT:= r.marca;
-		while (r.marca <> marcaACT) do begin 
+		while (r.marca = marcaACT) do begin 
 			promedio:= promedio + r.precio;
 			proceso(r,m1,o1,max); 
 			cant:= cant +1;
 			leer(r);
 		
 		end;
+		
+		writeln('El precio promedio por marca: ', promedio/cant);
 	end;
 	
-	writeln('Marca y modelo del auto más caro. ', m1,o1);
-	writeln('El precio promedio por marca: ', promedio:2:0);
+	writeln('Marca y modelo del auto más caro. ', 'MARCA: ', m1, 'MODELO: ',o1);
+	writeln('El precio promedio por marca: ', promedio/cant);
 end.
