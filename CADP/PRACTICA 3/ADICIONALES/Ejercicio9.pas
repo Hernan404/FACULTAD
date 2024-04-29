@@ -1,72 +1,58 @@
+Realizar un programa que lea información de los candidatos ganadores de las últimas elecciones a intendente
+de la provincia de Buenos Aires. Para cada candidato se lee: localidad, apellido del candidato, cantidad de votos
+obtenidos y cantidad de votantes de la localidad. La lectura finaliza al leer la localidad ‘Zárate’, que debe
+procesarse. Informar:
+● El intendente que obtuvo la mayor cantidad de votos en la elección.
+● El intendente que obtuvo el mayor porcentaje de votos de la elección
+
 program EJ9P3;
-
 type 
-    datos = record 
-        localidad:string;
-        apellido:string;
-        cantVotos:integer;
-        cantVotantes:integer;
-    end;
+	data = record 
+		localidad:string;
+		apellido:string;
+		cant_votos:integer;
+		cant_localidad:integer;
+	end;
 
-procedure leer (var d:datos);
+procedure leer(var r:data);
 begin 
-    with d do begin 
-		writeln('localidad');
-        readln(localidad);
-        writeln('apellido');
-        readln(apellido);
-        writeln('cant votos');
-        readln(cantVotos);
-        writeln('canti Votantes');
-        readln(cantVotantes);
-    end;
+	with r do begin 
+		writeln('LOCALIDAD');
+		readln(localidad);
+		writeln('APELLIDO');
+		readln(apellido);
+		writeln('CANTIDAD DE VOTOS');
+		readln(cant_votos);
+		writeln('CANTIDAD DE VOTOS POR LOCALIDAD');
+		readln(cant_localidad);
+	end;
 end;
 
-procedure mayorvotos(var d:datos; var max:real; var maxvotos:string);
-begin 
-    if (d.cantVotos > max) then begin
-        max:= d.cantVotos;
-        maxvotos:= d.apellido;
-    end;
-end;
-
-procedure mayorporcentaje (var maxporcentaje:real; var d:datos; var cumpleB:string);
+procedure procesardatos (var r:data);
 var 
-	porcentaje:real;
+	max:integer; a1,a2:string; porce:real; maxp:real;
 begin 
-	porcentaje:= (d.cantVotos*10) /100;
+	max:= -1; a1:= ''; a2:=''; porce:= 0; maxp:= -1;
 
-    if (porcentaje > maxporcentaje) then begin
-        maxporcentaje:= porcentaje;
-        cumpleB:= d.apellido;
-    end;
-end;
-
-procedure procesarDatos (var d:datos; max:real; maxvotos:string; maxporcentaje:real; cumpleB:string);
-begin
-    repeat 
-        leer(d);
-        mayorvotos(d,max,maxvotos);
-        mayorporcentaje(maxporcentaje,d,cumpleB);
-    until (d.localidad = 'zarate');
-    
-    writeln('intendente mayor cantidad de votos ', maxvotos);
-    writeln('intendente mayor porcentaje ', cumpleB);
+	repeat 
+		if (r.cant_votos > max) then begin 
+			max:= r.cant_votos;
+			a1:= r.apellido;
+		end;
+		porce:= r.cant_votos / r.cant_localidad * 100;
+		if (porce > maxp) then begin 
+			maxp:= porce;
+			a2:= r.apellido;
+		end;
+		leer(r);
+	until (r.localidad = 'zarate');
+	writeln('El intendente que obtuvo la mayor cantidad de votos en la elección: ', a1);
+	writeln('El intendente que obtuvo el mayor porcentaje de votos de la elección: ', a2);
 end;
 
 var 
-	max:real;
-    d:datos;
-    maxporcentaje:real;
-    cumpleB:string;
-    maxvotos:string;
+	r:data;
 begin 
-    max:= -1;
-    maxporcentaje:= -1;
-	maxvotos:= '';
-	cumpleB:= '';
-	
-    procesardatos(d,max,maxvotos,maxporcentaje,cumpleB);
-
-    
+	leer(r);
+	procesardatos(r);
 end.
