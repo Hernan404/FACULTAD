@@ -1,121 +1,104 @@
+Una compañía de vuelos internacionales está analizando la información de todos los vuelos realizados por
+sus aviones durante todo el año 2019. De cada vuelo se conoce el código de avión, país de salida, país de
+llegada, cantidad de kilómetros recorridos y porcentaje de ocupación del avión. La información se ingresa
+ordenada por código de avión y, para cada avión, por país de salida. La lectura finaliza al ingresar el código 44.
+Informar:
+● Los dos aviones que más kilómetros recorrieron y los dos aviones que menos kilómetros recorrieron.
+● El avión que salió desde más países diferentes.
+● La cantidad de vuelos de más de 5.000 km que no alcanzaron el 60% de ocupación del avión.
+● La cantidad de vuelos de menos de 10.000 km que llegaron a Australia o a Nueva Zelanda
+
 program EJ11P3;
 type
-    avion = record
-        codigo:integer;
-        pais_salida:string;
-        pais_llegada:string;
-        cantKM:integer;
-        porcentaje_ocu:real;
-    end;
-    
-procedure leer(var a:avion);
-begin 
-		writeln('codigo de avion');
-        readln(a.codigo);
-        writeln('pais de salida');
-        readln(a.pais_salida);
-        writeln('pais de llegada');
-        readln(a.pais_llegada);
-        writeln('cantidad de km recorridos');
-        readln(a.cantKM);
-        writeln('porcentaje de ocupacion');
-        readln(a.porcentaje_ocu);
+	data = record 
+		codigo:integer;
+		salida:string;
+		llegada:string;
+		cantKM:real;
+		ocupacion:real;
+	end;
 
+procedure leer(var r:data);
+begin 
+	with r do begin 
+		writeln('CODIGO');
+		readln(codigo); 
+		writeln('SALIDA');
+		readln(salida);
+		writeln('LLEGADA');
+		readln(llegada);
+		writeln('CANTKM');
+		readln(cantKM);
+		writeln('OCUPACION');
+		readln(ocupacion);
+	end;
 end; 
 
-procedure maskm (a:avion; var max1,max2,m1,m2:integer);
+procedure mayor(r:data; var max1,max2,cod1,cod2:real);
 begin 
-    if (a.cantKM > max1) then 
-        max2:= max1;
-        m2:= m1;
-        max1:= a.cantKM;
-        m1:= a.codigo;
-    if (max1 > max2) then 
-        max2:= a.cantKM;
-        m2:= a.codigo;
+	if (r.cantKM > max1) then begin 
+		max2:= max1; 
+		cod2:= cod1;
+		max1:= r.cantKM;
+		cod1:= r.codigo;
+	end
+	else if (max1 > max2) then begin 
+		max2:= r.cantKM;
+		cod2:= r.codigo;
+	end;
 end;
 
-procedure menosKM (a:avion; var min1,min2,l1,l2:integer);
-begin 
-    if (a.cantKM < min1) then begin
-        min2:= min1;
-        l2:= l1;
-        min1:= a.cantKM;
-        l1:= a.codigo
-    end
-    else 
-        if (min2 < min1) then 
-            min2:= a.cantKM;
-            l2:= a.codigo;
-    end;
 
-function puntoC(a:avion):boolean;
+procedure menor (r:data; var min1,min2,mcod1,mcod2:real);
 begin 
-    puntoC:= (a.cantKM > 5000) and (a.porcentaje_ocu < 60);
+	if (r.cantKM < min1) then begin 
+		min2:= min1;
+		mcod2:= mcod1;
+		min1:= r.cantKM;
+		mcod1:= r.codigo;
+	end 
+	else if (min1 < min2) then begin 
+		min2:= r.cantKM;
+		mcod2:= r.codigo;
+	end;
 end;
 
-function puntoD(a:avion):boolean;
-begin
-    puntoD:= (a.cantKM < 10000) and ((a.pais_llegada = 'australia') or (a.pais_llegada = 'nueva zelanda'));  
-end;
 
-procedure procesarDatos (var a:avion);
+procedure procesardatos (var r:data);
 var 
-    max,max1,max2:integer;
-    m1,m2:integer;
-    l1,l2:integer;
-    min1,min2:integer;
-    cantcumpleD,cantcumpleC:integer;
-    paisNUE,paisACT:integer;
-    cantdif:integer;
-    cumpleB:integer;
-   
-begin
-	cumpleB:= 0;
-    cantdif:= 0;
-    cantcumpleC:= 0;
-    max:= -1;
-    cantcumpleD:= 0;
-    max1:= -1;
-    max2:= -1;
-    min1:= 9999;
-    min2:= 9999;
-    
-    
-    paisACT:= a.codigo;
-    leer(a);
-    paisNUE:= a.codigo;
-    maskm(a,max1,max2,m1,m2);
-    menoskm(a,min1,min2,l1,l2);
-   
-    if puntoC(a) then begin
-        cantcumpleC:= cantcumpleC +1;
-    end;
-
-    if puntoD(a) then begin 
-        cantcumpleD:= cantcumpleD +1;
-    end;
-
-    if (paisACT <> paisNUE) then begin 
-        cantdif:= cantdif +1;
-        if (cantdif > max) then 
-            max:= cantdif;
-            cumpleB:= cumpleB +1;
-    end;
-
-    writeln('los dos aviones con mas KM ', m1 , m2);
-    writeln('los dos aviones con menos KM ', l1 , l2);
-    writeln('el avion que salio de mas paises diferentes ', cumpleB);
-    writeln('cantidad de vuelos de mas de 5k km y con 60% etc ', cantcumpleC);
-    writeln('la cantidad de vuelos de mas de 10k km con aus o nzl etc', cantcumpleD);
-
-   end;
-
-var
-    a:avion;
+	cod1,cod2,mcod1,mcod2,max1,max2,min1,min2,maxP:integer;
+	avionB,cantC,cantB,cantD:integer;
+	paisB:string;
 begin 
-	leer(a);
-   while (a.codigo <> 44) do begin 
-	procesarDatos(a);
-   end;
+	max1:= -1; max2:= -1; min1:= 9999; min2:= 9999; cod1:= 0; cod2:= 0; mcod1:= 0; mcod2:= 0; maxP:= -1; cantC:= 0; cantD:= 0; paisB:= ''; cantB:= 0;
+	while (r.codigo <> 44) do begin
+ 		mayor(r,max1,max2,cod1,cod2);
+		menor(r,min1,min2,mcod1,mcod2);
+		if (r.cantKM > 5.000) and (r.ocupacion > 60) then 
+			cantC:= cantC +1;
+		if (r.cantKM > 10.000) and ((r.llegada = 'australia') or (r.llegada = 'nueva zelanda')) then 
+			cantD:= cantD +1;
+		if (paisB = r.salida) then begin 
+			cantB:= cantB+1;
+			paisB:= r.llegada;
+			if (cantB > maxP) then begin 
+				maxP:= cantB;
+				avionB:= r.codigo;
+			end;
+		end;
+		leer(r);
+	end;
+	writeln('Los dos aviones que más kilómetros recorrieron y los dos aviones que menos kilómetros recorrieron: ', cod1, cod2, mcod1, mcod2);
+	writeln('El avión que salió desde más países diferentes: ', avionB);
+	writeln('La cantidad de vuelos de más de 5.000 km que no alcanzaron el 60% de ocupación del avión: ', cantC);
+	writeln('La cantidad de vuelos de menos de 10.000 km que llegaron a Australia o a Nueva Zelanda: ', cantD);
+end;
+
+
+
+var 
+	r:data;
+begin 
+	leer(r);
+	procesardatos(r);
 end.
