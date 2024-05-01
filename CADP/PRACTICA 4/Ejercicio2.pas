@@ -1,53 +1,54 @@
+a. El módulo cargarVector debe leer números reales y almacenarlos en el vector que se pasa como
+parámetro. Al finalizar, debe retornar el vector y su dimensión lógica. La lectura finaliza cuando se
+ingresa el valor 0 (que no debe procesarse) o cuando el vector está completo.
+b. El módulo modificarVectorySumar debe devolver el vector con todos sus elementos incrementados
+con el valor n y también debe devolver la suma de todos los elementos del vector
+
 program Vectores;
 const
-cant_datos = 150;
+	cant_datos = 150;
 type
-vdatos = array[1..cant_datos] of real;
-
-
-procedure cargarVector(var v:datos; var dimL : integer);
+	vdatos = array[1..cant_datos] of real;
+	
+procedure cargarVector(var v:vdatos; var dimL : integer);
 var
-    i,valor:integer;
+	num:real;
 begin
-    i:= 1;
-    while (i < dimf) do begin
-        readln(a[i]);
-        i:= i+1;
-
-
-    end;
-
+	writeln('numero'); 
+	readln(num);
+	
+	while (num <> 0) and (dimL < 150) do begin 
+		dimL:= dimL +1;
+		v[dimL]:= num;
+		writeln('numero');
+		readln(num);
+	end;
 end;
 
-
-
-
-procedure modificarVectorySumar(var v:datos;dimL : integer; n: real; var suma: real);
+procedure modificarVectorySumar(var v:vdatos; dimL : integer; n: real; var suma: real);
 var
-    i:integer;
+	x:integer;
 begin
-    while (i <= dimf) do begin
-        i:=i+1
-
+	for x:=1 to dimL do begin 
+		v[x]:= v[x] + n;
+		suma:= suma + v[x];
+	end;
 end;
 
-
-
+{ programa principal }
 var
-datos : vdatos;
-i, dim : integer;
-num, suma : real;
-
+	datos : vdatos;
+	i, dim : integer;
+	num, suma : real;
 begin
-dim := 0;
-sumaTotal := 0;
-cargarVector(datos,diml); { completar }
+	dim := 0;
+	sumaTotal := 0;
 
-    writeln(‘Ingrese un valor a sumar’);
-    readln(num);
+	cargarVector(v,dim); { completar }
+	writeln('Ingrese un valor a sumar');
+	readln(num);
 
-    modificarVectorySumar(datos);{completar}
-
-writeln(‘La suma de los valores es: ’, suma);
-writeln(‘Se procesaron: ’,dim, ‘ números’)
+	modificarVectorySumar(v,dim,n,suma);{completar}
+	writeln('La suma de los valores es: ', suma);
+	writeln('Se procesaron: ',dim, 'números')
 end.
