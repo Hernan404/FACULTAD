@@ -59,3 +59,82 @@ begin
   end;
   writeln(anioMax, anioMax2);
 end. 
+
+
+=================================================================================
+
+
+
+program EJ13P4P1;
+const 
+	dimf = 50;
+type 
+	reg_temp = record 
+		temp50:real;
+		tempPROMEDIO:real;
+	end;
+	
+	vector = array [1..dimf] of integer;
+
+
+function puntoA(v:vector):integer;
+var 
+	i:integer;
+	tempPROMEDIO:real;
+begin 
+	tempPROMEDIO:= 0;
+	for i:=1 to dimf do 
+		if (tempPROMEDIO < v[i].tempPROMEDIO) then begin 
+			tempPROMEDIO:= v[i].tempPROMEDIO;
+			puntoA:= i;
+		end;
+end;
+
+function puntoB(v:vector):integer;
+var 
+	i:integer;
+	tempALTA:real;
+begin 
+	tempALTA:= 0;
+	for i:=1 to dimf do begin 
+		if (tempALTA < v[i].tempALTA) then begin 
+			tempALTA:= v[i].tempALTA;
+			puntoB:= i;
+		end;
+	end;
+end;
+
+procedure procesardatos (var v:vector);
+var
+	i,x:integer;
+	lugar:string;
+	temp,tempPROMEDIO,temp50:real;
+begin 
+	tempPROMEDIO:= 0;
+	temp50:= 0;
+
+	for x:=1 to dimf do begin 
+			for i:=1 to 100 do begin 
+				writeln('LUGAR');
+				readln(lugar);
+				writeln('TEMPERATURA');
+				readln(temp);
+				
+				if (temp50 < temp) then 
+					temp50:= temp;
+				
+				tempPROMEDIO:= tempPROMEDIO + temp;
+			end;
+		tempPROMEDIO:= tempPROMEDIO/100;
+		v[x].temp50:= temp50;
+		v[x].tempPROMEDIO:= tempPROMEDIO;
+	end;
+end;
+
+var 
+	v:vector;
+begin 
+	procesardatos(v);
+	writeln('anio con mayor temperatura', puntoA(v));
+	writeln('anio con mayor temperatura en algun punto ', puntoB(v));
+end.
