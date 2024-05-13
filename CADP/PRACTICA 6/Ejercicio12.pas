@@ -1,51 +1,64 @@
+Una empresa desarrolladora de juegos para teléfonos celulares con Android dispone de información de
+todos los dispositivos que poseen sus juegos instalados. De cada dispositivo se conoce la versión de
+Android instalada, el tamaño de la pantalla (en pulgadas) y la cantidad de memoria RAM que posee
+(medida en GB). La información disponible se encuentra ordenada por versión de Android. Realizar un
+programa que procese la información disponible de todos los dispositivos e informe:
+a. La cantidad de dispositivos para cada versión de Android.
+b. La cantidad de dispositivos con más de 3 GB de memoria y pantallas de a lo sumo a 5 pulgadas.
+c. El tamaño promedio de las pantallas de todos los dispositivos
+
 program EJ12P6;
 type 
-    celular = record 
-        version:real;
-        tamanio:real;
-        RAM:integer;
-    end;
+	data = record 
+		version:integer;
+		pantalla:real;
+		cant_ram:real;
+	end;
+	
+	lista = ^nodo;
+	nodo = record 
+		data:datos;
+		sig:lista;
+	end;
 
-    lista = ^nodo
-    nodo = record 
-        data:celular
-        sig:lista;
-    end;
-
-function puntoB (L:lista; c:celular):boolean;
+procedure leer(var r:datos); // se dispone
+procedure cargardatos(L:lista); // se dispone
+procedure armarnodo(var L:lista; r:datos); //se dispone
+	
+function cumpleB(r:datos):boolean;
 begin 
-    puntoB:= (c.RAM > 3) and (c.tamanio >= 5);
+	cumpleB:= (r.cant_ram > 3) and (r.pantalla <= 5);
 end;
 
-procedure procesarDatos(L:lista);
+procedure procesardatos(L:lista);
 var 
-    cantdispositivos,ver,cantB:integer;
-    promedio:real;
+	r:datos; cant_celulares,cantA,cantB:integer; promedio:real; verACT:real;
 begin 
-    ver:= 0;
-    cantB:= 0;
-    cantdispositivos:= 0;
-    cargarlista(L,c);
+	cant_celulares:= 0; cantB:= 0; promedio:= 0;
+	while (L <> nil) do begin 
+		verACT:= L^.data.version;
+		cantA:= 0;
+		cant_celulares:= cant_celulares +1:
 
-    
+		while (L <> nil) and (verACT = L^.data.version) do begin 
+			cantA:= cantA +1;
+			if (cumpleB(L^.data)) then 
+				cantB:= cantB +1;
+			promedio:= promedio + L^.data.pantalla
+		L:= L^.sig;
+		end;
+		writeln('cantidad de versiones: ', cantA 'del dispositivo: ', verACT);
+	end;
 
-    {CORTE DE CONTROL}
-    while (L <> nil) do begin {si no llege al final de la lista}
-        cantdispositivos:= 0; {inicio la cantidad a contar de lo que quiero}
-        ver:= L^.data.version; {guardo el dato de la lista que va ser de anterior a una variable auxiliar}
-        
-        while (L <> nil) and (L^.dato.verion = ver) do begin {comparo el dato actual de la lista si es igual al anterior que guarde}
-            cantdispositivos:= cantdispositivos +1;
-            promedio:= L^.data.tamanio;
-            if puntoB(L,c);
-                cantB:= cantB +1;
-
-            L:= L^.sig;
-        end;
-        {imprimo}
-        writeln('la version ', ver, 'tiene ', cantdispositivos, 'dispositivos');
-        cantC:= cantC +1;
-    end;
-    writeln('dispositivos con 3 de memoria y 5 pulgadas: ', cantB);
-    writeln('promedio: ', promedio/cantC);
+	writeln('La cantidad de dispositivos con más de 3 GB de memoria y pantallas de a lo sumo a 5 pulgadas: ', cantB);
+	writeln('El tamaño promedio de las pantallas de todos los dispositivos: ', promedio/cant_celulares:2:0);
 end;
+	
+var 
+	L:lista;
+begin 
+	L:=nil;
+	cargardatos(L); //se dispone
+	procesardatos(L);
+end.
+
