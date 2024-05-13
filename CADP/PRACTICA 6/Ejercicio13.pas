@@ -27,12 +27,12 @@ begin
 	// leo datos
 end; 
 
-procedure armarnodo(var L:lista; r:datos); 
+procedure armarnodo(var L:lista; r:usuario);  // se dispone
 begin 
 	// cargo lista
 end;
 
-procedure cargardatos(L:lista); se dispone
+procedure cargardatos(L:lista); // se dispone
 begin 
 	//cargo datos, llamo a leer, pongo la condicion de fin.
 end; 	
@@ -46,7 +46,7 @@ begin
 	end;
 end; 
 
-Procedure InsertarElemento ( var pri: lista; r:datos);
+Procedure InsertarElemento ( var pri: lista; r:usuario);
 var 
     ant, nue, act: lista;
 begin
@@ -67,7 +67,7 @@ begin
     nue^.sig := act ;
 end;
 
-procedure puntoC (r:datos; var max1,max2:integer; var u1,u2:string);
+procedure puntoC (r:usuario; var max1,max2:integer; var u1,u2:string);
 begin 
 	if (r.cant_acceso > max1) then begin  
 		max2:= max1;
@@ -83,13 +83,14 @@ end;
 
 procedure procesardatos(L,L2:lista);
 var 
-	r:datos; cantB,max1,max2:integer; u1,u2:string; v:vector; i:integer;
+	r:usuario; cantB,max1,max2:integer; u1,u2:string; v:vector; i:integer;
 begin 
 	cantB:= 0; max1:= -1; max2:= -1; u1:= ''; u2:= '';
 	inivector(v);
+	i:= 0;
 	while (L <> nil) do begin 
 		if (L^.data.revista = 'economica') then 
-			insertarordenado(L2,r);
+			insertarordenado(L2,r); // Se dispone 
 			
 		v[L^.data.rol]:= v[L^.data.rol] +1;
 		puntoC(r,max1,max2,u1,u2);
@@ -114,6 +115,4 @@ begin
 	L2:= nil;
 	cargardatos(L);
 	procesardatos(L);
-end;
-
-
+end.
