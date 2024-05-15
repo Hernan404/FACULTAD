@@ -1,3 +1,13 @@
+{La cátedra de CADP está organizando la cursada para el año 2019. Para ello, dispone de una lista con
+todos los alumnos que cursaron EPA. De cada alumno se conoce su DNI, apellido, nombre y la nota
+obtenida. Escribir un programa que procese la información de alumnos disponible y los distribuya en
+turnos utilizando los siguientes criterios:
+- Los alumnos que obtuvieron al menos 8 en EPA deberán ir a los turnos 1 ó 4.
+- Los alumnos que obtuvieron entre 5 y 8 deberán ir a los turnos 2, 3 ó 5.
+- Los alumnos que no alcanzaron la nota 5 no se les asignará turno en CADP.
+Al finalizar, el programa debe imprimir en pantalla la lista de alumnos para cada turno.
+Nota: La distribución de alumnos debe ser lo más equitativa posible.}
+
 program EJ15P6;
 type 
     alumnos = record 
@@ -90,7 +100,7 @@ end.
 
 
 
-La cátedra de CADP está organizando la cursada para el año 2019. Para ello, dispone de una lista con
+{La cátedra de CADP está organizando la cursada para el año 2019. Para ello, dispone de una lista con
 todos los alumnos que cursaron EPA. De cada alumno se conoce su DNI, apellido, nombre y la nota
 obtenida. Escribir un programa que procese la información de alumnos disponible y los distribuya en
 turnos utilizando los siguientes criterios:
@@ -98,7 +108,8 @@ turnos utilizando los siguientes criterios:
 - Los alumnos que obtuvieron entre 5 y 8 deberán ir a los turnos 2, 3 ó 5.
 - Los alumnos que no alcanzaron la nota 5 no se les asignará turno en CADP.
 Al finalizar, el programa debe imprimir en pantalla la lista de alumnos para cada turno.
-Nota: La distribución de alumnos debe ser lo más equitativa posible.
+Nota: La distribución de alumnos debe ser lo más equitativa posible.}
+
 
 program EJ15P6;
 type 
@@ -129,7 +140,7 @@ begin
 	end;
 end;
 
-procedure turnos(L:lista; r:alumnos);
+procedure turnos(var L:lista; r:alumnos);
 var 
 	aux:lista;
 begin 
@@ -139,7 +150,7 @@ begin
 	L:= aux;
 end;
 	
-procedure cargardatos(L:lista);
+procedure cargardatos(var L:lista);
 var 
 		r:alumnos;
 begin 
@@ -167,21 +178,17 @@ procedure puntoB(L2,L3,L5:lista; var cant2,cant3,cant5:integer; r:alumnos);
 begin 
 		if (r.nota > 5) and (r.nota < 8) then begin 
 		
-			if (cant2 < cant3) or (cant3 < cant5) then begin 
+			if (cant2 <= cant3) and (cant2 <= cant5) then begin 
 				turnos(L2,r);
 				cant2:= cant2 + 1; 
 			end
-			else 
+			else if (cant3 <= cant2) and (cant3 <= cant5) then begin
 				turnos(L3,r);
 				cant3:= cant3 + 1; 
-				
-			if (cant5 < cant3) or (cant5 < cant2) then begin 
-				turnos(L2,r);
-				cant5:= cant5 +1;
-			end
-			else 
-				turnos(L3,r);
-				cant3:= cant3 + 1; 
+			end else begin 
+				turnos(L5,r);
+				cant5:= cant5 + 1;
+			end;
 				
 		end;		
 end;
@@ -191,23 +198,28 @@ begin
 		
 	writeln('== TURNO 1 ==');
 	while (L1 <> nil) do begin 
-			writeln(r.apellido);
+			writeln(L1^.apellido);
+	L1:= L1^.sig;
 	end;
 	writeln('== TURNO 2 ==');
 	while (L2 <> nil) do begin 
-			writeln(r.apellido);
+			writeln(L2^.data.apellido);
+	L2:= L2^.sig;
 	end;
 	writeln('== TURNO 3 ==');
 	while (L3 <> nil) do begin 
-			writeln(r.apellido);
+			writeln(L3^.data.apellido);
+	L3:= L3^.sig;
 	end;
 	writeln('== TURNO 4 ==');
 	while (L4 <> nil) do begin 
-			writeln(r.apellido);
+			writeln(L4^.data.apellido);
+	L4:=L4^.sig;
 	end;
 	writeln('== TURNO 5 ==');
 	while (L5 <> nil) do begin 
-			writeln(r.apellido);
+			writeln(L5^.data.apellido);
+	L5:=L5^.sig;
 	end;
 	
 	
@@ -229,7 +241,7 @@ begin
 	while (L <> nil) do begin 
 		puntoA(L1,L4,L^.data,cant1,cant4);
 		puntoB(L2,L3,L5,cant2,cant3,cant5,L^.data);
-	
+		L:=L^.sig;
 	end;
 		imprimir(L1,L2,L3,L4,L5,L^.data);
 end;
@@ -241,4 +253,3 @@ begin
 	cargardatos(L);
 	procesardatos(L);
 end.
-
