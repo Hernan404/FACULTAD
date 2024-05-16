@@ -48,12 +48,12 @@ begin
 	end;
 end;
 
-procedure crearLista (var L: Lista; r:corredor);
+procedure armarnodo (var L:lista; r:corredor);
   var
     nue,ant,act: Lista;
   begin
     New(nue);
-    nue^.dato:= r;
+    nue^.data:= r;
     nue^.sig:= nil;
 
     if (L = nil) then
@@ -98,32 +98,30 @@ begin
 	end;
 end;
 
-procedure puntoB (r:corredor; max:integer; suma_corredores:integer; var c1:string; var cantB:real);
-begin 
-	if (suma_corredores > max) then begin 
-		max:= suma_corredores;
-		c1:= ciudadACT;
-		cantB:= suma_distancia;
-	end;
-end;
+
 
 procedure procesardatos(L:lista);
 var 
 	total_corredores,total_distancia,total_tiempo:real;
 	promedioC,promedioE,max,suma_corredores,suma_minutos,suma_distancia:real;
 	c1:string;
-	ciudadSF,ciudadACT,paisACT:string;
-	cantB:integer;
+	ciudadSF:integer; ciudadACT,paisACT:string;
+	cantB:real;
 	
 
 begin 
+	total_corredores:= 0; total_distancia:= 0; promedioC:= 0; promedioE:= 0; 
+	suma_corredores:= 0; suma_minutos:= 0; suma_distancia:= 0; c1:= ''; 
+	cantB:= 0; total_tiempo:= 0;
+	ciudadSF:= 0;
+	max:= -1;
 	while (L <> nil) do begin 
 		ciudadACT:= L^.data.ciudad; 
 		paisACT:= L^.data.pais;
 
 		while (L <> nil) and (ciudadACT = L^.data.ciudad) do begin 
 			//PUNTO A
-			suma_minutos + L^.data.tiempo;
+			suma_minutos:= suma_minutos + L^.data.tiempo;
 			//PUNTO B
 			suma_corredores:= suma_corredores +1;
 			suma_distancia:= suma_distancia + L^.data.distancia;
@@ -139,8 +137,12 @@ begin
 		total_tiempo:= total_tiempo + suma_minutos;
 
 		//PUNTO B
-		puntoB(L^.data,max,suma_corredores,c1,cantB);
-
+		if (suma_corredores > max) then begin 
+			max:= suma_corredores;
+			c1:= ciudadACT;
+			cantB:= suma_distancia;
+		end;
+			
 		//PUNTO C 
 		if (paisACT = 'brasil') then 
 			promedioC:= suma_distancia/suma_corredores;
