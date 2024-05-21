@@ -1,150 +1,155 @@
+<{mplementar un programa que lea y almacene información de clientes de una empresa aseguradora
+automotriz. De cada cliente se lee: código de cliente, DNI, apellido, nombre, código de póliza contratada
+(1..6) y monto básico que abona mensualmente. La lectura finaliza cuando llega el cliente con código 1122,
+el cual debe procesarse.
+La empresa dispone de una tabla donde guarda un valor que representa un monto adicional que el cliente
+debe abonar en la liquidación mensual de su seguro, de acuerdo al código de póliza que tiene contratada.
+Una vez finalizada la lectura de todos los clientes, se pide:
+a. Informar para cada cliente DNI, apellido, nombre y el monto completo que paga mensualmente por su
+seguro automotriz (monto básico + monto adicional).
+b. Informar apellido y nombre de aquellos clientes cuyo DNI contiene al menos dos dígitos 9.
+c. Realizar un módulo que reciba un código de cliente, lo busque (seguro existe) y lo elimine de la
+estructura.}
+
+
 program EJ2P7;
-type
-    cliente = record 
-    codigo:integer;
-    DNI:integer;
-    apellidoYnombre:string;
-    codigoPoliza:1..6;
-    montoBasico:real;
-    end;
+type 
+	poliza = 1..6;
+	cliente = record 
+		codigo:integer;
+		DNI:integer;
+		apellido:string;
+		nombre:string;
+		cod_poliza:poliza;
+		monto:real;
+	end;
 
-    lista = ^nodo; 
-    nodo = record 
-        datos:cliente;
-        sig:lista;
-    end;
+	lista = ^nodo; 
+	nodo = record
+		data:cliente;
+		sig:lista;
+	end;
 
-    vector = array [1..6] of integer;
-
-procedure leer (var d:cliente);
-begin 
-    with d do begin 
-		writeln('codigo');
-        readln(codigo);
-        writeln('DNI');
-        readln(DNI);
-        writeln('apellido y nombre');
-        readln(apellidoYnombre);
-        writeln('codigo poliza');
-        readln(codigoPoliza);
-        writeln('monto basico');
-        readln(montoBasico);
-    end;
-end;
-
-procedure armarlista (L:lista; d:cliente);
-var 
-    aux:lista;
-begin 
-    new(aux);
-    aux^.datos:= d;
-    aux^.sig:= L;
-    L:= aux;
-end;
+	vector = array [poliza] of integer;
 
 procedure inivector (var v:vector);
-var 
-    i:integer;
 begin 
-    for i:=1 to 6 do begin 
-        v[i]:= 0;
-    end;
-end; 
-
-procedure cargarLista (var L:lista);
-var 
-	d:cliente;
-begin 
-    repeat  
-        leer(d);
-        armarlista(L,d);
-        
-    until (d.codigo = 1122);
+	// se dispone por la talba de valor adicional;
 end;
 
-procedure puntoA (var d:cliente; var montoAD:real);
+procedure leer(var r:cliente);
 begin 
-    writeln('Estos son sus datos');
-    writeln('DNI: ', d.DNI);
-    writeln('Apellido y nombre', d.apellidoYnombre);
-    writeln('Monto completo que paga mensual: ', d.montoBasico + montoAD);
+	with r do begin 
+		readln(codigo);
+		readln(DNI);
+		readln(apellido);
+		readln(nombre);
+		readln(cod_poliza);
+		readln(monto);
+	end;
 end;
 
-
-function puntoB (DNI:integer): boolean;
-  var
-    cant: integer;
-  begin
-    puntoB:= false;
-    cant:= 0;
-    while (dni > 0) and not(puntoB) do
-      begin
-        if ((dni mod 10) = 9) then
-          cant:= cant + 1;
-        if (cant = 2) then
-          puntoB:= true
-        else
-          dni:= dni div 10;
-      end;
-      puntoB:= (cant >=2);
-     
-  end;
-
-procedure eliminar (var pri:lista; d:cliente; var exito:boolean);
+procedure armarnodo (var L:lista; r:cliente);
 var 
-    ant,act:lista;
+	aux:lista;
 begin 
-    exito:= false;
-    act:= pri;
+	new(aux);
+	aux^.data:= r;
+	aux^.sig:= L;
+	L:= aux;
+end;
 
-    while (act <> nil) and (pri^.datos.codigo <> d.codigo) do begin 
-        ant:= act;
-        act:= act^.sig;
-    end;
+procedure cargardatos(L:lista);
+var 
+	r:cliente;
+begin 
+	leer(r);
+	repeat 
+		armarnodo(L,r);
+		leer(r);
+	until (r.codigo = 1122);
+end;
 
-    if (act <> nil) then begin 
-        exito := true;
-        if (act = pri) then 
-            pri:= act^.sig
-        else 
+procedure imprimirA(montoAD:real; r:cliente);
+begin 
+	writeln('nombreA: 'r.nombre ,'apellido A', r.apellido ,'DNI A', r.DNI , 'MONTO ADICIONAL A', montoAD);
+end;
+
+procedure imprimirB(r:cliente);
+begin 
+	writeln('APELLIDO B', r.apellido , 'NOMBRE B', r.nombre);
+end;
+
+function cumpleB(dni:integer):boolean;
+var 
+	dig9:integer;
+begin 
+	dig9:= 0;
+
+	while (dni > 0) do begin 
+		dni:= dni mod 10;
+		if (dni = 9) then 
+			dig9:= dig9 +1;
+
+		dni:= dni div 10;
+	end;
+
+	cumpleB:= (dig9 >= 2);
+
+end;
+
+procedure eliminar (var pri:lista; var exito:boolean);
+var 
+	ant, act: lista;
+	cod:integer;
+begin 
+	exito:= false;
+	writeln('ingrese codigo a eliminar');
+	readln(cod);
+
+    exito := false;
+    act := pri;
+    {Recorro mientras no se termine la lista y no encuentre el elemento}
+    while  (act <> NIL)  and (act^.data.codigo <> cod) do 
+    begin
+        ant := act;
+        act := act^.sig
+    end;   
+    if (act <> NIL) then 
+    begin
+        exito := true; 
+        if (act = pri) then  
+            pri := act^.sig
+        else  
             ant^.sig:= act^.sig;
         dispose (act);
     end;
 end;
 
-procedure procesarDatos (L:lista);
+procedure procesardatos(L:lista);
 var 
-	exito:boolean;
-	d:cliente;
-    v:vector;
-    montoAD:real;
-    dnidel:integer;
-    cumpleB:string;
+	v:vector; montoAD:real;  exito:boolean;
 begin 
-	montoAD:= 0;
-	cumpleB:= '';
-    inivector(v);
-    while (L <> nil) do begin
-        puntoA(d,montoAD);
-        
-        if puntoB(L^.datos.DNI) then 
-			writeln(L^.datos.apellidoYnombre);
-	L:= L^.sig;
-    end;
 
-     writeln('nombre de los que tienen al menos 2 digitos 9', cumpleB);
-   
-    writeln('ingrese dni a borrar');
-    readln(dnidel);
-    if (dnidel <> 0) then begin 
-        eliminar(L,d,exito);
-    end;
-   
+	inivector(v);
+	while (L <> nil) do begin 
+		montoAD:= L^.data.monto + v[L^.data.cod_poliza];
+		imprimirA(montoAD,L^.data);
+
+		if (cumpleB(L^.data.DNI)) then 
+			imprimirB(L^.data);
+
+		
+	L:=L^.sig;
+	end;
+	eliminar(L,exito);
 end;
 
+
 var 
-    L:lista;
+	L:lista;
 begin 
-    cargarLista(L);
-    procesarDatos(L);
+	L:= nil;
+	cargardatos(L);
+	procesardatos(L);
 end.
