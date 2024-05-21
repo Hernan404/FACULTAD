@@ -1,68 +1,63 @@
-
-Una maternidad dispone información sobre sus pacientes. De cada una se conoce: nombre, apellido y 
-peso registrado el primer día de cada semana de embarazo (a lo sumo 42). La maternidad necesita un 
-programa que analice esta información, determine e informe:
-a. Para cada embarazada, la semana con mayor aumento de peso. 
-b. El aumento de peso total de cada embarazada durante el embarazo.
-
-
-
-program EJ4P7; 
+program EJ4P7;
 type 
-    pacientes = record 
-        Nya:string;
-        pesoprimerdia:integer;
-    end;
+	semanas = 1..42;
+	pacientes = record 
+		nombre:string;
+		apellido:string;
+		peso:semanas;
+	end;
+	lista = ^nodo;
+	nodo = record 
+		data:pacientes;
+		sig:lista;
+	end;
+	
+	vector = array [semanas] of integer;
 
-    lista = nodo 
-    nodo = record 
-        datos:pacientes;
-        lista:sig;
-    end;
-
-    vsemana = array [1..42] of integer;
-
-procedure inicializarVector(); {se dispone}
-procedure leer (); {se dispone}
-procedure cargardatos (); {se dispone}
-
-procedure puntoA (v:vsemana; var max,p1:integer);
+procedure leer (var r:pacientes);
 var 
-    i:integer;
+	pesoaux:integer
 begin 
-    for i:=1 to 42 do begin 
-        if (v[i] > max) then begin 
-            max:=v[i];
-            p1:= i;
-        end;
-    end;
+	diml:= 0;
+	with r do begin 
+		readln(apellido);
+		readln(nombre);
+		readln(peso);
+		
+		while (diml < dimf) and (pesoAux <> 0) do begin 
+			diml:= diml +1;
+			diml:= diml +1;
+			peso[diml]:= pesoaux;
+			readln(pesoaux);
+		end;
+
+
+	end;
+
+procedure procesardatos(L:lista);
+var 
+	v:vector; i:integer; p1:real;
+begin 
+	p1:= 0;
+	while (L <> nil) do begin 
+		
+		for i:=1 to semanas do begin 
+			if (v[L^.data.peso] > max) then begin 
+				max:= v[L^.data.peso];
+				p1:= i;
+			end;
+		end;
+		writeln('la semana com mayor aumento de peso para esta embarazada: ', p1);
+		total:= L^.data.peso[i] + total;
+		
+	end;
 end;
 
-procedure procesardatos (L:lista);
 var 
-    r:pacientes;
-    max,p1:integer;
-    pesoInicial,aumentopeso:integer;
+	L:lista;
 begin 
-    
-    max:= -1;
-    p1:= 0;
-    while (L <> nil) do begin 
-        pesoInicial:= L^.data.pesoprimerdia;
-
-        puntoA(v,max1,p1);
-        aumentopeso:= max - pesoInicial;
-    L:= L^.sig;
-    end; 
-    writeln('punto A', p1);
-    writeln('punto B', aumentopeso);
-end;
-
-var 
-    L:lista;
-begin 
-   L:= nil;
-   cargardatos(L);
-   procesardatos(L);
+	L:= nil;
+	cargardatos(L);
+	procesardatos(L);
 end.
 
