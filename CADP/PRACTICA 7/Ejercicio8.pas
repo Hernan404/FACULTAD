@@ -1,44 +1,46 @@
 program EJ8P7;
 type 
+    motivo = 1..7;
+
     transferencia = record 
-        numero:integer;
-        DNI_origen:integer;
+        num_origen:integer;
+        dni_origen:integer;
         num_destino:integer;
-        hora,fecha:integer;
+        dni_destino:integer;
+        fecha:fechas;
+        hora:real;
         monto:real;
-        cod_motivo:1..7;
+        codigo:motivo;
+    end;
+
+    fechas = record 
+        dia:integer;
+        mes:integer;
+        anio:integer;
     end;
 
     lista = ^nodo 
-    nodo = record
+    nodo = record 
         data:transferencia;
         sig:lista;
     end;
 
-    vector = array [1..7] of integer;
 
 
-{procedure cargardatos (L:lista);
+    vector = array [motivos] of integer;
+
+
+Procedure armarlista2 ( var pri: lista; t:terceros);
 var 
-    t:transferencia;
-begin 
-    leer(t);
-    while (numero <> -1) do begin 
-        armarlista(L,t);
-        leer(t);
-    end;
-end;}
-
-procedure armarlista (var pri:lista; var t:transferencia);
-var 
-    ant,nue,act:lista;
-begin 
-    new(nue);
-    nue^.datos:= per;
-    act:= pri;
-    ant:= pri;
-
-    while (act <> nil) and (act^.data.DNI_origen < t.DNI_origen);
+    ant, nue, act: lista;
+begin
+    new (nue);
+    nue^.data := per;
+    act := pri;
+    ant := pri;
+    {Recorro mientras no se termine la lista y no encuentro la posición correcta}
+    while (act<>NIL) and (act^.data.num_origen < t.num_origen) do //De menor a mayor
+    begin
         ant := act;
         act := act^.sig ;
     end;
@@ -49,80 +51,84 @@ begin
     nue^.sig := act ;
 end;
 
-procedure puntoC(v:vector; var max:integer; var p1:integer);
-var 
-    i:integer;
+procedure puntoA(L:lista; var L2:listaA; r:transferencia);
 begin 
-    for i:=1 to 7 do begin 
-    if (v[i] > max) then 
-        max:= v[i];
-        p1:= i;
+    if (L^data.num_origen <> L^.data.num_destino) then begin 
+        armarlista2(L2,t)
+        L2:= L^.sig;
     end;
 end;
 
-function pares (num:integer):boolean;
+procedure puntoB(var max,p1:integer; v:vector);
+begin 
+    for i:=1 to motivo do begin 
+        if (v[i] > max) then begin 
+            max:= v[i];
+            p1:= i;
+        end;
+    end;
+end;
+
+function cumplePares(t:transferencia):boolean;
 var 
-    digito,par,impar:integer;
+    par,impar,digito:integer;
 begin 
     par:= 0;
     impar:= 0;
     while (digito > 0) do begin 
-        digito:= num mod 10;
-
-        if (digito mod 10 = 0) then begin  
+        digito:= r.num_destino mod 10;
+        if (digito mod 2 = 0) then 
             par:= par +1;
-        end 
-        else begin 
+        else 
             impar:= impar +1;
-        end;
+    
+        digito:= digito div 10;
     end;
-    pares(par < impar);
+
+    cumplePares:= (par < impar);
 end;
 
-function puntoD (t:transferencia):boolean;
+function puntoD(t:transferencia):boolean;
 begin 
-    puntoD:= (t.mes = 'junio') and (pares(L^.data.num_destino));
+    puntoD:= (r.fecha.mes = 5) and (cumplePares(r));
 end;
 
-procedure procesarDatos (L:lista);
+procedure procesardatos (L:lista);
 var 
-    t:transferencia;
-    max:integer;
-    v:vector;
-    montoTotal:real;
-    p1:integer;
-    cantD:integer;
-begin
-    cantD:= 0;
-    p1:= 0;
-    max:= -1;
-    while (L <> nil) do begin
-        
-        montoTotal:= 0;
-        dniaux:= L^.data.DNI_origen;
-        while (L <> nil) and (L^.data.DNI_origen = dniaux);
-           // punto A 
-            if (L^.data.DNI_origen <> L^.data.DNI_destino) then 
-                armarlista2(L,t);
-           
-            // punto B
-            v[L^.data.cod_motivo]:= v[L^.data.cod_motivo] +1;
+    v:vector; L2:lista;
+begin 
+    L2:= nil;
 
-            montoTotal:= L^.data.monto + montoTotal;
+    puntoA(L2,L);
+    while (L <> nil) do begin 
+        //PUNTO A
+        puntoA(L,L2,L2^.data);
+        cuentaACT:= L^.data.num_origen;
+        total:= 0;
+        while (L <> nil) and (L^.data.num_origen = cuentaACT) do begin
+            //PUNTO B
+            total:= L^.data.monto + total;
 
-            puntoC(v,max,p1);
+            //PUNTO C
+            v[L^.data.codigo]:= v[L^.data.codigo] +1;
 
-            if puntoD(L^.data) then 
+            //PUNTO D
+            if (puntoD(L^.data)) then 
                 cantD:= cantD +1;
-        L:=L^.sig;
+        end;
+        //PUNTO B
+        writeln(total);
+        puntoC(max,p1,v);
     end;
-
+    //punto C
+    writeln(p1);
+    //PUNTO D
+    writeln(cantD);
 end;
 
 var 
     L:lista;
-begin
-    L:= nil;
+begin 
     cargardatos(L);
-    procesardatos(L);
+    procesardatos(L2);
 end.
