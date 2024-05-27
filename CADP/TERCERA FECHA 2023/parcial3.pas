@@ -102,18 +102,18 @@ end;
 
 function cumpleA(DNI: integer): boolean;
 var 
-    digito: integer;
-    esimpar: boolean;
+    impar:boolean;
 begin 
-    esimpar:= true
+	impar:= false
     while (DNI > 0) do begin 
-        digito := DNI mod 10;
-        if (digito mod 2 = 0) then begin  
-            esimpar := false;
-        end;
-        DNI := DNI div 10;
+	
+        DNI:= DNI mod 10;
+        if (DNI mod 2 <> 0) then begin 
+			impar:= true;
+		end;
+		DNI:= DNI DIV 10;
     end;
-    cumpleA := true;
+    cumpleA:= not impar;
 end;
 
 procedure puntoB(var v: vector; var min, max: real; var p1, p2: real);
