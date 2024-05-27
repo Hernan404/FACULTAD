@@ -12,98 +12,86 @@ b) informar los dos dias del mes con mayor cantidad de reservas de clientes con 
 c) informar el porcentaje de reservas de eventos que inicien antes de las 12 hs y se produzcan en la primera quincena 
 
 
-
-
-program EJ;
-const
-  TablaPrecios: array[1..4] of PrecioPorHora = (
-    (Categoria: 1; Precio: 10.0),
-    (Categoria: 2; Precio: 15.0),
-    (Categoria: 3; Precio: 20.0),
-    (Categoria: 4; Precio: 25.0)
-  );
-  
+program EJ13P7;
 type 
-    reservas = record 
-        numero:integer;
-        DNI:integer;
-        dia:1..31;
-        hora_inicio:integer;
-        hora_fin:integer;
-        categoria:1..4;
-        duracion:integer;
-    end;
+	dias = 1..31;
+	categorias = 1..4;
+	reserva = record 
+		numero:integer;
+		DNI:integer;
+		dia:dias;
+		hora_inicio:integer;
+		hora_fin:integer;
+		categoria:categorias;
+	end;
+	
+	lista = ^nodo; 
+	nodo = record 
+		data:reserva;
+		sig:lista;
+	end;
+	
+	resA = record 
+		numtotal: integer;
+		preciototal: real;
+	end;
+	
+	listaTotal = ^nodo2;
+	nodo2 = record
+		data:resA;
+		sig:listaTotal;
+	end;
 
-    reservaA = record 
-        numeroA:integer;
-        precioA:real;
-    end; 
+	vdias = array [dias] of integer;
+	vcate = array [categorias] of integer;
+	vprecio = array [categorias] of real;
+	
+	
+	
+procedure cargardatos(L:lista);
+var 
+	r:reserva;
+begin 
+	//se dispone
+end;	
 
-    lista = nodo 
-    nodo = record 
-        data:reservas;
-        sig:lista;
-    end;
-
-    PrecioPorHora = record
-        Categoria: 1..4;
-        Precio: real;
-    end;
-
-    vector = array [1..31] of integer;
+procedure armarlista(var L:lista; r:reserva);
+var 
+	aux:Lista;
+begin 
+	// se dispone
+end;
 
 procedure leer(var r:reserva);
 begin 
-    with r do begin 
-        readln(numero);
-        readln(DNI);
-        readln(dia);
-        readln(hora_inicio);
-        readln(hora_fin);
-        readln(categoria);
-    end;
+	// se dispone
 end;
 
-procedure inivector (var v:vector);
+procedure inivectores (var vd:vdias; var vc:vcate; var vp:vprecio);
 var 
-    i:integer;
+	i:integer;
 begin 
-    for i:= 1 to 30 do begin 
-        v[i]:= 0;
-    end;
+	for i:=1 to 31 do 
+		vd[i]:= 0;
+		
+	for i:=1 to 4 do 
+		vc[i]:= 0;
+	
+	// aqui va el vector vprecio que se dispone
+	
 end;
 
-procedure armarlista (var L:lista; r:reservas);
+procedure armarlista2(var pri:listaTotal; ra:resA);
 var 
-    aux:lista;
-begin 
-    new(aux);
-    aux^.data:= r;
-    aux^.sig:= L;
-    L:= aux;
-end;
-
-procedure cargardatos (L:lista);
-var 
-    r:reserva;
-begin 
-    leer(r);
-    while (r.numero <> -1) do begin 
-        armarlista(L,r);
-        leer(r);
-    end;
-end;
-
-Procedure armarlista2 ( var pri: lista; rA:reservaA);
-var 
-    ant, nue, act: lista;
+    ant, nue, act: listaTotal;
 begin
     new (nue);
-    nue^.datos := rA;
+    nue^.data.numtotal:= ra.numtotal;
+    nue^.data.preciototal:= ra.preciototal;
     act := pri;
     ant := pri;
     {Recorro mientras no se termine la lista y no encuentro la posición correcta}
-    while (act <> NIL) and (act^.data.numero < rA.numero) do //De menor a mayor
+    while (act<>NIL) and (act^.data.numtotal < ra.numtotal) do //De menor a mayor
     begin
         ant := act;
         act := act^.sig ;
@@ -115,93 +103,71 @@ begin
     nue^.sig := act ;
 end;
 
-procedure puntoA (var rA:reservaA; var r:reserva);
+
+procedure puntoA (var L2:listaTotal; var ra:resA; r:reserva; precio:real);
 begin 
-    rA.precioA:= rA.precioA + r.precio;
-    armarlista2(L2,rA);
-end;
+	ra.numTotal:= r.numero; 
+	ra.precioTotal:= precio;
+	armarlista2(L2,ra);
+end;	
 
-procedure calcularDuracionYPrecio(var r: reservas);
-begin
-  r.duracion := r.hora_fin - r.hora_inicio;
-  r.precio := r.duracion * TablaPrecios[r.categoria].Precio;
-end;
-
-function cumpleB (dni:integer):boolean;
+procedure puntoB (var max1,max2,d1,d2:integer; vd:vdias);
 var 
-    digito,par,impar:integer;
+	i:integer;
 begin 
-    par:= 0;
-    impar:= 0;
-    digito:= 0;
-    while (digito > 1) do begin 
-        digito:= num mod 10;
-
-        if (digito mod 2 = 0) then 
-            par:= par +1;
-        else 
-            impar:= impar +1;
-        digito:= digito div 10;
-    end;
-    
-    cumpleB:= (par >= 1) and (impar = 0);
+	for i:= 1 to 31 do begin 
+		if (vd[i] > max1) then begin 
+			max2:= max1;
+			d2:= d1;
+			max1:= vd[i];
+		end
+		else if (max1 > max2) then begin 
+				max2:= vd[i];
+				d2:= i;
+		end;
+	end;
 end;
 
-procedure puntoB (var max1,max2,p1,p2:integer; r:reservas; v:vector);
+procedure procesardatos(L:lista);
 var 
-    i:integer;
+	max1,max2,d1,d2:integer; vc:vcate; vp:vprecio; vd:vdias;
+	porcentaje:real; L2:listaTotal; ra:resA; precio,tiempo:real; cant:integer;
 begin 
-    for i:=1 to 30 do 
-            if (cumpleB(r.DNI)) then begin 
-                    if (max1 > v[i]) then 
-                        max2:= max1;
-                        p2:= p1;
-                        max1:= v[i];
-                        p1:= i;
-                    else begin 
-                        if (max1 > max2) then 
-                            max2:= v[i];
-                            p2:= i;
-                    end;
-            end;
-    end;
+	L2:= NIL; max1:= -1; max2:= -1; d1:= 0; d2:= 0; porcentaje:= 0;
+	cant:= 0; tiempo:= 0; precio:= 0;
+	
+	inivectores(vd,vc,vp);
+	while (L <> nil) do begin 
+		//calculo precios
+		tiempo:= L^.data.hora_fin - L^.data.hora_inicio;
+		precio:= vc[L^.data.categoria] * tiempo;
+		
+		//punto A
+		puntoA(L2,ra,L^.data,precio);
+		
+		cant:= cant +1;
+		
+		//punto B
+		vd[L^.data.dia]:= vd[L^.data.dia] + 1; 
+		if ((L^.data.DNI mod 2 = 0) then 
+			puntoB(max1,max2,d1,d2,vd);
+		
+		//punto C
+		if (L^.data.hora_inicio < 12) and (L^.data.dia <= 15) then 
+			porcentaje:= porcentaje +1;
+	
+	L:= L^.sig;
+	end;
+	writeln('punto B ', d1 ,' y ', d2);
+	writeln('punto C ', (cant/porcentaje)*100:2:0);
 end;
-
-procedure procesardatos (L:lista);
+	
+//codigo principal 
 var 
-    v:vector;
-    r:reservas;
-    rA:reservaA;
-    max1,max2,p1,p2:integer;
-    porcentaje,porcentaje12:real;
-    numACT:integer;
+	L:lista;
 begin 
-    numACT:= 0;
-    inivector(v);
-    porcentaje:= 0;
-    porcentaje12:= 0;
-    while (L <> nil) do begin 
-        numACT:= L^.data.numero;
-        calcularDuracionYPrecio(L^.data);
-        porcentajes:= porcentajes +1;
-        while (L <> nil) and (L^.data.numero = numACT) do begin 
-            puntoA(rA,r);
-            puntoB(max1,max2,p1,p2,r,v);
-            if (L^.data.hora_inicio < 12) and (v[L^.data.dia] <  15) then
-                porcentaje12:= porcentaje12 +1;
-            end;
-
-        end;
-
-        writeln('punto B: ', p1,p2);
-        writeln('punto C: ', (porcentaje/porcentaje12)*100);
-    end;
-end;
-
-var 
-    L:lista;
-begin 
-    L:= nil;
-    cargardatos(L);
-    procesardatos(L);
+	L:= nil;
+	cargardatos(L);
+	procesardatos(L);
 end.
+
