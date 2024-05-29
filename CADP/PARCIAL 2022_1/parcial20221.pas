@@ -1,5 +1,5 @@
 
-Una panaderia artesanal de la plata vende productos de elaboracion propia
+{Una panaderia artesanal de la plata vende productos de elaboracion propia
 la panaderia agrupa sus productos en 26 categorias, para cada categoria se conoce
 su nombre y precio por kilo del productos
 
@@ -14,9 +14,9 @@ b) realizar un modulo que reciba la informacion de todas las compras, la informa
 las categorias y retorne: 
 1. DNI del cliente que mas compras ha realizados
 2. monto total recaudado por cada categoria
-3. cantidad de compras de clientes con DNI compuesto por al menos 3 digitos pares 
+3. cantidad de compras de clientes con DNI compuesto por al menos 3 digitos pares }
 
-program EJPARCIAL2022
+program EJPARCIAL2022;
 const 
 	categorias = 26;
 type
@@ -27,7 +27,7 @@ type
 		cantKG:real;
 	end;
 
-	lista = ^nodo 
+	lista = ^nodo; 
 	nodo = record 
 		data:compra;
 		sig:lista;
@@ -35,29 +35,39 @@ type
 
 	info = record 
 		nombre:string;
-		codigo:rango_categorias
+		codigo:rango_categorias;
 		precio:real;
 	end;
 
 	vcategoria = array [rango_categorias] of integer;
-	vinfo = array [rango_categorias] of info
+	vinfo = array [rango_categorias] of info;
 
-procedure cargarventas(var L:lista) //se dispone
+procedure cargarventas(var L:lista); //se dispone
+
+procedure inivector(var vc:vcategoria);
+var 
+	i:integer;
+begin 
+	for i:=1 to categorias do 
+		vc[i]:= 0;
+end;
 
 procedure cargarinformacion(var vI:vinfo);
 var 
 	x:rango_categorias;
 begin 
 	for x:=1 to categorias do begin 
-		readln(v[x].nombre);
-		readln(v[x].codigo);
-		readln(v[x].precio);
+		readln(vI[x].nombre);
+		readln(vI[x].codigo);
+		readln(vI[x].precio);
 	end;
 end;
 
+procedure puntoA(vc:vcategoria; var max:integer; var c1:integer);
+
 function cumplepares(dni:integer):boolean;
 var 
-	par:= integer;
+	par:integer;
 begin 
 	par:= 0;
 	while (dni > 0) do begin 
@@ -72,20 +82,20 @@ end;
 
 procedure procesardatos(L:lista; vI:vinfo);
 var 
-	vI:vinfo; max,c1:integer;
+	max,c1:integer;
 	vc:vcategoria;
-	x:integer;
+	x:info; cantC:integer;
+	
 begin 
-	max:= -1; c1:= 0;
-
+	max:= -1; c1:= 0; cantC:= 0;
+	inivector(vc);
 	while (L <> nil) do begin 
 		vc[L^.data.DNI]:= vc[L^.data.DNI] +1;
 		puntoA(vc,max,c1);
-		for x:=1 to categorias do 
-			vI[L^.data.categoria]:= vI[L^.data.categoria] + vc[x].precio;
+		vI[L^.data.categoria].precio:= vI[L^.data.categoria].precio + L^.data.cantKG;
 
 		if (cumplepares(L^.data.DNI)) then 
-			cantC:= vc[L^.data.DNI] + cnatC;
+			cantC:= vc[L^.data.DNI] + cantC;
 	end;
 	
 end;
@@ -98,5 +108,7 @@ begin
 	cargarinformacion(vI);
 	procesardatos(L,vI)
 end.
+
+	
 
 	
