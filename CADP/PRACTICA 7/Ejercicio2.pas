@@ -72,7 +72,7 @@ end;
 
 procedure imprimirA(montoAD:real; r:cliente);
 begin 
-	writeln('nombreA: 'r.nombre ,'apellido A', r.apellido ,'DNI A', r.DNI , 'MONTO ADICIONAL A', montoAD);
+	writeln('nombreA: ',r.nombre ,'apellido A', r.apellido ,'DNI A', r.DNI , 'MONTO ADICIONAL A', montoAD);
 end;
 
 procedure imprimirB(r:cliente);
