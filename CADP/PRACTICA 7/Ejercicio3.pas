@@ -1,3 +1,11 @@
+{Una remisería dispone de información acerca de los viajes realizados durante el mes de mayo de 2020. De
+cada viaje se conoce: número de viaje, código de auto, dirección de origen, dirección de destino y
+kilómetros recorridos durante el viaje. Esta información se encuentra ordenada por código de auto y para
+un mismo código de auto pueden existir 1 o más viajes. Se pide:
+a. Informar los dos códigos de auto que más kilómetros recorrieron.
+b. Generar una lista nueva con los viajes de más de 5 kilómetros recorridos, ordenada por número de
+viaje.}
+
 program EJ3P7;
 type 
 	viaje = record 
@@ -13,13 +21,24 @@ type
 		data:viaje;
 		sig:lista;
 	end;
+	
+procedure leer(var r:viaje);
+begin 
+	with r do begin 
+		readln(numero);
+		readln(codigo);
+		readln(dir_origen);
+		readln(dir_destino);
+		readln(km);
+	end;
+end;
 
 procedure armarlistaOrdenada (var pri:lista; r:viaje);
 var 
     ant, nue, act: lista;
 begin
     new (nue);
-    nue^.datos := per;
+    nue^.data := r;
     act := pri;
     ant := pri;
     {Recorro mientras no se termine la lista y no encuentro la posición correcta}
@@ -35,7 +54,7 @@ begin
     nue^.sig := act ;
 end;
 
-procedure puntoA(var max1,max2,c1,c2:integer; r:viaje);
+procedure puntoA(var max1,max2,c1,c2:real; r:viaje);
 begin 
 	if (r.km > max1) then begin 
 		max2:= max1;
@@ -57,26 +76,36 @@ begin
 	new(aux);
 	aux^.data:= r;
 	aux^.sig:= L2;
-	L2:= sig;
+	L2:= aux;
 end; 
+
+procedure cargardatos(var L:lista);
+var 
+	r:viaje;
+begin 
+	leer(r);
+	while (r.numero <> -1) do begin
+		armarlistaOrdenada(L,r);
+		leer(r);
+	end; 
+end;
 
 procedure procesardatos(L:lista);
 var 
 	L2:lista;
-	max1,max2,c1,c2:integer;
+	max1,max2,c1,c2:real;
+	viajeACT:integer;
 begin 
 	max1:= -1;
 	max2:= -1;
 	c1:= 0;
 	c2:= 0;
-
+	L2:= nil;
 	while (L <> nil) do begin 
 
 		viajeACT:= L^.data.codigo;
-		cantviajes:= 0;
 
 		while (L <> nil) and (viajeACT = L^.data.codigo) do begin 
-			cantviajes:= cantviajes +1;
 			puntoA(max1,max2,c1,c2,L^.data);
 
 			if (L^.data.km > 5) then 
@@ -84,7 +113,10 @@ begin
 		
 		L:= L^.sig;
 		end;
+		
 	end;
+		writeln('los dos códigos de auto que más kilómetros recorrieron ', c1,' y ', c2);
+
 end;
 
 var 
@@ -93,4 +125,4 @@ begin
 	L:= nil;
 	cargardatos(L);
 	procesardatos(L);
-end;
+end.
