@@ -1,166 +1,211 @@
+{La Facultad de Informática desea procesar la información de los alumnos que finalizaron la carrera de
+Analista Programador Universitario. Para ello se deberá leer la información de cada alumno, a saber:
+número de alumno, apellido, nombres, dirección de correo electrónico, año de ingreso, año de egreso y las
+notas obtenidas en cada una de las 24 materias que aprobó (los aplazos no se registran).
+1. Realizar un módulo que lea y almacene la información de los alumnos hasta que se ingrese el alumno
+con número de alumno -1, el cual no debe procesarse. Las 24 notas correspondientes a cada alumno
+deben quedar ordenadas de forma descendente.
+2. Una vez leída y almacenada la información del inciso 1, se solicita calcular e informar:
+a. El promedio de notas obtenido por cada alumno.
+b. La cantidad de alumnos ingresantes 2012 cuyo número de alumno está compuesto únicamente
+por dígitos impares.
+c. El apellido, nombres y dirección de correo electrónico de los dos alumnos que más rápido se
+recibieron (o sea, que tardaron menos años)
+3. Realizar un módulo que, dado un número de alumno leído desde teclado, lo busque y elimine de la
+estructura generada en el inciso 1. El alumno puede no existir}
+
 program EJ7P7;
 const 
-    materias = 1..24;
+    materias = 24;
 type 
+	rango_materias = 1..24;
+	
     alumno = record 
         numero:integer;
-        apellidoYnombre:string;
+        apellido:string;
+        nombre:string;
         mail:string;
         ingreso:integer;
         egreso:integer;
-        nota:materias;
+        nota:rango_materias;
     end;
 
-    lista = ^nodo
+    lista = ^nodo;
     nodo = record 
-        data:lista;
+        data:alumno;
         sig:lista;
     end;
 
-    vector = array [materias] of integer;
+    vector = array [rango_materias] of integer;
+    vnotas = array [rango_materias] of real;
+ 
+ 
+ procedure leer(var r:alumno);
+ var 
+	i,x:integer; diml:integer; vn:vnotas;
+ begin 
+	for i:= 1 to materias do 
+		vn[i]:= 0;  //donde guardo las notas ordenadas
 
-procedure inivector (var v:vector);
-var 
-    i:integer;
-begin 
-    for i:=1 to 24 do begin 
-        v[i]:= 0;
-    end;   
-end;
+	with r do begin 
+		readln(numero);
+		readln(apellido);
+		readln(nombre);
+		readln(mail);
+		readln(ingreso);
+		readln(egreso);
+		for i:=1 to materias do begin
+			readln(nota);
+			diml:= 1;
+			while (vn[diml] > nota) do  //Se busca la posición adecuada para la nueva nota en el arreglo notas. Esto se hace comparando la nueva nota con las notas existentes en el arreglo notas, avanzando diml hasta encontrar la posición correcta (donde notas[diml] sea menor o igual que la nueva nota
+					diml:= diml +1;
+			
+			for x:= materias downto diml do 
+				vn[x]:= vn[x - 1]; // // Una vez encontrada la posición correcta, se realiza un desplazamiento hacia la derecha de las notas existentes en el arreglo notas para hacer espacio para la nueva nota. Este desplazamiento se realiza desde el final del arreglo hasta la posición diml.
+			vn[diml]:= nota;    //Finalmente, se inserta la nueva nota en la posición diml del arreglo notas.
 
-procedure leer(var a:alumnos);
-begin 
-    with a do begin 
-        readln(numero);
-        readln(apellidoYnombre);
-        readln(mail);
-        readln(ingreso);
-        readln(egreso);
-        readln(nota);
-    end;
-end;
-
-procedure armarlista(pri:lista; a:alumnos);
-var 
-    ant,nue,act:lista;
-begin 
-    new(nue);
-    nue^.data:= a;
-    act:= pri;
-    ant:= pri;
-
-    while (act <> nil) and (act^.data.numero < a.numero) do begin 
-        ant:= act;
-        act:= act^.sig;
-    end;
-    if (ant = act) then 
-        pri:= nue
-    else 
-        ant^.sig:= nue;
-    nue^.sig:= act;
-end;
-
-procedure cargardatos(L:lista)
-var 
-    a:alumnos;
-begin 
-    leer(a);
-
-    while (o.numero <> -1) do begin 
-        armarlista(L,a);
-        leer(a);
-    end;
-end;
-
-function pares2 (num:integer):boolean;
-var 
-    digito,par,impar:integer;
-begin 
-    par:= 0;
-    impar:= 0;
-    while (digito > 0) do begin 
-        digito:= num mod 10;
-
-        if (digito mod 2 = 0) then 
-            par:= par +1;
-        else 
-            impar:= impar +1;
-    
-    num:= digito div 10;
-    end;
-
-    pares2:= (impar > 0) and (par = 0);
-end;
-
-function punto2 (a:alumnos):boolean;
-begin 
-    punto2:= (a.ingreso = 2012) and (pares2(L^.data.numero));
-end;
-
-function punto3(var a:alumnos;  var min1,min2,p1,p2:integer);
-begin 
-    
-    if (a.egreso < min1) then begin 
-        min2:= min1;
-        p2:= p1;
-        p1:= a.apellido;
-        min1:= a.egreso;
-    end 
-    else  
-        if (min1 < min2) then begin  
-            min2:= a.egreso;
-            a2:= a.apellido;
-        end;
+		end;
+	end;
 end;
 
 
-end;
-
-procedure procesarDatos(L:lista);
-var 
-    a:alumnos;
-    v:vector;
-    i:integer;
-    cant2:integer;
-    min1,min2,p1,p2:integer;
-    notasTotal:integer;
-    promedio:real;
+procedure armarlista (var L:Lista; r:alumno);
+var
+ nue: Lista;
 begin
-    min1:= -1;
-    min2:= -1;
-    p1:= 0;
-    p2:= 0;
-
-    notasTotal:= 0;
-    cant2:= 0;
-    promedio:= 0;
-    while (L <> nil) do begin
-        //punto 1
-        for i:=1 to 24 do begin  
-            notasTotal:= v[i];
-            promedio:= notasTotal/24;
-            writeln('promedio de notas:',promedio);
-        end;
-        
-        //punto 2
-        if punto2(L^.data) then 
-            cant2:= cant2 +1;
-        //punto 3
-        punto3(a,min1,min2,p1,p2);
-
-        L:= L.sig;
-    end;
-    writeln('cantidad de alumnos que cumplen punto 2: ', cant2);
-    writeln('los que mas rapido se recibieron', 'apellido:'  p1,'apellido', p2)
+    New(nue);
+    nue^.data:= r;
+    nue^.sig:= L;
+    L:= nue;  
+end;
+ 
+ procedure inivector(var v:vector);
+ var 
+	i:rango_materias;
+begin 
+	for i:=1 to materias do v[i]:= 0;
 end;
 
+function cumpleimpar(numero:integer):boolean;
 var 
-    L:lista;
+	impar:boolean;
 begin 
-    L:= nil;
-    cargardatos(L);
-    procesarDatos(L);
+	impar:= false;
+	while (numero > 0) do begin 
+		if (((numero mod 10) mod 2) = 1) then 
+			impar:= true;
+			
+		numero:= numero div 10;
+	end;
+	cumpleimpar:= (impar)
+end;
+
+function cumpleB(r:alumno):boolean;
+begin 
+	cumpleB:= (r.ingreso = 2012) and (cumpleimpar(r.numero));
+end;
+
+procedure puntoC (r:alumno; min1,min2:integer; a1,a2,d1,d2,n1,n2:string);
+var 
+	resta:integer;
+begin
+	resta:= r.egreso - r.ingreso;
+	if (resta < min1) then begin 
+		min2:= min1;
+		a2:= a1;
+		d2:= d1;
+		n2:= n1;
+		min1:= resta;
+		a1:= r.apellido;
+		d1:= r.mail;
+		n1:= r.nombre
+	end
+	else if (min1 > min2) then begin 
+			min2:= resta;
+			a2:= r.apellido;
+			n2:= r.nombre;
+			d2:= r.mail;
+	end;
+end;
+
+procedure eliminar (var pri:lista; var r:alumno; var exito: boolean);
+var
+	ant, act: lista; num:integer;
+begin 
+	writeln('NUMERO A ELIMINAR'); readln(num);
+	readln(r.numero);
+    exito := false;
+    act := pri;
+    {Recorro mientras no se termine la lista y no encuentre el elemento}
+    while  (act <> NIL)  and (act^.data.numero <> num) do 
+    begin
+        ant := act;
+        act := act^.sig
+    end;   
+    if (act <> NIL) then 
+    begin
+        exito := true; 
+        if (act = pri) then  
+            pri := act^.sig
+        else  
+            ant^.sig:= act^.sig;
+        dispose (act);
+    end;
+end;
+
+
+
+ procedure procesardatos(L:lista);
+ var 
+	v:vector; cantB,i:integer; min1,min2:integer;
+	a1,a2:string; d1,d2:string; n1,n2:string;
+	notas: real;
+	exito:boolean;
+	r:alumno;
+begin 
+	a1:= ''; a2:= ''; d1:= ''; d2:= ''; n1:= ''; n2:= ''; min1:= 999; min2:= 999;
+	cantB:= 0; notas:= 0;
+	
+	inivector(v);
+	while (L <> nil) do begin 
+		
+		for i:=1 to materias do 
+			notas:= v[L^.data.nota] + notas;
+			
+		if (cumpleB(L^.data)) then 
+			cantB:= cantB +1;
+			
+		puntoC(L^.data,min1,min2,a1,a2,d1,d2,n1,n2);
+			
+		writeln('El promedio de notas obtenido por cada alumno.', (notas/materias):2:0);
+	
+	L:=L^.sig;
+	end;
+	writeln('cantidad de alumnos ingresantes 2012 cuyo número de alumno está compuesto únicamente por dígitos impares ', cantB);
+	writeln('El apellido, nombres y dirección de correo electrónico de los dos alumnos que más rápido se recibieron ', a1,a2,d1,d2,n1,n2);
+	eliminar(L,r,exito);
+end;
+ 
+ 
+ procedure cargardatos(var L:lista);
+ var 
+	r:alumno;
+begin 
+	leer(r);
+	while (r.numero <> -1) do begin 
+		armarlista(L,r);
+		leer(r);
+	end;
+end;
+ 
+var 
+	L:lista;
+begin 
+	L:= nil;
+	cargardatos(L);
+	procesardatos(L);
 end.
+
 
 
 
