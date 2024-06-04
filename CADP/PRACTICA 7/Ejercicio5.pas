@@ -1,181 +1,189 @@
-{5. Una empresa de transporte de cargas dispone de la información de su flota compuesta por 100 camiones. De cada camión se tiene: patente, año de fabricación y capacidad (peso máximo en toneladas que puede transportar).
-Realizar un programa que lea y almacene la información de los viajes realizados por la empresa.
-De cada viaje se lee: código de viaje, código del camión que lo realizó (1..100), distancia en
-kilómetros recorrida, ciudad de destino, año en que se realizó el viaje y DNI del chofer. La lectura
-finaliza cuando se lee el código de viaje -1.
-Una vez leída y almacenada la información, se pide:
-1. Informar la patente del camión que más kilómetros recorridos posee y la patente del camión que menos kilómetros recorridos posee.
-2. Informar la cantidad de viajes que se han realizado en camiones con capacidad mayor a 30,5 toneladas y que posean una antigüedad mayor a 5 años al momento de realizar el viaje (año en que se realizó el viaje).
-3. Informar los códigos de los viajes realizados por choferes cuyo DNI tenga sólo dígitos impares.
-Nota: Los códigos de viaje no se repiten.
+{Una empresa de transporte de cargas dispone de la información de su flota compuesta por 100 camiones.
+De cada camión se tiene: patente, año de fabricación y capacidad (peso máximo en toneladas que puede
+transportar).
+Realizar un programa que lea y almacene la información de los viajes realizados por la empresa. De cada
+viaje se lee: código de viaje, código del camión que lo realizó (1..100), distancia en kilómetros recorrida,
 
-}
+ciudad de destino, año en que se realizó el viaje y DNI del chofer. La lectura finaliza cuando se lee el código
+de viaje -1.
+Una vez leída y almacenada la información, se pide:
+1. Informar la patente del camión que más kilómetros recorridos posee y la patente del camión que
+menos kilómetros recorridos posee.
+2. Informar la cantidad de viajes que se han realizado en camiones con capacidad mayor a 30,5 toneladas
+y que posean una antigüedad mayor a 5 años al momento de realizar el viaje (año en que se realizó el
+viaje).
+3. Informar los códigos de los viajes realizados por choferes cuyo DNI tenga sólo dígitos impares.
+Nota: Los códigos de viaje no se repiten.}
 
 
 program EJ5P7;
-type
-    camion = record 
-        patente:integer;
-        anio_fabri:integer;
-        capacidad:real;
-    end;
-
-    viaje = record 
-        codigo_viaje:integer;
-        codigo_camion:1..100;
-        distanciaKM:integer;
-        ciudad_destino:string;
-        anio_viaje:integer;
-        DNI:integer;
-    end;
-
-    lista = ^nodo 
-    nodo = record 
-        data:viaje;
-        sig:lista;
-    end;
-
-    vector = array [1..100] of integer;
-
-procedure leer(var d:viaje; var c:camion);
-begin 
-    with c do begin 
-        writeln('==DATOS DE CAMION==');
-        writeln('patente');
-        readln(patente);
-        writeln('anio fabricacion');
-        readln(anio_fabri);
-        writeln('capacidad');
-        readln(capacidad);
-    end;
-
-    with d do begin 
-        writeln('==DATOS DE VIAJE==');
-        writeln('codigo viaje');
-        readln(codigo_viaje);
-        if (codigo_viaje <> -1) do begin 
-            writeln('codigo camion');
-            readln(codigo_camion);
-            writeln('distanciaKM');
-            readln(distanciaKM);
-            writeln('ciudad destino');
-            readln(ciudad_destino);
-            writeln('anio de viaje');
-            readln(anio_viaje);
-            writeln('DNI');
-            readln(DNI);
-        end;
-    end;
-end;
-
-procedure cargardatos(L:lista);
+type 
+	camiones = 1..100;
+	
+	camion = record 
+		patente:string;
+		anio_fabricacion:integer;
+		capacidad:real;
+	end;
+	
+	viaje = record 
+		cod_viaje:integer;
+		cod_camion:camiones;
+		distancia:real;
+		destino:string;
+		dni:integer;
+	end;
+	
+	lista = ^nodo; 
+	nodo = record
+		data:viaje;
+		sig:lista;
+	end;
+	
+	vector = array [camiones] of camion;
+	vcontar = array [camiones] of real;
+	
+procedure inivectores (var vc:vcontar; var v:vector);
 var 
-    d:viaje;
-    c:camion;
+	i:integer;
 begin 
-    repeat 
-        leer(d,c);
-        armarlista(L,d);
-    until (d.codigo_viaje = -1);
+	for i:=1 to 100 do 
+		vc[i]:= 0;
+		
+		for i:=1 to 100 do begin 
+		readln(v[i].patente);
+		readln(v[i].anio_fabricacion);
+		readln(v[i].capacidad);
+
+	end;
 end;
 
-procedure armarlista(var L:lista; d:viaje);
+
+
+procedure leerViajes(var r:viaje);
 begin 
-    new(aux);
-    aux^.data:= d;  
-    aux^.sig:= L;
-    L:= aux;
+	with r do begin 
+		readln(cod_viaje);
+		readln(cod_camion);
+		readln(distancia);
+		readln(destino);
+		readln(dni);
+	end;
 end;
 
-procedure inivector(var v:vector);
+{procedure armarlista(L:lista; var r:viaje);
 var 
-    i:integer;
+	aux:lista;
 begin 
-    for i:= 1 to 100 do begin 
-        v[i]:= 0;
-    end;
-end;
+	new(aux);
+	aux^.data:= r;
+	aux^.sig:= L;
+	L:= aux;
+end;}
 
-procedure punto1 (c:camion; d:viaje; var max,min:integer; var cumpleMAX,cumpleMIN:integer);
-begin 
-    if (d.distanciaKM > max) then 
-        max:= d.distanciaKM;
-        cumpleMAX:= c.patente;
-    
-    if (d.distanciaKM < min) then
-        min:= d.distanciaKM; 
-        cumpleMIN:= c.patente;
-end;
+procedure armarlista (var L: Lista; r:viaje);
+  var
+    nue,ant,act: Lista;
+  begin
+    New(nue);
+    nue^.data:= r;
+    nue^.sig:= nil;
 
-function punto2 (c:camion; d:viaje):boolean;
-begin 
-    punto2:= (c.capacidad > 30.5) and (d.anio_viaje > 5);
-end;
-
-function punto3(d:viaje; c:camion):boolean
-var 
-    digito,par,impar:integer;
-begin 
-    par:= 0;
-    impar:= 0;
-    while (digito <> 0) do begin 
-        digito:= d.DNI mod 10;
-
-        if (digito mod 10 = 2) then 
-            par:= par +1;
-        else 
-            impar:= impar +1;
+    if (L = nil) then
+      L:= nue
+    else
+      begin
+        ant:= L;
+        act:= L;
+        while (act <> nil) and (act^.data.cod_camion < r.cod_camion) do
+          begin
+            ant:= act;
+            act:= act^.sig;
+          end;
         
-        digito:= digito div 10;
-    end;
-    punto3:= (par = 0); 
-    
+        if (ant = act) then
+          L:= nue
+        else
+          ant^.sig:= nue;
+        nue^.sig:= act;
+      end;
+  end;
+
+
+procedure cargardatos(var L:lista);
+var 
+	r:viaje;
+begin 
+	leerViajes(r);
+	while (r.cod_viaje <> -1) do begin 
+		armarlista(L,r);
+		leerViajes(r);
+	end;
 end;
 
-procedure procesarDatos(L:lista);
+procedure punto1(vc:vcontar; var max,min:real; var p1,m1:string);
 var 
-    c:camion;
-    max:integer;
-    cumpletres:integer;
-    cumpleMAX:integer;
-    cumpleMIN:integer;
-    cumpledos:integer;
-    i:integer;
-    v:vector;
+	i:integer;
 begin 
-    max:= -1;
-    min:= 9999;
-    
-    i:= 0;
+	for i:=1 to 100 do begin 
+		if (vc[i] > max) then begin 
+			max:= vc[i];
+			p1:= i;
+		end;
+		if (vc[i] < min) then begin 
+			min:= vc[i];
+			m1:= i;
+		end;
+	end;
+end;
 
-    while (L <> nil) do begin 
-        cumpleMAX:= 0;
-        cumpleMIN:= 0;
-        cumpledos:= 0;
-        cumpletres:= 0;
-        codactual:= L^.data.codigo_camion;
-        while (L <> nil) and (L^.data.codigo_camion = codactual);
-            punto1(c,max,cumpleMAX,cumpleMIN);
+function cumple3(dni:integer):boolean;
+var 
+	esimpar:boolean;
+begin 
+	esimpar:= false;
+	while (dni > 0) do begin 
+		if (((dni mod 10) mod 2) = 1) then 
+			esimpar:= true;
+		
+		dni:= dni div 10;
+	end;
+	cumple3:= (esimpar);
+end;
 
-            if punto2(L^.data,c) then 
-                cumpledos:= cumpledos +1;
+procedure procesardatos(L:lista);
+var 
+	min,max:real;
+	p1,m1:string;
+	i,cant2:integer;
+	vc:vcontar;
+	v:vector;
+begin 
+	i:= 0; max:= -1; min:= 999; m1:= ''; p1:= ''; cant2:= 0;
+	inivectores(vc,v);
+	while (L <> nil) do begin 
+		
+		vc[L^.data.cod_camion]:= vc[L^.data.cod_camion] + L^.data.distancia;
 
-            for i:= 1 to 100 do begin 
-                if punto3(L^.data,c) then 
-                    cumpletres:= cumpletres + v[i]
-            end;
-        L:=L^.sig;
-        end;
-    
-    end;
-end; 
+		punto1(vc,max,min,p1,m1);
+			
+		if (v[L^.data.cod_camion].capacidad > 30.5) and (2023 - L^.data. > 5) then 
+			cant2:= cant2 +1;
+			
+		if (cumple3(L^.data.dni)) then 
+			writeln('los códigos de los viajes realizados por choferes cuyo DNI tenga sólo dígitos impares. ', L^.data.cod_viaje);
+			
+	L:= L^.sig;
+	end;
+	writeln('patente del camión que más kilómetros recorridos posee ', p1, ' y la patente del camión que menos kilómetros recorridos posee. ', m1);
+	writeln('a cantidad de viajes que se han realizado en camiones con capacidad mayor a 30,5 toneladas y que posean una antigüedad mayor a 5 años al momento de realizar el viaje ', cant2);
+
+end;
 
 var 
-    L:lista;
-    c:camion;
-    v:vector;
+	L:lista;
 begin 
-    L:= nil;
-    cargardatos(L);
-    procesarDatos(L);
+	L:= nil;
+	cargardatos(L);
+	procesardatos(L);
 end.
