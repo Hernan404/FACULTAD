@@ -170,7 +170,7 @@ begin
 	while (L <> nil) do begin 
 		
 		for i:=1 to materias do 
-			notas:= v[L^.data.nota] + notas;
+			notas:= L^.data.nota[i] + notas;
 			
 		if (cumpleB(L^.data)) then 
 			cantB:= cantB +1;
@@ -205,11 +205,6 @@ begin
 	cargardatos(L);
 	procesardatos(L);
 end.
-
-
-
-
-
 
 
 
