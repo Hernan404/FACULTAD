@@ -373,22 +373,22 @@ end;
 
 procedure informarGeneroMasPuntaje(L: lista);
 var
-  puntajes: vector;
+  vg: vector;
   generoMax: rango_generos;
   maxPuntaje: real;
 begin
-  inivector(puntajes);
+  inivector(vg);
   while L <> nil do
   begin
-    puntajes[L^.data.genero] := puntajes[L^.data.genero] + L^.data.puntaje;
+    vg[L^.data.genero] := vg[L^.data.genero] + L^.data.puntaje;
     L := L^.sig;
   end;
   maxPuntaje := -1;
   for generoMax := 1 to generos do
   begin
-    if puntajes[generoMax] > maxPuntaje then
+    if vg[generoMax] > maxPuntaje then
     begin
-      maxPuntaje := puntajes[generoMax];
+      maxPuntaje := vg[generoMax];
     end;
   end;
   writeln('El genero con mas puntaje es: ', generoMax);
@@ -427,16 +427,11 @@ begin
   end;
 end;
 
-var 
-  L: lista;
-  L2: lista2;
+procedure procesardatos(var L: lista; var L2: lista2);
+var
   exito: boolean;
   codPeli: integer;
-begin 
-  L := nil;
-  L2 := nil;
-  cargarPeliculas(L);
-  cargarCriticos(L2);
+begin
   actualizarPuntaje(L, L2);
   informarGeneroMasPuntaje(L);
   informarCriticos(L2);
@@ -447,4 +442,16 @@ begin
     writeln('Pelicula eliminada con exito.')
   else
     writeln('Pelicula no encontrada.');
+end;
+
+var 
+  L: lista;
+  L2: lista2;
+begin 
+  L := nil;
+  L2 := nil;
+  cargarPeliculas(L);
+  cargarCriticos(L2);
+  procesardatos(L, L2);
 end.
+
