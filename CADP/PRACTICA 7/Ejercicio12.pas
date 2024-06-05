@@ -1,123 +1,158 @@
+{El centro de deportes Fortaco’s quiere procesar la información de los 4 tipos de suscripciones que ofrece:
+1)Musculación, 2)Spinning, 3)Cross Fit, 4)Todas las clases. Para ello, el centro dispone de una tabla con
+información sobre el costo mensual de cada tipo de suscripción.
+Realizar un programa que lea y almacene la información de los clientes del centro. De cada cliente se conoce el
+nombre, DNI, edad y tipo de suscripción contratada (valor entre 1 y 4). Cada cliente tiene una sola suscripción.
+La lectura finaliza cuando se lee el cliente con DNI 0, el cual no debe procesarse.
+Una vez almacenados todos los datos, procesar la estructura de datos generada, calcular e informar:
+- La ganancia total de Fortaco’s
+- Las 2 suscripciones con más clientes.
+- Genere una lista con nombre y DNI de los clientes de más de 40 años que están suscritos a CrossFit o a
+Todas las clases. Esta lista debe estar ordenada por DNI}
+
 program EJ12P7;
+const 
+	tipo = 4;
 type 
+	rango_tipo = 1..4;
+	
 	cliente = record 
 		nombre:string;
-		DNI:integer;
+		dni:integer;
 		edad:integer;
-		tipo:1..4;
+		subscripcion:rango_tipo;
 	end;
 	
-	cliente2 = record 
-		nombre:string;
-		DNI:integer;
-	end;
 	
-	lista = ^nodo 
+	lista = ^nodo;
 	nodo = record 
 		data:cliente;
 		sig:lista;
 	end;
+
 	
-	lista2 = ^nodo2 
-	nodo2 = record 
-		data:cliente2;
-		sig:lista2;
-	end;
+		
+	vector = array [rango_tipo] of integer;
+	vcostos = array [rango_tipo] of real;
 	
-	vcostos = array [1..4] of real;
-	vcontador = array [1..4] of integer;
-	
+
+procedure armarlista(var L:lista; r:cliente);
+var 
+	aux:lista;
+begin 
+	new(aux);
+	aux^.data:= r;
+	aux^.sig:= L;
+	L:= aux;
+end;
+
 procedure leer(var r:cliente);
+begin 
+	with r do begin 
+		readln(nombre);
+		readln(dni);
+		readln(edad);
+		readln(subscripcion);
+	end;
+end;
 
-procedure cargardatos(L:lista);
+procedure cargardatos (var L:lista);
+var 
+	r:cliente;
+begin 
+	leer(r);
+	while (r.dni <> 0) do begin 
+		armarlista(L,r);
+		leer(r);
+	end;
+end;
 
+procedure armarlista2(var pri:lista; nombre:string; dni:integer);
+var 
+    ant, nue, act: lista;
+begin
+    new (nue);
+    nue^.data.nombre := nombre;
+    nue^.data.dni:= dni;
+    act := pri;
+    ant := pri;
+    {Recorro mientras no se termine la lista y no encuentro la posición correcta}
+    while (act<>NIL) and (act^.data.dni < dni) do //De menor a mayor
+    begin
+        ant := act;
+        act := act^.sig ;
+    end;
+    if (ant = act)  then 
+        pri := nue   {el dato va al principio}
+    else  
+        ant^.sig  := nue; {va entre otros dos o al final}
+    nue^.sig := act ;
+end;
 
-
-	
-procedure inivectores (v:vcostos; vc:vcontador);
+procedure masclientes(v:vector; var max1,max2,p1,p2:integer);
 var 
 	i:integer;
 begin 
-	for i:=1 to 4 do begin 
-		v[i]:= 0;
-	end;
-	
-	{se dispone 
-	for i:=1 to 4 do begin 
-		vc[1]:= 232 
-		vc[2]:= 432
-		vc[3]:= 543
-		vc[4]:= 324
-	end;}
-end;
-
-procedure puntoB (v:vector; min1,min2,s1,s2:integer);
-begin 
-	for i:=1 to 4 do begin 
-		if (v[i]> max1) then begin 
+	for i:=1 to tipo do begin 
+		if (v[i] > max1) then begin 
 			max2:= max1;
-			s2:= s1;
+			p2:= p1;
 			max1:= v[i];
-			s1:= i;
+			p1:= i;
 		end
 		else if (max1 > max2) then begin 
-			max2:= v[i];
-			s2:= i;
-		end; 	
-end;
-
-procedure armarlista2 (L2:lista2; nombre:string; DNI:Integer);
-var 
-	aux,ant,act:lista2;
-  begin
-    New(aux);
-    nue^.dato.nombre:= nombre;
-    nue^.dato.DNI:= DNI;
-    nue^.sig:= nil;
-
-    if (L = nil) then
-      L:= aux;
-    else
-      begin
-        ant:= L;
-        act:= L;
-        while (act <> nil) and (act^.data.DNI < DNI) do
-          begin
-            ant:= act;
-            act:= act^.sig;
-          end;
-        if (ant = act) then
-          L:= aux
-        else
-          ant^.sig:= nue;
-        nue^.sig:= act;
-      end;
-  end;
-
-procedure procesardatos(L:lista);
-var 
-	vc:vcostos; v:vcontador;
-	max1,max2,s1,s2:integer;
-begin 
-	max1:= 0; max2:= 0; s1:= 0; s2:= 0;
-	inivector(v,vc);
-	while (L <> nil) do begin 
-		//punto A
-		total:= vc[L^.data.tipo] + total;
-		//punto B
-		v[L^.data.tipo]:= v[L^.data.tipo] +1;
-		puntoB(v,max1,max2,s1,s2);
-		//punto C
-		if (L^.data.edad > 40) and (L^.data.tipo = 1) or (L^.data.tipo = 4) then 
-			armarlista2(L2,L^.data.nombre,L^.data.DNI);
+				max2:= v[i];
+				p2:= i;
+		end;
 	end;
-     writeln(total);
-     wirteln(s1,s2);
-     
+end;
+
+procedure cargarvector(var vc:vcostos); // se dispone
+begin 
+	// esta es la tabla que se dispone
+end;
+
+procedure inivector(var v:vector);
+var 
+	i:Integer;
+begin 
+	for i:=1 to tipo do begin 
+		v[i]:= 0;
+	end;
+end;
+
+
+
+procedure procesardatos(L,L2:lista);
+var 
+	v:vector; vc:vcostos; 
+	ganancia_total:real; max1,max2,p1,p2:integer; 
+begin 
+	ganancia_total:= 0; max1:= -1; max2:= -1; p1:= 0; p2:= 0;
+	cargarvector(vc); //se dispone
+	inivector(v);
+	while (L <> nil) do begin 
+	
+		ganancia_total:= vc[L^.data.subscripcion] + ganancia_total;
+		
+		v[L^.data.subscripcion]:= v[L^.data.subscripcion] +1;
+		
+		if (L^.data.edad > 40) and ((L^.data.subscripcion = 3) or (L^.data.subscripcion = 4)) then 
+			armarlista2(L2,L^.data.nombre,L^.data.dni);
+		
+		L:= L^.sig;
+	end;	
+	masclientes(v,max1,max2,p1,p2);
+	writeln('La ganancia total de Fortaco’s ', ganancia_total);
+	writeln('Las 2 suscripciones con más clientes. ', p1, p2); 
+	
+end;
 
 var 
-	L:lista;
+	L2,L:lista;
 begin 
-	cargardatos(L); // se dispone;
-	procesardatos(L);
-end;
+	L:= nil;
+	L2:= nil;
+	cargardatos(L);
+	procesardatos(L,L2);
+end.
