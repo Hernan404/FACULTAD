@@ -1,43 +1,56 @@
+{La biblioteca de la Universidad Nacional de La Plata necesita un programa para administrar información de
+préstamos de libros efectuados en marzo de 2020. Para ello, se debe leer la información de los préstamos
+realizados. De cada préstamo se lee: nro. de préstamo, ISBN del libro prestado, nro. de socio al que se prestó el
+libro, día del préstamo (1..31). La información de los préstamos se lee de manera ordenada por ISBN y finaliza
+cuando se ingresa el ISBN -1 (que no debe procesarse).
+Se pide:
+A) Generar una estructura que contenga, para cada ISBN de libro, la cantidad de veces que fue prestado.
+Esta estructura debe quedar ordenada por ISBN de libro.
+B) Calcular e informar el día del mes en que se realizaron menos préstamos.
+C) Calcular e informar el porcentaje de préstamos que poseen nro. de préstamo impar y nro. de socio par.}
+
+
 program EJ14P7;
 const 
-    dia = 31;
+	dias = 31;
 type 
-    rango_dia:= 1..31;
-
-    prestamo = record 
-        numero:integer;
-        ISBN:integer;
-        numero_socio:integer;
-        diaprestamo:rango_dia;
-    end; 
-
-    lista =  ^nodo 
-    nodo = record 
-        data:prestamo;
-        sig:lista;
-    end;
-
-    vector = array [rango_dia] of integer;
-
-procedure leer(r:prestamo);
-with r do begin 
-    readln(numero);
-    readln(ISBN);
-    readln(numero_socio);
-    readln(diaprestamo);
+	rango_dias = 1..31;
+	
+	prestamo = record 
+		numero:integer;
+		ISBN:integer;
+		numero_socio:integer;
+		dia:rango_dias;
+	end;
+	
+	lista = ^nodo;
+	nodo = record 
+		data:prestamo;
+		sig:lista;
+	end;
+	
+	vector = array [rango_dias] of integer;
+	
+procedure leer(var r:prestamo);
+begin 
+	with r do begin 
+		readln(numero);
+		readln(ISBN);
+		readln(numero_socio);
+		readln(dia);
+	end;
 end;
-end;
 
-Procedure InsertarElemento ( var pri: lista; r: prestamo);
+Procedure armarlista ( var pri: lista; r:prestamo);
 var 
     ant, nue, act: lista;
 begin
     new (nue);
-    nue^.datos := per;
+    nue^.data := r;
     act := pri;
     ant := pri;
     {Recorro mientras no se termine la lista y no encuentro la posición correcta}
-    while (act<>NIL) and (act^.datos.ISBN < r.ISBN) do //De menor a mayor
+    while (act<>NIL) and (act^.data.ISBN < r.ISBN) do //De menor a mayor
     begin
         ant := act;
         act := act^.sig ;
@@ -49,83 +62,81 @@ begin
     nue^.sig := act ;
 end;
 
-procedure inivector (var v:vector); 
+
+procedure cargardatos (var L:lista);
 var 
-    i:rango_dia;
+	r:prestamo;
 begin 
-    for i:=1 to dia do begin 
-        v[i]:= 0;
-    end;
+	leer(r);
+	while (r.ISBN <> -1) do begin 
+		armarlista(L,r);
+		leer(r);
+	end;
 end;
 
-procedure cargardatos (L:lista);
+procedure inivector(var v:vector);
 var 
-    r:prestamo;
+	i:integer;
 begin 
-    leer(r);
-    while (ISBN <> -1) do begin 
-        armarlista(L,r);
-        leer(r);
-    end;
-end; 
-
-procedure puntoB (var max,p1:integer; v:vector);
-begin 
-    for i:=1 to dia do begin 
-        if (v[i].dia < min) then begin 
-            min:= v[i];
-            p1:= i;
-        end;
-    end;
+	for i:=1 to dias do v[i]:= 0;
 end;
 
-function puntoC(num:integer):boolean;
+procedure puntoB(v:vector; var min,p1:integer);
 var 
-    digito,par,impar:integer;
+	i:rango_dias;
 begin 
-    par:= 0;
-    impar := 0;
-end;    
+	for i:=1 to dias do begin 
+		if (v[i] < min) then begin 
+			min:= v[i];
+			p1:= i;
+		end;
+	end;
+end;
+
+function cumpleC(num,num_socio:integer):boolean;
+begin 
+	cumpleC:= ((num mod 2) = 1) and ((num_socio mod 2) = 0);
+end;
+
+
 
 procedure procesardatos(L:lista);
 var 
-    v:vector;
-    r:prestamo;
-    min,p1:integer;
+	porcentaje:real; min,p1:integer; ISBNACT:integer; cant_prestado:integer;
+	v:vector; cantC:real; total:integer;
 begin 
-    min:= 9999;
-    p1:= 0;
-    suma:= suma +1;
-    while (L <> nil) do begin 
-    ISBNact:= L^.data.ISBN;
-        while (L <> nil) and (L^.data.ISBN = ISBNact) do begin 
-            //punto A
-            v[L^.data.dia]:= v[L^.data.dia] +1;
-
-            //punto B
-            puntoB(max1,p1,v);
-
-            //punto C 
-            suma:= suma +1;
-            if ((L^.data.numero mod 10) mod 2 = 1) and ((L^.data.numero_socio mod 10) mod 2 = 0) then 
-                cantC:= cantC +1;
-
-            L:= L^.sig;
-        end;
-        for i:=1 to dia do begin 
-            writeln('punto A', v[i], i);
-        end; 
-        writeln('punto B', p1);
-        writeln('punto C', cantC*100/suma);
-    end;
+	porcentaje:= 0; min:= 999; p1:= 0;  cantC:= 0; total:= 0;
+	inivector(v);
+	while (L <> nil) do begin 
+		ISBNACT:= L^.data.ISBN;
+		cant_prestado:= 0;
+		//PUNTO A
+		while (L <> nil) and (L^.data.ISBN = ISBNACT) do begin 
+			cant_prestado:= cant_prestado +1;
+			total:= total +1;
+			//PUNTO C B
+			v[L^.data.dia]:= v[L^.data.dia] +1;
+			
+			//PUNTO C
+			if (cumpleC(L^.data.numero, L^.data.numero_socio)) then 
+				cantC:= cantC +1;
+		L:= L^.sig;
+		end;
+		writeln('ISB', ISBNACT, 'fue prestado', cant_prestado,'veces');
+	end;
+		//PUNTO C
+		porcentaje:= (cantC/total)*100;
+		puntoB(v,min,p1);
+		
+		writeln('el día del mes en que se realizaron menos préstamos. ', p1);
+		writeln(' el porcentaje de préstamos que poseen nro. de préstamo impar y nro. de socio par ', porcentaje);
 
 end;
 
-
 var 
-    L:lista;
+	L:lista;
 begin 
-    L:= nil;
-    cargardatos(L);
-    procesarDatos(L);
+	L:= nil;
+	cargardatos(L);
+	procesardatos(L);
 end.
