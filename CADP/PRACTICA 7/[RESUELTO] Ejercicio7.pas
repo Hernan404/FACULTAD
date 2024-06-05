@@ -20,6 +20,9 @@ const
 type 
 	rango_materias = 1..24;
 	
+	vnotas = array [rango_materias] of real;
+
+	
     alumno = record 
         numero:integer;
         apellido:string;
@@ -27,7 +30,7 @@ type
         mail:string;
         ingreso:integer;
         egreso:integer;
-        nota:rango_materias;
+        notas:vnotas;
     end;
 
     lista = ^nodo;
@@ -37,33 +40,35 @@ type
     end;
 
     vector = array [rango_materias] of integer;
-    vnotas = array [rango_materias] of real;
  
  
  procedure leer(var r:alumno);
  var 
-	i,x:integer; diml:integer; vn:vnotas;
+	i,x:integer; diml:integer; nota:real;
  begin 
-	for i:= 1 to materias do 
-		vn[i]:= 0;  //donde guardo las notas ordenadas
-
 	with r do begin 
-		readln(numero);
-		readln(apellido);
-		readln(nombre);
-		readln(mail);
-		readln(ingreso);
-		readln(egreso);
-		for i:=1 to materias do begin
-			readln(nota);
-			diml:= 1;
-			while (vn[diml] > nota) do  //Se busca la posición adecuada para la nueva nota en el arreglo notas. Esto se hace comparando la nueva nota con las notas existentes en el arreglo notas, avanzando diml hasta encontrar la posición correcta (donde notas[diml] sea menor o igual que la nueva nota
-					diml:= diml +1;
+	
+		for x:= 1 to materias do 
+			notas[x]:= 0;  //donde guardo las notas ordenadas
 			
-			for x:= materias downto diml do 
-				vn[x]:= vn[x - 1]; // // Una vez encontrada la posición correcta, se realiza un desplazamiento hacia la derecha de las notas existentes en el arreglo notas para hacer espacio para la nueva nota. Este desplazamiento se realiza desde el final del arreglo hasta la posición diml.
-			vn[diml]:= nota;    //Finalmente, se inserta la nueva nota en la posición diml del arreglo notas.
+		if (numero <> -1) then begin 
+			readln(numero);
+			readln(apellido);
+			readln(nombre);
+			readln(mail);
+			readln(ingreso);
+			readln(egreso);
+			for i:=1 to materias do begin
+				readln(nota);
+				diml:= 1;
+				while (notas[diml] > nota) do  //Se busca la posición adecuada para la nueva nota en el arreglo notas. Esto se hace comparando la nueva nota con las notas existentes en el arreglo notas, avanzando diml hasta encontrar la posición correcta (donde notas[diml] sea menor o igual que la nueva nota
+						diml:= diml +1;
+				
+				for x:= materias downto diml do 
+					notas[i]:= notas[i - 1]; // // Una vez encontrada la posición correcta, se realiza un desplazamiento hacia la derecha de las notas existentes en el arreglo notas para hacer espacio para la nueva nota. Este desplazamiento se realiza desde el final del arreglo hasta la posición diml.
+				notas[diml]:= nota;    //Finalmente, se inserta la nueva nota en la posición diml del arreglo notas.
 
+			end;
 		end;
 	end;
 end;
@@ -84,6 +89,17 @@ end;
 	i:rango_materias;
 begin 
 	for i:=1 to materias do v[i]:= 0;
+end;
+
+procedure cargardatos(var L:lista);
+var 
+	r:alumno;
+begin 
+	leer(r);
+	while (r.numero <> -1) do begin 
+		armarlista(L,r);
+		leer(r);
+	end;
 end;
 
 function cumpleimpar(numero:integer):boolean;
@@ -155,47 +171,37 @@ end;
 
 
 
- procedure procesardatos(L:lista);
- var 
+
+
+procedure procesardatos(L:lista);
+var 
 	v:vector; cantB,i:integer; min1,min2:integer;
 	a1,a2:string; d1,d2:string; n1,n2:string;
-	notas: real;
 	exito:boolean;
-	r:alumno;
+	r:alumno; promedio_notas:real;
 begin 
 	a1:= ''; a2:= ''; d1:= ''; d2:= ''; n1:= ''; n2:= ''; min1:= 999; min2:= 999;
-	cantB:= 0; notas:= 0;
+	cantB:= 0; 
 	
 	inivector(v);
 	while (L <> nil) do begin 
 		
+		promedio_notas:= 0;
 		for i:=1 to materias do 
-			notas:= L^.data.nota[i] + notas;
+			promedio_notas:= L^.data.notas[i] + promedio_notas;
 			
 		if (cumpleB(L^.data)) then 
 			cantB:= cantB +1;
 			
 		puntoC(L^.data,min1,min2,a1,a2,d1,d2,n1,n2);
 			
-		writeln('El promedio de notas obtenido por cada alumno.', (notas/materias):2:0);
+		writeln('El promedio de notas obtenido por cada alumno.', (promedio_notas/materias):2:0);
 	
 	L:=L^.sig;
 	end;
 	writeln('cantidad de alumnos ingresantes 2012 cuyo número de alumno está compuesto únicamente por dígitos impares ', cantB);
 	writeln('El apellido, nombres y dirección de correo electrónico de los dos alumnos que más rápido se recibieron ', a1,a2,d1,d2,n1,n2);
 	eliminar(L,r,exito);
-end;
- 
- 
- procedure cargardatos(var L:lista);
- var 
-	r:alumno;
-begin 
-	leer(r);
-	while (r.numero <> -1) do begin 
-		armarlista(L,r);
-		leer(r);
-	end;
 end;
  
 var 
@@ -205,7 +211,4 @@ begin
 	cargardatos(L);
 	procesardatos(L);
 end.
-
-
-
 
