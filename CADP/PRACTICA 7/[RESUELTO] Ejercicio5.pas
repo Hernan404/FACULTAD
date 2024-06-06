@@ -165,8 +165,6 @@ begin
 		
 		vc[L^.data.cod_camion]:= vc[L^.data.cod_camion] + L^.data.distancia;
 
-		punto1(vc,max,min,p1,m1);
-			
 		if (v[L^.data.cod_camion].capacidad > 30.5) and (2023 - L^.data. > 5) then 
 			cant2:= cant2 +1;
 			
@@ -175,6 +173,7 @@ begin
 			
 	L:= L^.sig;
 	end;
+ 	punto1(vc,max,min,p1,m1);
 	writeln('patente del camión que más kilómetros recorridos posee ', p1, ' y la patente del camión que menos kilómetros recorridos posee. ', m1);
 	writeln('a cantidad de viajes que se han realizado en camiones con capacidad mayor a 30,5 toneladas y que posean una antigüedad mayor a 5 años al momento de realizar el viaje ', cant2);
 
