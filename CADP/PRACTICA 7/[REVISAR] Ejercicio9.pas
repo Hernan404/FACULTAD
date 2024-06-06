@@ -17,6 +17,23 @@ parámetro (el mismo puede no existir)}
 
 
 
+{Un cine posee la lista de películas que proyectará durante el mes de Febrero. De cada película se tiene:
+código de película, título de la película, código de género (1: acción, 2: aventura, 3: drama, 4: suspenso, 5:
+comedia, 6: bélica, 7: documental y 8: terror) y puntaje promedio otorgado por las críticas. Dicha estructura
+no posee orden alguno.
+Se pide:
+a) Actualizar (en la lista que se dispone) el puntaje promedio otorgado por las críticas. Para ello se debe
+leer desde teclado las críticas que han realizado críticos de cine, de cada crítica se lee: DNI del crítico,
+apellido y nombre del crítico, código de película y el puntaje otorgado. La lectura finaliza cuando se lee
+el código de película -1 y la información viene ordenada por código de película.
+b) Informar el código de género que más puntaje obtuvo entre todas las críticas.
+c) Informar el apellido y nombre de aquellos críticos que posean la misma cantidad de dígitos pares que
+impares en su DNI.
+d) Realizar un módulo que elimine de la lista que se dispone una película cuyo código se recibe como
+parámetro (el mismo puede no existir)}
+
+
+
 
 
 program EJ9P7;
@@ -170,30 +187,51 @@ begin
     cumplepares := (par = impar) and (par <> 0) and (impar <> 0); 
 end;
 
+procedure puntoB(v:vector; vc:contador; var max,p1:integer);
+var 
+	i:integer;
+begin 
+   for i := 1 to generos do begin
+        if (c[i] <> 0) then
+            v[i] := (v[i] / c[i]);
+            
+        if (v[i] > max) then begin
+            max := v[i];
+            p1 := i;
+        end;
+   end;
+end;
+
+
 // Procedimiento para procesar los datos
 procedure procesardatos(L: lista; L2: lista2);
 var 
+    r: pelicula;
     auxL: lista;
     auxL2: lista2;
     v: vector;
-    c: contador;
+    vc: contador;
     max: real;
     p1: integer;
-    i:integer;
 begin 
     inivector(v);
     inicontador(c);
     max := -1;
     p1 := 0;
-
+    //GUARDO LAS LISTAS EN UNA VARIABLE AUXILIAR Y RECORRO LAS DOS        
     auxL := L;
-    while auxL <> nil do begin
+    while (auxL <> nil) do begin
         auxL2 := L2;
         while (auxL2 <> nil) do begin
+            //SI CUMPLE QUE LOS CODIGOS SEAN IGUALES 
             if (auxL2^.data.codigo_pelicula = auxL^.data.codigo) then begin
-                auxL^.data.puntaje := (auxL^.data.puntaje + auxL2^.data.puntaje_otorgado) / 2;
+                // Incrementa el contador de cantidad de puntajes
+                cantpuntajes:= cantpuntajes +1;
+                // Calcula el nuevo promedio, 
+                auxL^.data.puntaje := auxL^.data.puntaje + (auxL2^.data.puntaje_otorgado - auxL^.data.puntaje) / cantpuntajes;
+
                 v[auxL^.data.genero] := v[auxL^.data.genero] + auxL2^.data.puntaje_otorgado;
-                c[auxL^.data.genero] := c[auxL^.data.genero] + 1;
+                vc[auxL^.data.genero] := vc[auxL^.data.genero] + 1;
 
                 if cumplepares(auxL2^.data.dni) then 
                     writeln('Critico con DNI pares/impares: ', auxL2^.data.apeynom);
@@ -202,15 +240,8 @@ begin
         end;
         auxL := auxL^.sig;
     end;
+    puntoB(v,vc,max,p1);
 
-    for i := 1 to generos do begin
-        if (c[i] <> 0) then
-            v[i] := (v[i] / c[i]);
-        if (v[i] > max) then begin
-            max := v[i];
-            p1 := i;
-        end;
-    end;
     writeln('Genero con más puntaje: ', p1);
 end;
 
@@ -256,3 +287,6 @@ begin
     else
         writeln('Código de película no encontrado.');
 end.
+
+
+
