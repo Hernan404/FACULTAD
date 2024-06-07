@@ -6,114 +6,102 @@ A. informar el numero de coche con le cual se realizaron mas viajes.
 B. genere una lista con los viajes realizados en el mes 2 por un chofer con DNI multiplo de 10 donde la cantidad de pasajes vendidos no alcanza la capacidad maxima del coche;
 C. para cada coche, informe el promedio de pasajeros que viajaron entre todos sus viajes.}
 
-program PARCIAL;
+
+
+program PARCIALMARDELPLATA;
 type 
-	numeros = 1000..2500;
-	viaje = record 
+	rango_numero = 1000..2500;
+	
+	viajes = record 
 		codigo:integer;
-		numero:integer;
+		numero:rango_numero;
 		mes:1..12;
 		cant_pasajes:integer;
-		DNI:integer;
+		dni:integer;
 	end;
-
+	
 	lista = ^nodo;
 	nodo = record 
-		data:viaje;
+		data:viajes;
 		sig:lista;
 	end;
 
-	vnum = array [numeros] of integer;
-	vmeses = array [1..12] of integer;
-	vcapacidad = array [numeros] of integer;
-
-
-procedure cargardatos(var L:lista); //se dispone
-begin
-
-end;
-
-procedure leer(var r:viaje); // se dispone
-begin 
-
-end;
-
-procedure armarlista(var L:lista; r:viaje); // se dispone
-begin 
-
-end;
-
-procedure cargarcapacidad (var vc:vcapacidad); // se dispone 
-begin 
+	vector = array [rango_numero] of integer;
+	vcapacidad = array [rango_numero] of integer;
 	
-end;
+procedure armarlista(var L:lista; r:viajes); // se dispone
 
-procedure inivectores (var vn:vnum; var vm:vmeses);
+procedure leer(var r:viajes); // se dispone
+
+procedure cargarcapacidad(var vc:vcapacidad); // se dispone
+
+procedure cargardatos(var L:lista); // se dispone
+
+procedure inivector(var v:vector); 
 var 
-	i:integer;
+	i:rango_numero;
 begin 
-	for i:=1 to 2500 do 
-		vn[i]:= 0;
-	for i:=1 to 12 do 
-		vm[i]:= 0;
+	for i:=1000 to 2500 do v[i]:= 0;
 end;
 
-procedure armarlista2(var L2:lista; var r:viaje);
+procedure puntoA(v:vector; var max,p1:integer);
+var 
+	i:rango_numero;
+begin 
+	for i:=1000 to 2500 do begin 
+		if (v[i] > max) then begin 
+			max:= v[i];
+			p1:= i;
+		end;
+	end;
+end;
+
+function cumpleB(r:viajes; cap:integer):boolean;
+begin 
+	cumpleB:= (r.mes = 2) and (r.dni mod 10 = 0) and (r.cant_pasajes < cap);
+end;
+
+procedure armarlista2(var L2:lista; r:viajes);
 var 
 	aux:lista;
 begin 
 	new(aux);
 	aux^.data:= r;
 	aux^.sig:= L2;
-	L2:= aux;
+	L:= aux;
 end;
 
-procedure puntoA(vn:vnum;var max:integer;var n1:integer);
-var 
-	i:integer;
-begin 
-	for i:=1000 to 2500 do begin 
-		if (vn[i] > max) then begin  
-			max:= vn[i];
-			n1:= i;
-		end;
-	end;
-
-end;
-	
 procedure procesardatos(L:lista);
 var 
-	vc:vcapacidad; vm:vmeses; vn:vnum; max,n1:integer;
-	cap:integer;
-	L2:lista;
-	r:viaje; cant:integer; i:integer;
+	v:vector; vc:vcapacidad; max,p1:integer;
+	L2:Lista; promedio:real; i,cap:integer;
 begin 
-	L2:= NIL;
-	cap:= 0; cant:= 0; max:= -1; n1:= 0;
-	cargarcapacidad(vc);
-	inivectores(vn,vm);
+	max:= -1; p1:= 0; L2:= NIL; promedio:= 0; cap:= 0;
+	inivector(v);
 	while (L <> nil) do begin 
-		//calculo la capacidad
-		cap:= L^.data.cant_pasajes * L^.data.numero;
-		vc[L^.data.numero]:= vc[L^.data.numero] + cap;
-		puntoA(vn,max,n1);
-		cant:= cant +1;
-		vn[L^.data.numero]:= vn[L^.data.numero] + 1;
 		
-		if (vm[L^.data.mes] = 2) and (L^.data.DNI MOD 10 = 0) and (L^.data.cant_pasajes < cap) then 
-			armarlista2(L2,r);
-
+		cap:= vc[L^.data.numero] + cap;
+		
+		v[L^.data.numero]:= v[L^.data.numero] +1;
+		
+		if (cumpleB(L^.data,cap)) then 
+			armarlista(L2,L^.data);
+		
+		promedio:= L^.data.cant_pasajes + promedio;
+		
 	L:= L^.sig;
 	end;
-	writeln('punto A ', n1);
-	for i:=1000 to 2500 do   
-		writeln(cant/vn[i]);
-end;	
+	for i:=1 to 2500 do 
+		writeln(promedio/v[i]);
 	
+	puntoA(v,max,p1);
+	writeln(p1);
+end;
+
 var 
 	L:lista;
 begin 
 	L:= nil;
 	cargardatos(L);
 	procesardatos(L);
-end.	
+end.
