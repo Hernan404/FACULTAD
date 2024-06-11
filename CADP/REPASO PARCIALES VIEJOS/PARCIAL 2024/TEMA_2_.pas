@@ -1,5 +1,17 @@
-program TEMA2;
+{un fabricante de dispositivos electronicos desea procesar informacion de los repuestos que compro.
+de cada repuesto conoce su codigo, precio, codigo de marca (entre 1 y 130) y nombre del pais del que proviene.
+el fabricante dispone de una estructura de datos con la informacion de los repuestos, ordenados por nombre de
+pais.
+Realizar un progrma que:
+	A. Lea el codigo y el nombre de las 130 marcas con las que trabaja, y las almacene en una estructura de 
+	datos. la informacion se ingresa sin ningun orden particular.
+	B. una vez completada la carga, procese la informacion de los repuestos e informe: 
+		1. la cantidad de paises a los que se le compro mas de 100 repuestos
+		2. para cada marca, nombre de la marca y el precio del producto mas barato
+		3. la cantidad de repuestos que no poseen ningun cero en su codigo.}
 
+
+program TEMA2;
 const
   marcas = 130;
 
