@@ -82,7 +82,7 @@ var
 	suma,i,cant,promedio:real;
 begin 
 	for i:=1 to paises do
-		suma:= suma vc[i]
+		suma:= suma + vc[i]
 
 	promedio:= suma/paises;
 	cant:= 0;
