@@ -1,4 +1,4 @@
-{un fabricante de dispositivos electronicos desea procesar informacion de repuestos que compro. el fabricante
+{TEMA 1: un fabricante de dispositivos electronicos desea procesar informacion de repuestos que compro. el fabricante
 dispone de una estructura de datos con informacion de los 200 paises en los cuales provienen repuestos, en la
 que para cada codigo de pais (1..200) se tiene su nombre
 
@@ -18,6 +18,7 @@ const
     paises = 200;
 type 
     rango_pais = 1..paises;
+
     repuesto = record 
         codigo: integer;
         precio: real;
@@ -76,6 +77,27 @@ begin
     end;
 end;
 
+procedure punto1(vc:vcant):integer;
+var 
+	suma,i,cant,promedio:real;
+begin 
+	for i:=1 to paises do
+		suma:= suma vc[i]
+
+	promedio:= suma/paises;
+	cant:= 0;
+
+	for i:=1 to paises do
+		if (v[i] > paises) then 
+		cant:= cant +1;
+end;
+
+procedure punto2(var max:real; precioNUE:real);
+begin
+	if (precioNUE > max) then 
+		max:= precioNUE;  
+end;
+
 function punto3(cod: integer): boolean;
 var 
     ceros: integer;
@@ -89,45 +111,37 @@ begin
     punto3 := (ceros >= 3);
 end;
 
-procedure procesardatos(L: lista; vp: vpais);
+
+procedure procesardatos(L: lista; vpa: vpais);
 var 
-    vc: vcant; vprecios: vprecio; total, cant3, cantMenorPromedio: integer; 
+    vc: vcant; vp:vprecio; total, cant3, cantMenorPromedio: integer; 
     max: real; promedio: real;
     i: integer;
 begin 
-    inivector(vc, vprecios);
-    total := 0; 
-    cant3 := 0;
-    cantMenorPromedio := 0;
-    
-    while (L <> nil) do begin 
-        vc[L^.data.cod_pais] := vc[L^.data.cod_pais] + 1;
-        if (L^.data.precio > vprecios[L^.data.cod_pais]) then
-            vprecios[L^.data.cod_pais] := L^.data.precio;
-        total := total + 1;
-        if (punto3(L^.data.codigo)) then 
-            cant3 := cant3 + 1;
-        L := L^.sig;
-    end;
 
-    promedio := total / paises;
-    for i := 1 to paises do begin 
-        if (vc[i] < promedio) then 
-            cantMenorPromedio := cantMenorPromedio + 1;
-    end;
+	while (L <> nil) do begin 
+		vc[L^.data.codigo]:= vc[L^.data.codigo] +1;
 
-    writeln('Cantidad de paises con repuestos por debajo del promedio: ', cantMenorPromedio);
-    for i := 1 to paises do begin 
-        writeln('Pais: ', vp[i], ' - Precio del repuesto más caro: ', vprecios[i]:0:2);
-    end;
-    writeln('Cantidad de repuestos con al menos 3 ceros en su código: ', cant3);
+		punto1(vp);
+
+		punto2(vp[L^.data.codigo], L^.data.precio);  
+
+		if (cumple3(L^.data.codigo)) then 
+			cant3:= cant3 +1;
+	end;
+	writeln('punto 1: ', cant);
+
+	for i:=1 to paises do 
+		writeln('repuesto de pais mas caro ', vp[i],'cuesta ', vpa[i]);
+	
+	writeln('cantidad de repuestos con 3 ceros', cant3);
 end;
 
 var 
-    L: lista; vp: vpais;
+	L:lista; vpa:vpais;
 begin 
-    L := nil;
-    cargarnombrepais(vp); // Cargar nombres de paises antes de procesar datos
-    cargardatos(L);
-    procesardatos(L, vp);
-end.
+	L:= nil;
+	cargarpais(vp);
+	cargardatos(L);
+	procesardatos(L,vpa);
+end,
