@@ -1,4 +1,4 @@
-El Portal de Revistas de la UNLP está estudiando el uso de sus sistemas de edición electrónica por parte
+{El Portal de Revistas de la UNLP está estudiando el uso de sus sistemas de edición electrónica por parte
 de los usuarios. Para ello, se dispone de información sobre los 3600 usuarios que utilizan el portal. De
 cada usuario se conoce su email, su rol (1: Editor; 2. Autor; 3. Revisor; 4. Lector), revista en la que
 participa y cantidad de días desde el último acceso.
@@ -6,7 +6,8 @@ a. Imprimir el nombre de usuario y la cantidad de días desde el último acceso 
 de la revista Económica. El listado debe ordenarse a partir de la cantidad de días desde el último
 acceso (orden ascendente).
 b. Informar la cantidad de usuarios por cada rol para todas las revistas del portal.
-c. Informar los emails de los dos usuarios que hace más tiempo que no ingresan al portal.
+c. Informar los emails de los dos usuarios que hace más tiempo que no ingresan al portal.}
+
 program EJ13P6;
 type 
 	usuario = record 
@@ -16,18 +17,20 @@ type
 		cant_acceso:integer;
 	end;
 	
-	lista = ^nodo
+	lista = ^nodo;
 	nodo = record 
-		data:usuarios;
+		data:usuario;
 		sig:lista
 	end;
+	
+	vector = array [1..4] of integer;
 
 procedure leer(var r:usuario); // se dispone
 begin 
 	// leo datos
 end; 
 
-procedure armarnodo(var L:lista; r:usuario);  // se dispone
+procedure armarlista(var L:lista; r:usuario);  // se dispone
 begin 
 	// cargo lista
 end;
@@ -46,12 +49,12 @@ begin
 	end;
 end; 
 
-Procedure InsertarElemento ( var pri: lista; r:usuario);
+Procedure armarlista2 ( var pri: lista; r:usuario);
 var 
     ant, nue, act: lista;
 begin
     new (nue);
-    nue^.datos := r;
+    nue^.data := r;
     act := pri;
     ant := pri;
     {Recorro mientras no se termine la lista y no encuentro la posición correcta}
@@ -83,17 +86,18 @@ end;
 
 procedure procesardatos(L,L2:lista);
 var 
-	r:usuario; cantB,max1,max2:integer; u1,u2:string; v:vector; i:integer;
+	max1,max2:integer; u1,u2:string; v:vector; i:integer;
 begin 
-	cantB:= 0; max1:= -1; max2:= -1; u1:= ''; u2:= '';
+	max1:= -1; max2:= -1; u1:= ''; u2:= '';
 	inivector(v);
 	i:= 0;
 	while (L <> nil) do begin 
 		if (L^.data.revista = 'economica') then 
-			insertarordenado(L2,r); // Se dispone 
+			armarlista2(L2,L^.data); // Se dispone 
 			
 		v[L^.data.rol]:= v[L^.data.rol] +1;
-		puntoC(r,max1,max2,u1,u2);
+		
+		puntoC(L^.data,max1,max2,u1,u2);
 		L:= L^.sig;
 	end;
 	while (L2 <> nil) do begin 
@@ -114,5 +118,6 @@ begin
 	L:= niL;
 	L2:= nil;
 	cargardatos(L);
-	procesardatos(L);
+	procesardatos(L,L2);
 end.
+
