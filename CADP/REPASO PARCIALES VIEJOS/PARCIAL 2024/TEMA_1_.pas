@@ -92,10 +92,10 @@ begin
 		cant:= cant +1;
 end;
 
-procedure punto2(var max:real; precioNUE:real);
+procedure punto2(var max:real; precio:real);
 begin
 	if (precioNUE > max) then 
-		max:= precioNUE;  
+		max:= precio;  
 end;
 
 function punto3(cod: integer): boolean;
