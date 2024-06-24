@@ -1,174 +1,157 @@
-
-
 program EJ10P7;
-const 
+
+const
     dimf = 20;
-type 
-    empresa = record 
-        codigo:integer;
-        nombre:string;
-        est_o_priv:string;
-        nombre_ciudad:string;
-        tipocultivo:vector;
+
+type
+    cultivos = record
+        tipo: string;
+        cantHec: integer;
+        cantMeses: integer;
     end;
 
-    cultivo = record 
-        tipo:string;
-        cantHec:integer;
-        cantMeses:integer;
+    vector = array [1..dimf] of cultivos;
+
+    empresa = record
+        codigo: integer;
+        nombre: string;
+        est_o_priv: string;
+        nombre_ciudad: string;
+        cultivo: vector;
+        diml: integer;
     end;
 
-    vector = array [1..dimf] of cultivo;
+    lista = ^nodo;
+    nodo = record
+        data: empresa;
+        sig: lista;
+    end;
 
-
-//punto A
-procedure leer(var e:empresa);
-var 
+// Procedimiento para leer una empresa y sus cultivos
+procedure leer(var e: empresa);
+var
     ha:integer;
-begin 
-    with e do begin 
-        writeln('codigo empresa');
-        readln(codigo);
-        if (codigo <> -1) then begin 
-            writeln('nombre empresa');
-            readln(nombre);
-            writeln('privada o estatal');
-            readln(est_o_priv);
-            writeln('ciudad');
-            readln(nombre_ciudad);
-
-        diml:= 0;
-
+begin
+    writeln('codigo empresa');
+    readln(e.codigo);
+    if (e.codigo <> -1) then begin
+        writeln('nombre empresa');
+        readln(e.nombre);
+        writeln('privada o estatal');
+        readln(e.est_o_priv);
+        writeln('ciudad');
+        readln(e.nombre_ciudad);
+        e.diml := 0;
         writeln('cantidad hectareas');
         readln(ha);
-    
-        while (diml <= dimf) and (ha <> 0) do begin 
-            diml:= diml +1;
+        while (e.diml < dimf) and (ha <> 0) do begin
+            e.diml := e.diml + 1;
             writeln('tipo de cultivo');
-            readln(cultivo[diml].tipo);
-            writeln('cantida de meses');
-            readln(cultivo[diml].meses);
-
-            cultivo[diml].hectareas:= ha;
-
-            writeln('cant hectareas');
+            readln(e.cultivo[e.diml].tipo);
+            writeln('cantidad de meses');
+            readln(e.cultivo[e.diml].cantMeses);
+            e.cultivo[e.diml].cantHec := ha;
+            writeln('cantidad hectareas');
             readln(ha);
         end;
     end;
 end;
 
-procedure armarlista (L:lista; r:empresa);
-var 
-    aux:lista;
-begin 
+// Procedimiento para agregar una empresa a la lista
+procedure armarlista(var L: lista; e: empresa);
+var
+    aux: lista;
+begin
     new(aux);
-    aux^.data:= r;
-    aux^.sig:= L;
-    L:= aux;
+    aux^.data := e;
+    aux^.sig := L;
+    L := aux;
 end;
 
-procedure cargardatos (L:lista); 
-var 
-    e:empresa;
-begin 
+// Procedimiento para cargar los datos de empresas en la lista
+procedure cargardatos(var L: lista);
+var
+    e: empresa;
+begin
     leer(e);
-    while (e.codigo <> -1) do begin 
-        armarlista(L,e);
+    while (e.codigo <> -1) do begin
+        armarlista(L, e);
         leer(e);
     end;
 end;
 
-//punto B
-
-function dosceros (codigo:integer; vc:vector; diml:integer):boolean;
-var 
-    digito,cero:integer;
-begin 
-    cero:= 0;
-    while (digito > 0) and not (puntoB) do begin 
-        digito:= num mod 10;
-        if (digito = 0) then 
-            cero:= cero +1;
+// Función para verificar si un código tiene al menos dos ceros
+function dosceros(codigo: integer): boolean;
+var
+    digito, cero: integer;
+begin
+    cero := 0;
+    while (codigo > 0) do begin
+        digito := codigo mod 10;
+        if (digito = 0) then
+            cero := cero + 1;
+        codigo := codigo div 10;
     end;
-    dosceros:= (cero = 2);
+    dosceros := (cero >= 2);
 end;
 
-function puntoB (L:lista; c:cultivo; e:empresa):boolean;
-begin 
-    (e.nombre_ciudad = 'san miguel del monte') and (v[i].tipo = 'trigo') and (dosceros(L^.data.codigo);
-end;
-
-procedure puntoD (var max:integer; var p1:string; c:cultivo; e:empresa);
-var 
-    i:integer;
-begin 
-    i:= 1;
-    while (i <= diml) do begin 
-        i:= i +1;
-    if (v[i].meses > max) then begin 
-        max:= v[i].meses;
-        p1:= e.nombre;
-    end;
-end;
-
-procedure puntoE (c:cultivo; e:empresa):boolean;
-var 
-    i:integer;
-begin 
-    puntoE:=(v[i].tipo = 'girasol') and (v[i].cantHec < 5) and (e.est_o_priv = 'privada') and (i <= diml);
-        i:= i +1;
-end;
-
-procedure procesaardatos(L:lista);
-var 
-    v:vector;
-    e:empresa;
-    c:cultivo;
-    TotalHEC:integer;
-    HECsoja:integer;
-    cumpleC:real;
-    max1:integer;
-    p1:string;
-    i:integer;
-begin 
-    i:= 0;
-    max1:= -1;
-    p1:= 0;
-    HECsoja:= 0;
-    TotalHEC:= 0;
-    while (L <> nil) do begin 
-        //punto B
-        if puntoB(L,c,e) then 
-            cumpleB:= L^.data.nombre;
-        //punto C 
-        TotalHEC:= v[c.cantHec] + TotalHEC;
-        
-        for i:=1 to diml do 
-            if (v[i].tipo = 'soja') then  
-                HECsoja:= v[i].cantHec + HECsoja;
-                
-        //punto D 
-        if (v[i].tipo = 'maiz') then   
-            puntoD(max1,p1,e,c);
-
-        //punto E 
-        if (puntoE(e,c)) then  
-            v[i].cantMeses:= v[i].cantMeses +1;
-    
-        else  
-            i:= i +1;
+// Procedimiento para procesar los datos
+procedure procesardatos(L: lista);
+var
+    totalHEC, HECsoja, max, i: integer;
+    cumpleC: real;
+    p1: string;
+begin
+    HECsoja := 0;
+    totalHEC := 0;
+    max := -1;
+    p1 := '';
+    while (L <> nil) do begin
+        // PUNTO B: Empresas en "San Miguel del Monte" que cultivan trigo y cuyo código tiene al menos dos ceros.
+        if (L^.data.nombre_ciudad = 'San Miguel del Monte') and dosceros(L^.data.codigo) then begin
+            for i := 1 to L^.data.diml do begin
+                if (L^.data.cultivo[i].tipo = 'trigo') then
+                    writeln('Empresa cumple con Punto B: ', L^.data.nombre);
+            end;
         end;
-        
-        L:= L^.sig;
+        // Total de hectáreas
+        for i := 1 to L^.data.diml do begin
+            totalHEC := totalHEC + L^.data.cultivo[i].cantHec;
+            // PUNTO C: Cantidad de hectáreas dedicadas al cultivo de soja
+            if (L^.data.cultivo[i].tipo = 'soja') then
+                HECsoja := HECsoja + L^.data.cultivo[i].cantHec;
+        end;
+        // PUNTO D: Empresa que dedica más tiempo al cultivo de maíz
+        for i := 1 to L^.data.diml do begin
+            if (L^.data.cultivo[i].tipo = 'maiz') then
+                if (L^.data.cultivo[i].cantMeses > max) then begin
+                    max := L^.data.cultivo[i].cantMeses;
+                    p1 := L^.data.nombre;
+                end;
+        end;
+        // PUNTO E: Incrementar en un mes los tiempos de cultivos de girasol < 5 hectáreas en empresas privadas
+        if (L^.data.est_o_priv = 'privada') then begin
+            for i := 1 to L^.data.diml do begin
+                if (L^.data.cultivo[i].tipo = 'girasol') and (L^.data.cultivo[i].cantHec < 5) then
+                    L^.data.cultivo[i].cantMeses := L^.data.cultivo[i].cantMeses + 1;
+            end;
+        end;
+        L := L^.sig;
     end;
-        writeln('PUNTO C ',  (HECsoja*TotalHEC)/100);
-    
-end; 
+    // PUNTO C: Porcentaje de hectáreas dedicadas a soja
+    if totalHEC > 0 then
+        cumpleC := (HECsoja / totalHEC) * 100
+    else
+        cumpleC := 0;
+    writeln('PUNTO C: Hectáreas dedicadas a soja representan el ', cumpleC:2:2, '% del total');
+    writeln('PUNTO D: La empresa que dedica más tiempo al cultivo de maíz es: ', p1);
+end;
 
-var 
-    L:lista;
-begin 
-    L:= niL;
-    procesardatos(L);
+var
+    L: lista;
+begin
+    L := nil;
     cargardatos(L);
+    procesardatos(L);
 end.
+
