@@ -88,7 +88,7 @@ begin
 	cant:= 0;
 
 	for i:=1 to paises do
-		if (v[i] > promedio) then 
+		if (vc[i] > promedio) then 
 		cant:= cant +1;
 end;
 
