@@ -33,7 +33,7 @@ type
 
     vpais = array [rango_pais] of string;
     vcant = array [rango_pais] of integer;
-    vprecio = array [rango_pais] of real;
+    vmax = array [rango_pais] of real;
 
 procedure cargarnombrepais(var vp: vpais); // se dispone
 
@@ -81,15 +81,15 @@ procedure punto1(vc:vcant):integer;
 var 
 	suma,i,cant,promedio:real;
 begin 
-	for i:=1 to paises do
-		suma:= suma + vc[i]
-
-	promedio:= suma/paises;
 	cant:= 0;
+	for i:=1 to paises do
+		total:= vc[i] + total
 
+	promedio:= suma/200;
+ 
 	for i:=1 to paises do
 		if (vc[i] > promedio) then 
-		cant:= cant +1;
+			cant:= cant +1;
 end;
 
 procedure punto2(var max:real; precio:real);
