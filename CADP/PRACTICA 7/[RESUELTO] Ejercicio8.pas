@@ -121,8 +121,11 @@ end;
 	
 procedure cargarterceros(var L2:lista; L:lista);
 begin 
-	if (L^.data.dni_origen <> L^.data.dni_destino) then 
-		armarlista2(L2,L^.data);
+	while (L2 <> nil) do begin 
+		if (L^.data.dni_origen <> L^.data.dni_destino) then 
+			armarlista2(L2,L^.data);
+	L2:=L2^.sig;
+ 	end;
 end;
 
 procedure puntoB (v:vector; var max,p1:integer);
