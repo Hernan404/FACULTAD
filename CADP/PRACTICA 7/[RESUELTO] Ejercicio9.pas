@@ -11,7 +11,7 @@ b) Informar el código de género que más puntaje obtuvo entre todas las críti
 c) Informar el apellido y nombre de aquellos críticos que posean la misma cantidad de dígitos pares que
 impares en su DNI.
 d) Realizar un módulo que elimine de la lista que se dispone una película cuyo código se recibe como
-parámetro (el mismo puede no existir)}
+parámetro (el mismo puede no existiDDDDDDDr)}
 
 program EJ9P7;
 const 
