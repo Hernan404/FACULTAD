@@ -88,3 +88,78 @@ begin
 	writeln('numero 2: ');
 	readln(y);
 	inciso(v,i,y);
+
+====================================
+solucion propia
+program EJ3P4;
+const 
+	dimf = 100;
+type 
+	vector = array [1..dimf] of integer;
+	
+procedure puntoA(v:vector; dimf:integer);
+var 
+	i:integer;
+begin 
+	for i:=1 to dimf do begin 
+		writeln(v[i]);
+	end;	 
+end;
+
+procedure puntoB(v:vector; dimf:integer);
+var 
+	i:integer;
+begin 
+	for i:=dimf downto 1 do begin 
+		writeln(v[i]);
+	end;	 
+end;
+
+procedure puntoC(v:vector);
+var 
+	i:integer; mitad:real;
+begin 
+	
+		
+	mitad:= diml div 2;
+	
+	for i:= mitad downto 1 do begin  
+		writeln(v[i]);
+			
+		mitad:= mitad +1;
+		
+		for i:= mitad to dimf do 
+			writeln(v[i]);
+	end;
+end;
+
+procedure puntoD(v:vector; dimf:integer; X,Y:integer);
+var 
+	i:integer;
+begin 
+	if (Y < X) then begin 
+		for i:=X to Y do 
+			writeln(v[i]);
+	end
+	else 
+		for i:=Y downto X then 
+			writeln(v[i]);
+	end;
+end;
+
+
+
+
+var 
+	v:vector;
+	diml:integer;
+	X,Y:integer;
+begin 
+	puntoA(v);
+	puntoB(v);
+	
+	readln(X);
+	readln(Y);
+	puntoC(v,dimf,diml,X,Y);
+end.
+
