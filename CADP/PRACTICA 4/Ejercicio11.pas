@@ -75,3 +75,75 @@ begin
 	inivector(v);
 	procesardatos(v);
 end.
+
+
+
+
+
+
+
+=================================================================
+
+
+program EJ11P4;
+const 
+	dimf = 200;
+type 
+	foto = record 
+		titulo:string;
+		autor:string;
+		cantMG:integer;
+		cantCLicks:integer;
+		cantComentarios:integer;
+	end;
+
+	vector = array [1..dimf] of foto;
+
+procedure cargar(var v:vector);
+var 
+	i:integer;
+begin 
+	for i:=1 to dimf do begin 
+		readln(v[i].titulo);
+		readln(v[i].autor);
+		readln(v[i].cantMG);
+		readln(v[i].cantClicks);
+		readln(v[i].cantComentarios);
+	end;
+	
+end;
+
+procedure puntoA (v:vector; var max,p1,totalMG:integer);
+var 
+	i:integer;
+begin 
+	for i:=1 to dimf do begin 
+		if (v[i].cantClicks) then begin 
+			max:= v[i].cantCLicks;
+			p1:= v[i].titulo;
+		end;
+		
+		if (v[i].autor = 'Art Vandelay') then 
+			totalMG:= v[i].cantCLicks + totalMG;
+			
+		writeln(v[i].cantCOmentarios);
+	end;
+end;
+
+var 
+	p1:string;
+	v:vector;
+	max:integer;
+	totalMG:integer;
+begin 
+	totalMG:= 0; max:= -1; p1:= 0;
+	cargar(v);
+	procesar (v,max,p1,totalMG);
+	for i:=1 to dimf do begin 
+		writeln(p1);
+		writeln(totalMG);
+	end;
+	
+end.
+    
+    
