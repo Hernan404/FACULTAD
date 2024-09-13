@@ -63,3 +63,53 @@ begin
     Promedio_empresa(salarios,dimL,promedio);
     WriteLn('El promedio es: ', promedio:4:3);
 end.
+
+
+
+
+====================================
+
+
+program EJ10P4;
+const 
+	dimf = 300;
+type 
+	
+	vector = array [1..dimf] of real;
+	
+procedure cargar(var v:vector; salario:real; var diml:integer);
+var 
+	i:integer;
+begin 
+	while (diml < dimf) and (salario <> 0) do begin 
+		for i:=1 to dimf do begin 
+			diml:= diml +1;
+			v[diml]:= salario;
+			readln(salario);
+		end;
+	end;
+end;
+
+procedure puntoA(salario:real; var v:vector; diml:integer);
+var 
+	i:integer; aumento:real;
+begin 
+	aumento:= 0;
+	for i:=1 to diml do begin 
+		aumento:= v[i] * 15
+		v[i]:= v[i] + aumento;
+	end;
+end;
+
+var 
+	diml:integer;
+	v:vector; salario:real;
+begin 
+	readln(salario);
+	cargar(v,salario,diml);
+	puntoA(salario,v,diml);
+	
+	writeln(aumento)
+	for i:=1 to diml do 
+		writeln(diml/dimf);
+end.
