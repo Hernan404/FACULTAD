@@ -1,140 +1,80 @@
-Ejercicio 13
-program sumador;
-const
-  CANT_PUNTOS = 100;
-  CANT_ANIOS = 2023;
-  INICIO_ANIOS = 1973;
-type
+{El Grupo Intergubernamental de Expertos sobre el Cambio Climático de la ONU (IPCC) realiza todos los
+años mediciones de temperatura en 100 puntos diferentes del planeta y, para cada uno de estos
+lugares, obtiene un promedio anual. Este relevamiento se viene realizando desde hace 50 años, y con
+todos los datos recolectados, el IPCC se encuentra en condiciones de realizar análisis estadísticos.
+Realizar un programa que lea y almacene los datos correspondientes a las mediciones de los últimos
+50 años (la información se ingresa ordenada por año). Una vez finalizada la carga de la información,
+obtener:
+a. El año con mayor temperatura promedio a nivel mundial.
+b. El año con la mayor temperatura detectada en algún punto del planeta en los últimos 50 años.}
 
-
-    vMediciones = array[1..CANT_PUNTOS] of real;
-
-    vAnios = array[INICIO_ANIOS..CANT_ANIOS] of vMediciones;
-
-procedure leerMediciones(var v: vMediciones);
-var
-   i : integer;
-begin
-  for i:= 1 to CANT_PUNTOS do
-      readln(v[i]);
-end;
-
-procedure leerAnios(var v:vAnios);
-var
-   i: integer;
-begin
-  for i:= INICIO_ANIOS to CANT_ANIOS do
-      leerMediciones(v[i]);
-end;
-
-var
-   v : vAnios;
-   i, j : integer;
-
-   totalTemp : real;
-   anioMax : integer;
-   tempMax : real;
-
-   anioMax2 : integer;
-   tempMax2 : real;
-begin
-  leerAnios(v);
-  tempMax := -9999;
-  tempMax2 := -9999;
-
-  for i := INICIO_ANIOS to CANT_ANIOS do begin
-    totalTemp := 0;
-    for j := 1 to CANT_PUNTOS do begin
-        totalTemp := totalTemp + v[i][j];
-        if (v[i][j] > tempMax2) then begin
-           tempMax2 := v[i][j];
-           anioMax2 := i;
-        end;
-    end;
-    totalTemp := totalTemp / CANT_PUNTOS;
-    if (totalTemp > tempMax) then begin
-      tempMax := totalTemp;
-      anioMax := i;
-    end;
-  end;
-  writeln(anioMax, anioMax2);
-end. 
-
-
-=================================================================================
-
-
-
-program EJ13P4P1;
+program EJ13P4;
 const 
-	dimf = 50;
+    dimf = 50;
 type 
-	reg_temp = record 
-		temp50:real;
-		tempPROMEDIO:real;
-	end;
-	
-	vector = array [1..dimf] of integer;
+    temperatura = record 
+        alta:real;
+        promedio:real;
+    end;
+
+    vector = array [1..dimf] of temperatura;
 
 
 function puntoA(v:vector):integer;
 var 
-	i:integer;
-	tempPROMEDIO:real;
+    i:integer;
+    promedio:real;
 begin 
-	tempPROMEDIO:= 0;
-	for i:=1 to dimf do 
-		if (tempPROMEDIO < v[i].tempPROMEDIO) then begin 
-			tempPROMEDIO:= v[i].tempPROMEDIO;
-			puntoA:= i;
-		end;
+    promedio:= 0;
+
+    for i:=1 to dimf do 
+        if (promedio < v[i].promedio) then begin 
+            promedio:= v[i].promedio;
+            puntoA:= i;
+        end;
 end;
 
 function puntoB(v:vector):integer;
 var 
-	i:integer;
-	tempALTA:real;
+    i:integer;
+    alta:real;
 begin 
-	tempALTA:= 0;
-	for i:=1 to dimf do begin 
-		if (tempALTA < v[i].tempALTA) then begin 
-			tempALTA:= v[i].tempALTA;
-			puntoB:= i;
-		end;
-	end;
+    alta:= 0;
+    for i:=1 to dimf do 
+        if (alta < v[i].alta) then begin 
+            alta:= v[i].alta;
+            puntoB:= i;
+        end;
 end;
 
-procedure procesardatos (var v:vector);
-var
-	i,x:integer;
-	lugar:string;
-	temp,tempPROMEDIO,temp50:real;
+procedure cargar (var v:vector);
+var 
+    i,x:integer;
+    lugar:string;
+    temperatura,promedio,alta:real;
 begin 
-	tempPROMEDIO:= 0;
-	temp50:= 0;
-
-	for x:=1 to dimf do begin 
-			for i:=1 to 100 do begin 
-				writeln('LUGAR');
-				readln(lugar);
-				writeln('TEMPERATURA');
-				readln(temp);
-				
-				if (temp50 < temp) then 
-					temp50:= temp;
-				
-				tempPROMEDIO:= tempPROMEDIO + temp;
-			end;
-		tempPROMEDIO:= tempPROMEDIO/100;
-		v[x].temp50:= temp50;
-		v[x].tempPROMEDIO:= tempPROMEDIO;
-	end;
-end;
+    promedio:= 0;
+    alta:= 0;
+    for i:=1 to dimf do begin 
+        for x:=1 to 100 do begin 
+            readln(lugar);
+            readln(temperatura);
+        
+            if (temperatura > alta) then 
+                alta:= temperatura;
+            
+            promedio:= promedio + temperatura;
+        end;
+        promedio:= promedio / 100;
+        v[i].alta = alta;
+        v[i].promedio:= promedio;
+    end;
+end; 
 
 var 
-	v:vector;
+    v:vector;
 begin 
-	procesardatos(v);
-	writeln('anio con mayor temperatura', puntoA(v));
-	writeln('anio con mayor temperatura en algun punto ', puntoB(v));
+    cargar(v);
+    writeln(puntoA(v));
+    writeln(puntoB(v));
 end.
