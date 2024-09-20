@@ -1,149 +1,79 @@
- El colectivo de fotógrafos ArgenPics desea conocer los gustos de sus seguidores en las redes sociales.
+{El colectivo de fotógrafos ArgenPics desea conocer los gustos de sus seguidores en las redes sociales.
 Para ello, para cada una de las 200 fotos publicadas en su página de Facebook, cuenta con la siguiente
 información: título de la foto, el autor de la foto, cantidad de Me gusta, cantidad de clics y cantidad de
 comentarios de usuarios. Realizar un programa que lea y almacene esta información. Una vez
 finalizada la lectura, el programa debe procesar los datos e informar:
 a. Título de la foto más vista (la que posee mayor cantidad de clics).
 b. Cantidad total de Me gusta recibidas a las fotos cuyo autor es el fotógrafo “Art Vandelay”.
-c. Cantidad de comentarios recibidos para cada una de las fotos publicadas en esa página
-program EJ11P4P1;
-const 
-	dimf = 200;
-type 
-	data = record 
-		titulo:string;
-		autor:string;
-		cantMG:integer;
-		cantCLicks:integer;
-		cantComents:integer;
-	end;
-
-	vector = array [1..dimf] of data;
-
-procedure inivector(var v:vector);
-var 
-	i:integer;
-begin 
-	for i:=1 to dimf do begin  
-			writeln('TITULO');
-			readln(v[i].titulo);
-			writeln('AUTOR');
-			readln(v[i].autor);
-			writeln('CANTIDAD DE MEGUSTAS');
-			readln(v[i].cantMG);
-			writeln('CANTIDAD DE CLICKS');
-			readln(v[i].cantCLicks);
-			writeln('CANTIDAD DE COMENTARIOS');
-			readln(v[i].cantComents);
-		end;
-	end;
-
-procedure mayor(v:vector; var max:integer; var puntoA:string);
-var
-	i:integer;
-begin 
-	for i:=1 to dimf do begin
-		if (v[i].cantCLicks > max) then begin 
-			max:= v[i].cantCLicks;
-			puntoA:= v[i].titulo;
-		end;
-	end;
-end;
-
-procedure procesardatos(v:vector);
-var 
-	max:integer; puntoB:integer;
-	puntoA:string;
-	i:integer;
-begin 
-	max:= -1; puntoB:= 0; puntoA:='';
-	
-	for i:=1 to dimf do begin 
-			mayor(v,max,puntoA);
-			if (v[i].autor = 'Art Vandenlay') then 
-				puntoB:= puntoB + v[i].cantMG;
-	end;
-
-	writeln('titulo de la foto mas vista: ', puntoA);
-	writeln('cantidad total de megustas del Art Vandenlay', puntoB);
-	for i:=1 to dimf do 
-		writeln('cantidad de comentarios recibidos para la foto ',v[i].titulo ,  ' : ',v[i].cantComents);
-end;
-var 
-	v:vector;
-begin 
-	inivector(v);
-	procesardatos(v);
-end.
-
-
-
-
-
-
-
-=================================================================
-
+c. Cantidad de comentarios recibidos para cada una de las fotos publicadas en esa página.}
 
 program EJ11P4;
 const 
-	dimf = 200;
+  dimf = 200;
 type 
-	foto = record 
-		titulo:string;
-		autor:string;
-		cantMG:integer;
-		cantCLicks:integer;
-		cantComentarios:integer;
-	end;
+  foto = record 
+    titulo: string;
+    autor: string;
+    cantMG: integer;
+    cantClicks: integer;
+    cantComentarios: integer;
+  end;
 
-	vector = array [1..dimf] of foto;
+  vector = array[1..dimf] of foto;
 
-procedure cargar(var v:vector);
+procedure cargar(var v: vector);
 var 
-	i:integer;
+  i: integer;
 begin 
-	for i:=1 to dimf do begin 
-		readln(v[i].titulo);
-		readln(v[i].autor);
-		readln(v[i].cantMG);
-		readln(v[i].cantClicks);
-		readln(v[i].cantComentarios);
-	end;
-	
+  for i := 1 to dimf do begin 
+    writeln('Ingrese el título de la foto ', i, ':');
+    readln(v[i].titulo);
+    writeln('Ingrese el autor de la foto ', i, ':');
+    readln(v[i].autor);
+    writeln('Ingrese la cantidad de Me gusta de la foto ', i, ':');
+    readln(v[i].cantMG);
+    writeln('Ingrese la cantidad de clics de la foto ', i, ':');
+    readln(v[i].cantClicks);
+    writeln('Ingrese la cantidad de comentarios de la foto ', i, ':');
+    readln(v[i].cantComentarios);
+  end;
 end;
 
-procedure puntoA (v:vector; var max,p1,totalMG:integer);
+procedure procesar(v: vector; var max: integer; var p1: string; var totalMG: integer);
 var 
-	i:integer;
+  i: integer;
 begin 
-	for i:=1 to dimf do begin 
-		if (v[i].cantClicks) then begin 
-			max:= v[i].cantCLicks;
-			p1:= v[i].titulo;
-		end;
-		
-		if (v[i].autor = 'Art Vandelay') then 
-			totalMG:= v[i].cantCLicks + totalMG;
-			
-		writeln(v[i].cantCOmentarios);
-	end;
+  for i := 1 to dimf do begin 
+    // Título de la foto más vista (la que posee mayor cantidad de clics).
+    if (v[i].cantClicks > max) then begin 
+      max := v[i].cantClicks;
+      p1 := v[i].titulo;
+    end;
+    
+    // Cantidad total de Me gusta recibidas a las fotos cuyo autor es el fotógrafo "Art Vandelay".
+    if (v[i].autor = 'Art Vandelay') then 
+      totalMG := v[i].cantMG + totalMG;
+    
+    // Cantidad de comentarios recibidos para cada una de las fotos publicadas en esa página.
+    writeln('Foto: ', v[i].titulo, ' - Cantidad de comentarios: ', v[i].cantComentarios);
+  end;
 end;
 
 var 
-	p1:string;
-	v:vector;
-	max:integer;
-	totalMG:integer;
+  p1: string;
+  v: vector;
+  max: integer;
+  totalMG: integer;
 begin 
-	totalMG:= 0; max:= -1; p1:= 0;
-	cargar(v);
-	procesar (v,max,p1,totalMG);
-	for i:=1 to dimf do begin 
-		writeln(p1);
-		writeln(totalMG);
-	end;
-	
+  totalMG := 0;
+  max := -1; // Inicializamos max en -1 para buscar la mayor cantidad de clics.
+  p1 := '';
+  
+  cargar(v);
+  procesar(v, max, p1, totalMG);
+  
+  writeln('La foto más vista es: ', p1);
+  writeln('La cantidad total de Me gusta de "Art Vandelay" es: ', totalMG);
 end.
     
     
