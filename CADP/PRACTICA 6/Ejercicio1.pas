@@ -1,50 +1,58 @@
 program JugamosConListas;
 type
-	lista = ^nodo;
-	nodo = record
-	num : integer;
-	sig : lista;
+  lista = ^nodo;
+  nodo = record
+    num : integer;
+    sig : lista;
 end;
 procedure armarNodo(var L: lista; v: integer);
 var
-	aux : lista;
+  aux : lista;
 begin
-	new(aux);
-	aux^.num := v;
-	aux^.sig := L;
-	L := aux;
+  new(aux);
+  aux^.num := v;
+  aux^.sig := L;
+  L := aux;
 end;
 
-procedure puntoD(L:lista; numD:integer);
+//punto c)
+procedure imprimir(pri:lista; valor:integer);
 begin 
-	readln(numD);
-	while (L <> nil) do begin 
-		L^.num:= L^.num + numD; 
-		L:= L^.sig;
-	end;
+  while (pri <> nil) do begin 
+      writeln(pri^.valor);
+      pri:= pri^.sig;
+  end;
 end;
 
-procedure imprimir (L:lista; num:integer);
+//punto d)
+procedure incremento(var pri:lista; num:integer; var valor:integer)
 begin 
-	while (L <> nil) then  
-		writeln(L^.num);
-		L:= L^.sig;
-end; 
+  while (pri <> nil) do begin 
+    pri^.valor:= pri^.valor + num;
+    pri:= pri^.sig;
+  end;
+end;
 
 var
-	pri : lista;
-	valor : integer;
+pri : lista;
+valor : integer;
+num:integer;
 begin
-	pri := nil;
-	writeln('Ingrese un numero');
-	read(valor);
-	while (valor <> 0) do begin
-		armarNodo(pri, valor);
-		writeln('Ingrese un numero');
-		read(valor);
-	end;
-	puntoD(pri,valor);
-	
-	imprimir(pri,valor);
-	
+  pri := nil;
+  writeln(‘Ingrese un numero’);
+  read(valor);
+  while (valor <> 0) then begin
+    armarNodo(pri, valor);
+
+    writeln(‘Ingrese un numero’);
+    read(valor);
+  end;
+  imprimir(pri,valor);
+  readln(num);
+  incremento(pri,valor,num);
+
 end.
+
+{ a) lee numeros y los agrega a la lista 
+  b) la secuencia queda 49 10 21 10, en orden en el que fueron ingresados (o leidos) al ser agregar adelante
+}
