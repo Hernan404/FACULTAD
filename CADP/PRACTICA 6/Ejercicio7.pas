@@ -1,5 +1,5 @@
 
-{ 6. La Agencia Espacial Europea (ESA) está realizando un relevamiento de todas las sondas espaciales
+{6. La Agencia Espacial Europea (ESA) está realizando un relevamiento de todas las sondas espaciales
 lanzadas al espacio en la última década. De cada sonda se conoce su nombre, duración estimada de la
 misión (cantidad de meses que permanecerá activa), el costo de construcción, el costo de
 mantenimiento mensual y rango del espectro electromagnético sobre el que realizará estudios. Dicho
@@ -15,8 +15,7 @@ d. El nombre de las sondas cuyo costo de construcción supera el costo promedio 
 sondas.
 Nota: para resolver los incisos a), b), c) y d), la lista debe recorrerse la menor cantidad de veces posible}
 
-
-{ 7. El Programa Horizonte 2020 (H2020) de la Unión Europea ha publicado los criterios para financiar
+{7. El Programa Horizonte 2020 (H2020) de la Unión Europea ha publicado los criterios para financiar
 proyectos de investigación avanzada. Para los proyectos de sondas espaciales vistos en el ejercicio
 anterior, se han determinado los siguientes criterios:
 - Sólo se financiarán proyectos cuyo costo de mantenimiento no supere el costo de construcción.
@@ -32,181 +31,151 @@ con aquellos que no los cumplen.
 c. Invoque a un módulo que reciba una lista de proyectos de sondas espaciales e informe la cantidad
 y el costo total (construcción y mantenimiento) de los proyectos que no serán financiados por
 H2020. Para ello, utilice el módulo realizado en b}
-program EJ6P6;
+
+program EJ6Y7P6;
+const 
+  categorias = 7
 type 
-	datos = record 
-		nombre:string;
-		duracion:integer;
-		costo:real;
-		costo_man:real;
-		rango:1..7;
-	end;
-	
-	lista = ^nodo; 
-	nodo = record 
-		data:datos;
-		sig:lista;
-	end;
-	
+  rango_categorias = 1..7;
+
+  sonda = record 
+    nombre:string;
+    duracion:integer;
+    costo_con:real;
+    costo_man:real;
+    rango:rango_categorias;
+  end;
+
+  lista = ^nodo;
+  nodo = record 
+    data:sonda;
+    sig:lista;
+  end;
+
+  vector = array [rango_categorias] of integer;
 
 
-	vector = array [1..7] of integer;
-
-procedure leer(var r:datos);
-begin 
-	with r do begin 
-		writeln('NOMBRE');
-		readln(nombre);
-		if (nombre <> 'GAIA') then begin 
-			writeln('DURACION');
-			readln(duracion);
-			writeln('COSTO DE CONSTRUCCION');
-			readln(costo);
-			writeln('COSTO MANTENIMIENTO');
-			readln(costo_man);
-			writeln('RANGO');
-			readln(rango);
-		end;
-	end;
-end;
-
-procedure armarnodo (var L:lista; r:datos);
+procedure agregaradelante(var L:lista; s:sonda);
 var 
-	aux:lista;
+  aux:lista;
 begin 
-	new(aux);
-	aux^.data:= r;
-	aux^.sig:= L;
-	L:= aux;
+  new(aux);
+  aux^.data:= s;
+  aux^.sig:= L;
+  L:= aux;
 end;
 
-procedure cargardatos(var L:lista);
+procedure leer(var s:sonda); 
+begin 
+  with s do begin
+    readln(nombre);
+    readln(duracion)
+    readln(costo_con);
+    readln(costo_man);
+    readln(rango);
+  end;
+end;
+
+procedure cargardatos(L:lista);
 var 
-	r:datos;
+  s:sonda;
 begin 
-	leer(r);
-	repeat 
-		armarnodo(L,r);
-		leer(r);
-	until (r.nombre  = 'GAIA');
+  leer(s);
+  repeat 
+    agregaradelante(L,s);
+    leer(s);
+  until (s.nombre = 'GAIA');
 end;
 
-procedure inivector (var v:vector);
+procedure puntoA(var max:real; var p1:string; costoTotal:real; nombre:string);
+begin 
+  if (costoTotal > max) then 
+    max:= costoTotal;
+    p1:= nombre;
+end;
+
+procedure calcularpromedio(promedioDuracion,promedioCostos:real; cantC:integer; L:lista);
+begin 
+  while (L <> nil) do begin 
+  
+      if (L^.data.costo_con > promedio) then
+          writeln('PUNTO D', L^.data.nombre);
+      if (L^.data.duracion > promedioDuracion) then 
+          cantC:= cantC +1;
+  end;
+end; 
+
+procedure procesardatos(L:lista);
 var 
-	i:integer;
-begin 
-	for i:=1 to 7 do begin 
-		v[i]:= 0;
-	end;
-end;
-
-procedure puntoA(var r:datos; var max:real; var sondaA:string);
-var 
-	costoA:real;
-begin 
-	costoA:= r.costo + r.costo_man;
-	if (costoA > max) then begin  
-		max:= costoA;
-		sondaA:= r.nombre;
-	end;
-end;
-
-function puntoA7 (r:datos; v:vector):boolean;
-begin 
-	puntoA7:= (r.costo_man < r.costo) and (v[r.rango] <> -1);
-end;
-
-procedure imprimir_cumple (r:datos; L2:lista);
+  v:vector;
+  promedio:real;
+  costoTotal:real; duracionTotal:real; cantC:integer;
+  promedioDuracion,promedioCostos:real;
+  cant:integer; max:real; p1:string;
 begin
-	while (L2 <> nil) do begin 
-			writeln(r.nombre);
-	L2:= L2^.sig;
-	end;
+  p1:= '';
+  max:= -1; cant:= 0;
+  costoTotal:= 0; duracionTotal:= 0; cantC:= 0;
+  promedioDuracion:= 0; 
+  inivector(v);
+
+  while (L <> nil) do begin 
+      
+      //PUNTO A
+      costoTotal:= L^.data.costo_man + L^.data.costo_con;
+      puntoA(max,p1,costoTotal,L^.data.nombre);
+
+      //PUNTO B
+      v[L^.data.rango]:= v[L^.data.rango] +1;
+
+      //CONTADOR PARA PROMEDIOS
+      cant:= cant +1;
+
+      //PUNTO C 
+      duracionTotal:= duracionTotal + L^.data.duracion;
+
+  end;
+  promedioCostos:= costoTotal/cant;
+  promedioDuracion:= duracionTotal/cant;
+
+  calcularpromedio(promedioDuracion,promedioCostos,cantC,L);
+
+  writeln('El nombre de la sonda más costosa ',p1);
+  for i:=1 to categorias do 
+    writeln('La cantidad de sondas que realizarán estudios en cada rango del espectro electromagnético.', v[i]);
+  writeln('La cantidad de sondas cuya duración estimada supera la duración promedio de todas las sondas.', cant);
 end;
 
-procedure imprimir_nocumple (r:datos; L3:lista);
+procedure incisos7(L:lista);
 var 
-	total7:real; cantnofin:integer;
+  cantTotal:integer; 
+  costoTotal:real; costo:real;
 begin 
-	cantnofin:= 0;
-	while (L3 <> nil) do begin 
-		writeln(r.nombre);
-		cantnofin:= cantnofin +1;
-		total7:= r.costo + r.costo_man;
-	L3:=L3^.sig;
-		writeln('costo total: ',total7);
-		writeln('cantidad: ', cantnofin);
-		
-	end;
+  cantTotal:= 0; costo:= 0; cantTotal:= 0;
+
+  while (L <> nil) do begin 
+      if (L^.data.costo_man < L^.data.costo_con) and (L^.data.sonda <> 1) then begin 
+        writeln('SONDA CUMPLE')
+        agregaradelante(L2,L^.data);
+   
+      else 
+        writeln('SONDA NO CUMPLE')
+        agregaradelante(L3,L^.data);
+        cantTotal:= cantTotal +1;
+        costoTotal:= L^.data.costo_con + L^.data.costo_man;
+        costo:= costo + costoTotal;
+  end;
 end;
 
-
-procedure procesardatos (L:lista);
 var 
-	L2,L3:lista;
-	r:datos; v:vector;
-	sondaA:string; max,promedio:real; cantsondasC,cantcumpleB:integer; cantsondas:integer; totalduracion:integer; 
+  L:lista;
 begin 
-	sondaA:= '';  max:= -1; promedio:= 0; cantsondas:= 0; cantcumpleB:= 0;totalduracion:= 0; cantsondasC:= 0;
-	inivector(v);
-	L2:=nil;
-	L3:=nil;
-	while (L <> nil) do begin 
-		//punto A
-		puntoA(r,max,sondaA);
-		
-		cantsondas:= cantsondas +1;
-		
-		//punto B
-		v[L^.data.rango]:= v[L^.data.rango] +1;
-		if (v[L^.data.rango] > 7) then 
-			cantcumpleB:= cantcumpleB +1;
-		
-		//punto C 	
-		totalduracion:= L^.data.duracion + totalduracion;	
-		promedio:= totalduracion/cantsondas;
-		if (L^.data.duracion > promedio) then 
-			cantsondasC:= cantsondasC +1;
-	
-		//punto D	
-		if (L^.data.costo > promedio) then 
-			writeln('El nombre de las sondas cuyo costo de construcción supera el costo promedio entre todas las sondas: ', L^.data.nombre);
-	
-	
-		//punto A Y B Ejercicio 7
-		if (puntoA7(L^.data,v)) then begin  	
-			armarnodo(L2,r);
-			writeln('==EL PRODUCTO CUMPLE==');
-		end
-		else begin 
-			armarnodo(L3,r);
-			writeln('==EL PRODUCTO NO CUMPLE==');
-		end;
-	L:= L^.sig;
-	end;
-	
-	//A
-	writeln('El nombre de la sonda más costosa (considerando su costo de construcción y de mantenimiento).', sondaA);
-	//B
-	writeln('La cantidad de sondas que realizarán estudios en cada rango del espectro electromagnético.', cantcumpleB); 
-	//C
-	writeln('La cantidad de sondas cuya duración estimada supera la duración promedio de todas las sondas.', cantsondasC);
+  L:= nil;
+  L2:=nil;
+  L3:=nil;
 
-	//C y D ejercicio 7
-	writeln('Proyectos que cumplen H2020');
-	imprimir_cumple(r,L2);
-
-	writeln('Proyectos que no cumplen H2020 y sus detalles');
-	imprimir_nocumple(r,L3);
-
-end;
-
-
-var 
-	L:lista;
-begin 
-	L:= nil;
-	cargardatos(L);
-	procesardatos(L);
-
+  cargardatos(L);
+  procesardatos(L);
+  incisos7(L,L2,L3);
 end.
+
