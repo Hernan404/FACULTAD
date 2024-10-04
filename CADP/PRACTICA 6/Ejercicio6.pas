@@ -13,102 +13,136 @@ c. La cantidad de sondas cuya duración estimada supera la duración promedio de
 d. El nombre de las sondas cuyo costo de construcción supera el costo promedio entre todas las
 sondas.
 Nota: para resolver los incisos a), b), c) y d), la lista debe recorrerse la menor cantidad de veces posible}
+
 program EJ6P6;
+
 const 
-  categorias = 7
+  categorias = 7;
+
 type 
   rango_categorias = 1..7;
 
   sonda = record 
-    nombre:string;
-    duracion:integer;
-    costo_con:real;
-    costo_man:real;
-    rango:rango_categorias;
+    nombre: string;
+    duracion: integer;
+    costo_con: real;
+    costo_man: real;
+    rango: rango_categorias;
   end;
 
   lista = ^nodo;
   nodo = record 
-    data:sonda;
-    sig:lista;
+    data: sonda;
+    sig: lista;
   end;
 
   vector = array [rango_categorias] of integer;
 
-procedure cargardatos(L:lista);
+procedure agregaradelante(var L: lista; s: sonda);
+var
+  nuevo: lista;
+begin
+  new(nuevo);
+  nuevo^.data := s;
+  nuevo^.sig := L;
+  L := nuevo;
+end;
+
+procedure leer(var s: sonda);
+begin
+  // Implementa la lectura de datos para la sonda
+end;
+
+procedure cargardatos(var L: lista);
 var 
-  s:sonda;
+  s: sonda;
 begin 
-  leer(s);
   repeat 
     leer(s);
-    agregaradelante(L,s);
+    agregaradelante(L, s);
   until (s.nombre = 'GAIA');
 end;
 
-procedure puntoA(var max:real; var p1:string; costoTotal:real; nombre:string);
+procedure puntoA(var max: real; var p1: string; costoTotal: real; nombre: string);
 begin 
-  if (costoTotal > max) then 
-    max:= costoTotal;
-    p1:= nombre;
+  if (costoTotal > max) then begin
+    max := costoTotal;
+    p1 := nombre;
+  end;
 end;
 
-procedure calcularpromedio(promedioDuracion,promedioCostos:real; cantC:integer; L:lista);
+procedure calcularpromedio(var cantC: integer; promedioDuracion, promedioCostos: real; L: lista);
 begin 
   while (L <> nil) do begin 
-  
-      if (L^.data.costo_con > promedio) then
-          writeln('PUNTO D', L^.data.nombre);
-      if (L^.data.duracion > promedioDuracion) then 
-          cantC:= cantC +1;
+    if (L^.data.costo_con > promedioCostos) then
+      writeln('PUNTO D: ', L^.data.nombre);
+    if (L^.data.duracion > promedioDuracion) then 
+      cantC := cantC + 1;
+    L := L^.sig;  // Avanzar en la lista
   end;
-end; 
+end;
 
-procedure procesardatos(L:lista);
-var 
-  v:vector;
-  promedio:real;
-  costoTotal:real; duracionTotal:real; cantC:integer;
-  promedioDuracion,promedioCostos:real;
-  cant:integer; max:real; p1:string;
+procedure inivector(var v: vector);
+var
+  i: rango_categorias;
 begin
-  p1:= '';
-  max:= -1; cant:= 0;
-  costoTotal:= 0; duracionTotal:= 0; cantC:= 0;
-  promedioDuracion:= 0; 
+  for i := 1 to categorias do
+    v[i] := 0;
+end;
+
+procedure procesardatos(L: lista);
+var 
+  v: vector;
+  promedioCostos, promedioDuracion, costoTotal, duracionTotal: real;
+  cant, cantC: integer;
+  max: real;
+  p1: string;
+begin
+  p1 := '';
+  max := -1;
+  cant := 0;
+  costoTotal := 0;
+  duracionTotal := 0;
+  cantC := 0;
   inivector(v);
 
+  // Primer recorrido para obtener promedios y valores necesarios
   while (L <> nil) do begin 
-      
-      //PUNTO A
-      costoTotal:= L^.data.costo_man + L^.data.costo_con;
-      puntoA(max,p1,costoTotal,L^.data.nombre);
+    // PUNTO A
+    costoTotal := L^.data.costo_con + (L^.data.costo_man * L^.data.duracion);
+    puntoA(max, p1, costoTotal, L^.data.nombre);
 
-      //PUNTO B
-      v[L^.data.rango]:= v[L^.data.rango] +1;
+    // PUNTO B
+    v[L^.data.rango] := v[L^.data.rango] + 1;
 
-      //CONTADOR PARA PROMEDIOS
-      cant:= cant +1;
+    // Acumuladores para promedio
+    cant := cant + 1;
+    costoTotal := costoTotal + L^.data.costo_con;
+    duracionTotal := duracionTotal + L^.data.duracion;
 
-      //PUNTO C 
-      duracionTotal:= duracionTotal + L^.data.duracion;
+    L := L^.sig;  // Avanzar en la lista
   end;
-  promedioCostos:= costoTotal/cant;
-  promedioDuracion:= duracionTotal/cant;
 
-  calcularpromedio(promedioDuracion,promedioCostos,cantC,L);
+  // Calcular promedios
+  promedioCostos := costoTotal / cant;
+  promedioDuracion := duracionTotal / cant;
 
-  writeln('El nombre de la sonda más costosa ',p1);
-  for i:=1 to categorias do 
-    writeln('La cantidad de sondas que realizarán estudios en cada rango del espectro electromagnético.', v[i]);
-  writeln('La cantidad de sondas cuya duración estimada supera la duración promedio de todas las sondas.', cant);
+  // Reiniciar la lista para el segundo recorrido
+  calcularpromedio(cantC, promedioDuracion, promedioCostos, L);
+
+  // Mostrar resultados
+  writeln('El nombre de la sonda más costosa: ', p1);
+  for i := 1 to categorias do 
+    writeln('Cantidad de sondas para la categoría ', i, ': ', v[i]);
+  writeln('Cantidad de sondas con duración mayor al promedio: ', cantC);
 end;
 
 var 
-  L:lista;
+  L: lista;
 begin 
-  L:= nil;
+  L := nil;
   cargardatos(L);
   procesardatos(L);
-end;
+end.
+
 
