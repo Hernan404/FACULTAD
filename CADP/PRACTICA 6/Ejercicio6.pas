@@ -1,4 +1,4 @@
-La Agencia Espacial Europea (ESA) está realizando un relevamiento de todas las sondas espaciales
+{La Agencia Espacial Europea (ESA) está realizando un relevamiento de todas las sondas espaciales
 lanzadas al espacio en la última década. De cada sonda se conoce su nombre, duración estimada de la
 misión (cantidad de meses que permanecerá activa), el costo de construcción, el costo de
 mantenimiento mensual y rango del espectro electromagnético sobre el que realizará estudios. Dicho
@@ -12,126 +12,103 @@ b. La cantidad de sondas que realizarán estudios en cada rango del espectro ele
 c. La cantidad de sondas cuya duración estimada supera la duración promedio de todas las sondas.
 d. El nombre de las sondas cuyo costo de construcción supera el costo promedio entre todas las
 sondas.
-Nota: para resolver los incisos a), b), c) y d), la lista debe recorrerse la menor cantidad de veces posible
-
+Nota: para resolver los incisos a), b), c) y d), la lista debe recorrerse la menor cantidad de veces posible}
 program EJ6P6;
+const 
+  categorias = 7
 type 
-	datos = record 
-		nombre:string;
-		duracion:integer;
-		costo:real;
-		costo_man:real;
-		rango:1..7;
-	end;
-	
-	lista = ^nodo; 
-	nodo = record 
-		data:datos;
-		sig:lista;
-	end;
+  rango_categorias = 1..7;
 
-	vector = array [1..7] of integer;
+  sonda = record 
+    nombre:string;
+    duracion:integer;
+    costo_con:real;
+    costo_man:real;
+    rango:rango_categorias;
+  end;
 
-procedure leer(var r:datos);
+  lista = ^nodo;
+  nodo = record 
+    data:sonda;
+    sig:lista;
+  end;
+
+  vector = array [rango_categorias] of integer;
+
+procedure cargardatos(L:lista);
+var 
+  s:sonda;
 begin 
-	with r do begin 
-		writeln('NOMBRE');
-		readln(nombre);
-		writeln('DURACION');
-		readln(duracion);
-		writeln('COSTO DE CONSTRUCCION');
-		readln(costo);
-		writeln('COSTO MANTENIMIENTO');
-		readln(costo_man);
-		writeln('RANGO');
-		readln(rango);
-	end;
+  leer(s);
+  repeat 
+    leer(s);
+    agregaradelante(L,s);
+  until (s.nombre = 'GAIA');
 end;
 
-procedure armarnodo (var L:lista; r:datos);
-var 
-	aux:lista;
+procedure puntoA(var max:real; var p1:string; costoTotal:real; nombre:string);
 begin 
-	new(aux);
-	aux^.data:= r;
-	aux^.sig:= L;
-	L:= aux;
+  if (costoTotal > max) then 
+    max:= costoTotal;
+    p1:= nombre;
 end;
 
-procedure cargardatos(var L:lista);
-var 
-	r:datos;
+procedure calcularpromedio(promedioDuracion,promedioCostos:real; cantC:integer; L:lista);
 begin 
-	leer(r);
-	repeat 
-		armarnodo(L,r);
-		leer(r);
-	until (r.nombre  = 'GAIA');
+  while (L <> nil) do begin 
+  
+      if (L^.data.costo_con > promedio) then
+          writeln('PUNTO D', L^.data.nombre);
+      if (L^.data.duracion > promedioDuracion) then 
+          cantC:= cantC +1;
+  end;
+end; 
+
+procedure procesardatos(L:lista);
+var 
+  v:vector;
+  promedio:real;
+  costoTotal:real; duracionTotal:real; cantC:integer;
+  promedioDuracion,promedioCostos:real;
+  cant:integer; max:real; p1:string;
+begin
+  p1:= '';
+  max:= -1; cant:= 0;
+  costoTotal:= 0; duracionTotal:= 0; cantC:= 0;
+  promedioDuracion:= 0; 
+  inivector(v);
+
+  while (L <> nil) do begin 
+      
+      //PUNTO A
+      costoTotal:= L^.data.costo_man + L^.data.costo_con;
+      puntoA(max,p1,costoTotal,L^.data.nombre);
+
+      //PUNTO B
+      v[L^.data.rango]:= v[L^.data.rango] +1;
+
+      //CONTADOR PARA PROMEDIOS
+      cant:= cant +1;
+
+      //PUNTO C 
+      duracionTotal:= duracionTotal + L^.data.duracion;
+  end;
+  promedioCostos:= costoTotal/cant;
+  promedioDuracion:= duracionTotal/cant;
+
+  calcularpromedio(promedioDuracion,promedioCostos,cantC,L);
+
+  writeln('El nombre de la sonda más costosa ',p1);
+  for i:=1 to categorias do 
+    writeln('La cantidad de sondas que realizarán estudios en cada rango del espectro electromagnético.', v[i]);
+  writeln('La cantidad de sondas cuya duración estimada supera la duración promedio de todas las sondas.', cant);
 end;
 
-procedure inivector (var v:vector);
 var 
-	i:integer;
+  L:lista;
 begin 
-	for i:=1 to 7 do begin 
-		v[i]:= 0;
-	end;
+  L:= nil;
+  cargardatos(L);
+  procesardatos(L);
 end;
 
-procedure puntoA(var r:datos; var max:real; var sondaA:string);
-var 
-	costoA:real;
-begin 
-	costoA:= r.costo + r.costo_man;
-	if (costoA > max) then begin  
-		max:= costoA;
-		sondaA:= r.nombre;
-	end;
-end;
-
-procedure procesardatos (L:lista);
-var 
-	r:datos; v:vector;
-	sondaA:string; max,promedio:real; cantsondasC,cantcumpleB:integer; cantsondas:integer; totalduracion:integer; 
-begin 
-	sondaA:= '';  max:= -1; promedio:= 0; cantsondas:= 0; cantcumpleB:= 0;totalduracion:= 0; cantsondasC:= 0;
-	inivector(v);
-	while (L <> nil) do begin 
-		//punto A
-		puntoA(r,max,sondaA);
-		
-		cantsondas:= cantsondas +1;
-		
-		//punto B
-		v[L^.data.rango]:= v[L^.data.rango] +1;
-		if (v[L^.data.rango] > 7) then 
-			cantcumpleB:= cantcumpleB +1;
-		
-		//punto C 	
-		totalduracion:= L^.data.duracion + totalduracion;	
-		promedio:= totalduracion/cantsondas;
-		if (L^.data.duracion > promedio) then 
-			cantsondasC:= cantsondasC +1;
-	
-		//punto D	
-		if (L^.data.costo > promedio) then 
-			writeln('El nombre de las sondas cuyo costo de construcción supera el costo promedio entre todas las sondas: ', L^.data.nombre);
-	L:= L^.sig;
-	end;
-	
-	writeln('El nombre de la sonda más costosa (considerando su costo de construcción y de mantenimiento).', sondaA);
-
-	writeln('La cantidad de sondas que realizarán estudios en cada rango del espectro electromagnético.', cantcumpleB); 
-
-	writeln('La cantidad de sondas cuya duración estimada supera la duración promedio de todas las sondas.', cantsondasC);
-
-end;
-
-
-var 
-	L:lista;
-begin 
-	L:= nil;
-	cargardatos(L);
-	procesardatos(L);
-end.
