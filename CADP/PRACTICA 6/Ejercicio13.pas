@@ -7,117 +7,132 @@ de la revista Económica. El listado debe ordenarse a partir de la cantidad de d
 acceso (orden ascendente).
 b. Informar la cantidad de usuarios por cada rol para todas las revistas del portal.
 c. Informar los emails de los dos usuarios que hace más tiempo que no ingresan al portal.}
-
 program EJ13P6;
 type 
 	usuario = record 
-		email:string;
-		rol:1..4;
-		revista:string;
-		cant_acceso:integer;
+		email: string;
+		rol: 1..4;
+		revista: string;
+		cant_acceso: integer;
 	end;
 	
 	lista = ^nodo;
 	nodo = record 
-		data:usuario;
-		sig:lista
+		data: usuario;
+		sig: lista;
 	end;
 	
 	vector = array [1..4] of integer;
 
 procedure leer(var r:usuario); // se dispone
 begin 
-	// leo datos
+	// leer datos del usuario
 end; 
 
 procedure armarlista(var L:lista; r:usuario);  // se dispone
 begin 
-	// cargo lista
+	// cargar lista de usuarios
 end;
 
-procedure cargardatos(L:lista); // se dispone
+procedure cargardatos(var L:lista); // se dispone
 begin 
-	//cargo datos, llamo a leer, pongo la condicion de fin.
+	// cargar datos llamando a leer y agregando a la lista
 end; 	
 
-procedure inivector (var v:vector);
+procedure inivector(var v:vector);
 var 
-	i:integer;
+	i: integer;
 begin 
-	for i:=1 to 4 do begin 
-		v[i]:= 0;
-	end;
+	for i := 1 to 4 do 
+		v[i] := 0; // inicializar el vector de contadores
 end; 
 
-Procedure armarlista2 ( var pri: lista; r:usuario);
+procedure armarlista2(var pri: lista; r:usuario);
 var 
-    ant, nue, act: lista;
+	ant, nue, act: lista;
 begin
-    new (nue);
-    nue^.data := r;
-    act := pri;
-    ant := pri;
-    {Recorro mientras no se termine la lista y no encuentro la posición correcta}
-    while (act<>NIL) and (act^.data.cant_acceso < r.cant_acceso) do //De menor a mayor
-    begin
-        ant := act;
-        act := act^.sig ;
-    end;
-    if (ant = act)  then 
-        pri := nue   {el dato va al principio}
-    else  
-        ant^.sig  := nue; {va entre otros dos o al final}
-    nue^.sig := act ;
+	new (nue);
+	nue^.data := r;
+	act := pri;
+	ant := pri;
+	
+	// Recorrer mientras no se encuentre la posición correcta
+	while (act <> NIL) and (act^.data.cant_acceso < r.cant_acceso) do begin
+		ant := act;
+		act := act^.sig;
+	end;
+	
+	// Insertar al principio o en el medio/final
+	if (ant = act) then begin
+		nue^.sig := pri; 
+		pri := nue;   // Dato va al principio
+	end else begin
+		ant^.sig := nue; // Dato va entre otros dos o al final
+		nue^.sig := act;
+	end;
 end;
 
-procedure puntoC (r:usuario; var max1,max2:integer; var u1,u2:string);
+procedure puntoC(r:usuario; var max1, max2: integer; var u1, u2: string);
 begin 
+	// Verificar y actualizar los usuarios que hace más tiempo no acceden
 	if (r.cant_acceso > max1) then begin  
-		max2:= max1;
-		u2:= u1;
-		max1:= r.cant_acceso;
-		u1:= r.email
+		max2 := max1;
+		u2 := u1;
+		max1 := r.cant_acceso;
+		u1 := r.email;
 	end
-	else if (max1 > max2) then begin 
-		max2:= r.cant_acceso;
-		u2:= r.email;
+	else if (r.cant_acceso > max2) then begin 
+		max2 := r.cant_acceso;
+		u2 := r.email;
 	end;
 end;
 
-procedure procesardatos(L,L2:lista);
+procedure procesardatos(L:lista; var L2:lista);
 var 
-	max1,max2:integer; u1,u2:string; v:vector; i:integer;
+	max1, max2: integer; 
+	u1, u2: string; 
+	v: vector; 
+	i: integer;
 begin 
-	max1:= -1; max2:= -1; u1:= ''; u2:= '';
-	inivector(v);
-	i:= 0;
+	max1 := -1; 
+	max2 := -1; 
+	u1 := ''; 
+	u2 := '';
+	inivector(v); // Inicializar el vector de roles
+	
+	// Procesar la lista original
 	while (L <> nil) do begin 
-		if (L^.data.revista = 'economica') then 
-			armarlista2(L2,L^.data); // Se dispone 
-			
-		v[L^.data.rol]:= v[L^.data.rol] +1;
+		if (L^.data.revista = 'Económica') then 
+			armarlista2(L2, L^.data); // Ordenar por días de acceso
 		
-		puntoC(L^.data,max1,max2,u1,u2);
-		L:= L^.sig;
-	end;
-	while (L2 <> nil) do begin 
-		writeln(L2^.data.email);
-		writeln(L2^.data.cant_acceso);
-		L2:= L2^.sig;
+		v[L^.data.rol] := v[L^.data.rol] + 1; // Contar usuarios por rol
+		
+		puntoC(L^.data, max1, max2, u1, u2); // Encontrar los usuarios con más días sin acceder
+		
+		L := L^.sig;
 	end;
 	
-	for i:=1 to 4 do 
-		writeln('cantidad de usuarios:', v[i],' del rol: ', i);
-
-	writeln('emails de los dos usuarios que hace más tiempo que no ingresan al portal: ', u1,u2);
+	// Imprimir usuarios de la revista Económica en orden ascendente
+	writeln('Usuarios de la revista Económica:');
+	while (L2 <> nil) do begin 
+		writeln('Usuario: ', L2^.data.email, ', Días desde el último acceso: ', L2^.data.cant_acceso);
+		L2 := L2^.sig;
+	end;
+	
+	// Imprimir la cantidad de usuarios por rol
+	writeln('Cantidad de usuarios por rol:');
+	for i := 1 to 4 do 
+		writeln('Rol ', i, ': ', v[i], ' usuarios');
+	
+	// Imprimir los emails de los dos usuarios que hace más tiempo no ingresan al portal
+	writeln('Emails de los dos usuarios que hace más tiempo no ingresan: ', u1, ', ', u2);
 end;
 	
 var 
-	L,L2:lista;
+	L, L2: lista;
 begin 
-	L:= niL;
-	L2:= nil;
-	cargardatos(L);
-	procesardatos(L,L2);
+	L := nil;
+	L2 := nil;
+	cargardatos(L); // Cargar datos en la lista L
+	procesardatos(L, L2); // Procesar datos y realizar las tareas solicitadas
 end.
-
