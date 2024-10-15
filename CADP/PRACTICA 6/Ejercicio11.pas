@@ -1,116 +1,122 @@
-La Facultad de Informática debe seleccionar los 10 egresados con mejor promedio a los que la UNLP les
+
+{La Facultad de Informática debe seleccionar los 10 egresados con mejor promedio a los que la UNLP les
 entregará el premio Joaquín V. González. De cada egresado se conoce su número de alumno, apellido y
-el promedio obtenido durante toda su carrera.
+el promedio obtenido durante toda su carrera
+  
+Implementar un programa que:
 a. Lea la información de todos los egresados, hasta ingresar el código 0, el cual no debe procesarse.
 b. Una vez ingresada la información de los egresados, informe el apellido y número de alumno de los
 egresados que recibirán el premio. La información debe imprimirse ordenada según el promedio
-del egresado (de mayor a menor)
-
-
+del egresado (de mayor a menor)}
 
 program EJ11P6;
 type 
-	datos = record 
-		codigo:integer;
-		apellido:string;
-		promedio:real;
-	end;
 
-	lista = ^nodo; 
-	nodo = record 
-		data:datos;
-		sig:lista;
-	end;
+  info = record 
+    numero:integer;
+    apellido:string;
+    promedio:real;
+  end;
 
-procedure leer(var r:datos);
+  lista = ^nodo;
+  nodo = record 
+    data:info;
+    sig:lista;
+  end;
+
+
+procedure leer(var r:info);
 begin 
-	with r do begin
-		writeln('codigo');
-		readln(codigo);
-		if (codigo <> 0) then begin  
-			writeln('apellido');
-			readln(apellido);
-			writeln('promedio');
-			readln(promedio);
-		end;
-	end;
+  with r do begin 
+    readln(numero);
+    readln(apellido);
+    readln(promedio);
+  end;
 end;
 
-procedure armarnodo(L:lista; r:datos);
+
+procedure armarlista(var L:lista; r:info);
 var 
-	aux:lista;
+  aux:lista;
 begin 
-	new(aux);
-	aux^.data:= r;
-	aux^.sig:= L;
-	L:= aux;  
+  new(aux);
+  aux^.data:= r;
+  aux^.sig:= L;
+  L:= aux;
 end;
 
-Procedure insertarordenado ( var pri: lista; var r:datos);
+
+procedure cargardatos(L:lista);
+var 
+  r:info;
+begin 
+  leer(r);
+  while (r.numero <> 0) do begin 
+      armarlista(L,r);
+      leer(r);
+  end;
+end;
+
+procedure armarlista2(var L2:lista; r:info);
 var 
     ant, nue, act: lista;
 begin
     new (nue);
-    nue^.data:= r;
-    act := pri;
-    ant := pri;
+    nue^.data := r;
+    act := L2;
+    ant := nil;
     {Recorro mientras no se termine la lista y no encuentro la posición correcta}
-    while (act<>NIL) and (act^.data.promedio > r.promedio) do //De mayor a menor
-    begin
+    while (act<>NIL) and (act^.data.promedio > r.promedio) do begin   {el dato va al principio}
         ant := act;
         act := act^.sig ;
     end;
     if (ant = act)  then 
-        pri := nue   {el dato va al principio}
+        L2 := nue   {el dato va al principio}
     else  
         ant^.sig  := nue; {va entre otros dos o al final}
     nue^.sig := act ;
 end;
 
-procedure cargardatos(L:lista);
+procedure seleccion (r:info; var L2:lista; var cant:integer);
 var 
-	r:datos;
+  aux:lista;
 begin 
-	leer(r);
-	while (r.codigo <> 0) do begin 
-		armarnodo(L,r);
-		leer(r);
-	end;
+  if (cant < 10) then begin
+    armarlista2(L2, r);
+    cant := cant + 1;
+  end
+  else if (r.promedio > L2^.data.promedio) then begin
+    aux := L2;
+    L2 := L2^.sig;
+    dispose(aux);
+    armarlista2(L2, r);
+  end;
 end;
 
-
-procedure procesardatos(L:lista);
+procedure procesardatos(L:lista; var L2:lista);
 var 
-	r:datos;
-	L2:lista;
-	max:real;
-	cant:integer;
-begin
-	L2:= nil;
-	max:= -1;
-	cant:= 0;
-	while (L <> nil) do begin 
-		
-		if (L^.data.promedio > max) and (cant >= 10) then begin 
- 			max:= L^.data.promedio;
-			insertarordenado(L2,L^.data);
-			cant:=cant +1;
-			L:=L^.sig;
-		end;
-	end;
-	while (L2 <> nil) do begin 
-		writeln('EGRESADOS CON MEJOR PROMEDIO');
-		writeln('NUMERO: ', L2^.data.codigo);
-		writeln('APELLIDO: ', L2^.data.apellido);
-		L2:= L2^.sig;
-	end;
+  cant: integer;
+begin 
+  cant := 0;
+  while (L <> nil) do begin 
+    seleccion(L^.data, L2, cant);
+    L := L^.sig;
+  end;
+
+  writeln('DATOS DE EGRESADOS QUE RECIBIRAN PREMIO');
+  while (L2 <> nil) do begin
+    writeln('Apellido: ', L2^.data.apellido);
+    writeln('Numero: ', L2^.data.numero);
+    L2 := L2^.sig;
+  end;
 end;
 
 var 
-	L:lista;
+  L,L2:lista;
+
 begin 
-	L:=nil;
-	cargardatos(L);
-	procesardatos(L);
+    L := nil;
+    L2 := nil;
+    cargardatos(L);
+    procesardatos(L, L2);
 end.
- 
