@@ -1,64 +1,78 @@
-Una empresa desarrolladora de juegos para teléfonos celulares con Android dispone de información de
+{Una empresa desarrolladora de juegos para teléfonos celulares con Android dispone de información de
 todos los dispositivos que poseen sus juegos instalados. De cada dispositivo se conoce la versión de
 Android instalada, el tamaño de la pantalla (en pulgadas) y la cantidad de memoria RAM que posee
 (medida en GB). La información disponible se encuentra ordenada por versión de Android. Realizar un
 programa que procese la información disponible de todos los dispositivos e informe:
 a. La cantidad de dispositivos para cada versión de Android.
 b. La cantidad de dispositivos con más de 3 GB de memoria y pantallas de a lo sumo a 5 pulgadas.
-c. El tamaño promedio de las pantallas de todos los dispositivos
+c. El tamaño promedio de las pantallas de todos los dispositivos.}
 
 program EJ12P6;
 type 
-	data = record 
-		version:integer;
-		pantalla:real;
-		cant_ram:real;
-	end;
-	
-	lista = ^nodo;
-	nodo = record 
-		data:datos;
-		sig:lista;
-	end;
+  dispositivo = record 
+    version: real;
+    tamanio: real;  // Tamaño de la pantalla (en pulgadas)
+    cantRAM: real;  // Cantidad de memoria RAM (en GB)
+  end; 
 
-procedure leer(var r:datos); // se dispone
-procedure cargardatos(L:lista); // se dispone
-procedure armarnodo(var L:lista; r:datos); //se dispone
-	
-function cumpleB(r:datos):boolean;
-begin 
-	cumpleB:= (r.cant_ram > 3) and (r.pantalla <= 5);
+  lista = ^nodo;
+  nodo = record 
+    data: dispositivo;
+    sig: lista;
+  end;
+
+// Se dispone
+procedure cargardatos(var L: lista); 
+begin
+
 end;
 
-procedure procesardatos(L:lista);
+procedure procesardatos(L: lista);
 var 
-	r:datos; cant_celulares,cantA,cantB:integer; promedio:real; verACT:real;
+  versionACT: real;
+  cantA, cantB, cantC: integer;
+  sumaTamanios, promedio: real;
 begin 
-	cant_celulares:= 0; cantB:= 0; promedio:= 0;
-	while (L <> nil) do begin 
-		verACT:= L^.data.version;
-		cantA:= 0;
-		cant_celulares:= cant_celulares +1:
+  cantB := 0;
+  cantC := 0;
+  sumaTamanios := 0.0;
+  
+  while (L <> nil) do begin
+    // PUNTO A: Contar dispositivos por versión de Android
+    versionACT := L^.data.version; 
+    cantA := 0;  // Contador de dispositivos para la versión actual
 
-		while (L <> nil) and (verACT = L^.data.version) do begin 
-			cantA:= cantA +1;
-			if (cumpleB(L^.data)) then 
-				cantB:= cantB +1;
-			promedio:= promedio + L^.data.pantalla
-		L:= L^.sig;
-		end;
-		writeln('cantidad de versiones: ', cantA 'del dispositivo: ', verACT);
-	end;
+    while (L <> nil) and (L^.data.version = versionACT) do begin
+      cantA := cantA + 1;
 
-	writeln('La cantidad de dispositivos con más de 3 GB de memoria y pantallas de a lo sumo a 5 pulgadas: ', cantB);
-	writeln('El tamaño promedio de las pantallas de todos los dispositivos: ', promedio/cant_celulares:2:0);
+      // PUNTO B: Contar dispositivos con más de 3 GB de RAM y pantalla <= 5 pulgadas
+      if (L^.data.cantRAM > 3) and (L^.data.tamanio <= 5) then 
+        cantB := cantB + 1;
+
+      // PUNTO C: Acumular tamaños de pantallas para promedio
+      sumaTamanios := sumaTamanios + L^.data.tamanio;
+      cantC := cantC + 1;  // Contador total de dispositivos
+
+      L := L^.sig;
+    end;
+
+    // Imprimir la cantidad de dispositivos para la versión actual
+    writeln('Version ', versionACT:0:1, ': ', cantA, ' dispositivos');
+  end;
+
+  // Mostrar resultados finales
+  writeln('Cantidad de dispositivos con más de 3GB de RAM y pantallas <= 5 pulgadas: ', cantB);
+  
+  promedio := sumaTamanios / cantC;
+  writeln('Tamaño promedio de las pantallas: ', promedio:0:2, ' pulgadas');
+  
 end;
-	
+
 var 
-	L:lista;
+  L: lista;
 begin 
-	L:=nil;
-	cargardatos(L); //se dispone
-	procesardatos(L);
+  L := nil;
+  cargardatos(L);  // Se dispone
+  procesardatos(L);
 end.
 
