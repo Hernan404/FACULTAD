@@ -1,4 +1,4 @@
-El repositorio de código fuente más grande en la actualidad, GitHub, desea estimar el monto invertido
+{El repositorio de código fuente más grande en la actualidad, GitHub, desea estimar el monto invertido
 en los proyectos que aloja. Para ello, dispone de una tabla con información de los desarrolladores que
 participan en un proyecto de software, junto al valor promedio que se paga por hora de trabajo:
 
@@ -18,7 +18,7 @@ proyecto -1, que no debe procesarse. Al finalizar la lectura, el programa debe i
 a. El monto total invertido en desarrolladores con residencia en Argentina.
 b. La cantidad total de horas trabajadas por Administradores de bases de datos.
 c. El código del proyecto con menor monto invertido.
-d. La cantidad de Arquitectos de software de cada proyecto
+d. La cantidad de Arquitectos de software de cada proyecto}
 
 program EJ14P4;
 
@@ -33,7 +33,7 @@ type
 
   resultados = record 
     montoDesarrollador: real;
-    cantHoras: real;
+    cantHoras: integer;
     menorMonto: real;
     cantRol: integer;
   end;
@@ -43,12 +43,21 @@ type
 
 procedure cargar(var r: participante);
 begin 
-  with r do begin 
+  with r do 
+  begin 
+    writeln('Ingrese país de residencia:');
     readln(pais);
+    writeln('Ingrese código de proyecto:');
     readln(codigo);
-    readln(nombre);
-    readln(rol);
-    readln(cantHoras);
+    if (codigo <> -1) then
+    begin
+      writeln('Ingrese nombre del proyecto:');
+      readln(nombre);
+      writeln('Ingrese rol (1-5):');
+      readln(rol);
+      writeln('Ingrese cantidad de horas trabajadas:');
+      readln(cantHoras);
+    end;
   end;
 end;
 
@@ -61,11 +70,12 @@ begin
   vr[5] := 39.87;  // Administrador de redes y seguridad
 end;
 
-procedure cargarcodigo(var v: vcodigo);
+procedure inicializarCodigos(var v: vcodigo);
 var 
   i: integer;
 begin 
-  for i := 1 to 1000 do begin 
+  for i := 1 to 1000 do 
+  begin 
     v[i].montoDesarrollador := 0;
     v[i].cantHoras := 0;
     v[i].menorMonto := 0;
@@ -73,7 +83,7 @@ begin
   end;
 end;
 
-procedure procesar(var r: participante; var v: vcodigo; var vr: vrol);
+procedure procesar(var r: participante; var v: vcodigo; vr: vrol);
 begin 
   if (r.pais = 'argentina') then 
     v[r.codigo].montoDesarrollador := v[r.codigo].montoDesarrollador + (vr[r.rol] * r.cantHoras);
@@ -81,7 +91,7 @@ begin
   if (r.rol = 3) then 
     v[r.codigo].cantHoras := v[r.codigo].cantHoras + r.cantHoras;
 
-  v[r.codigo].menorMonto := v[r.codigo].menorMonto + (vr[r.rol] * r.cantHoras);
+  v[r.codigo].menorMonto := v[r.codigo].montoDesarrollador;
 
   if (r.rol = 4) then 
     v[r.codigo].cantRol := v[r.codigo].cantRol + 1; 
@@ -89,28 +99,30 @@ end;
 
 procedure imprimir(v: vcodigo);
 var 
-  i, c1: integer;
-  montoDesarrollador, cantHoras, menorMonto: real;
+  i, codigoMenorMonto: integer;
+  montoTotalArgentina, totalHorasDB, menorMonto: real;
 begin 
-  montoDesarrollador := 0;
-  cantHoras := 0;
-  menorMonto := 9999;
+  montoTotalArgentina := 0;
+  totalHorasDB := 0;
+  menorMonto := 1E+10; // Inicializa con un valor muy alto para asegurar que se actualice
 
-  for i := 1 to 1000 do begin 
-    montoDesarrollador := montoDesarrollador + v[i].montoDesarrollador;
-    cantHoras := cantHoras + v[i].cantHoras;
+  for i := 1 to 1000 do 
+  begin 
+    montoTotalArgentina := montoTotalArgentina + v[i].montoDesarrollador;
+    totalHorasDB := totalHorasDB + v[i].cantHoras;
 
-    if (v[i].menorMonto < menorMonto) then begin 
-      menorMonto := v[i].menorMonto;
-      c1 := i;
+    if (v[i].montoDesarrollador < menorMonto) and (v[i].montoDesarrollador > 0) then 
+    begin 
+      menorMonto := v[i].montoDesarrollador;
+      codigoMenorMonto := i;
     end;
     
     writeln('Cantidad de Arquitectos de Software en proyecto ', i, ': ', v[i].cantRol);
   end;
 
-  writeln('Monto total invertido en desarrolladores de Argentina: ', montoDesarrollador:0:2);
-  writeln('Cantidad total de horas trabajadas por Administradores de bases de datos: ', cantHoras:0:2);
-  writeln('Código del proyecto con menor monto invertido: ', c1);
+  writeln('Monto total invertido en desarrolladores de Argentina: ', montoTotalArgentina:0:2);
+  writeln('Cantidad total de horas trabajadas por Administradores de bases de datos: ', totalHorasDB:0:0);
+  writeln('Código del proyecto con menor monto invertido: ', codigoMenorMonto);
 end;
 
 var 
@@ -119,13 +131,15 @@ var
   r: participante;
 begin
   cargarroles(vr);
-  cargarcodigo(vc);
+  inicializarCodigos(vc);
   cargar(r);
   
-  while (r.codigo <> -1) do begin
+  while (r.codigo <> -1) do 
+  begin
     procesar(r, vc, vr);
     cargar(r);
   end;
   
   imprimir(vc);
 end.
+
