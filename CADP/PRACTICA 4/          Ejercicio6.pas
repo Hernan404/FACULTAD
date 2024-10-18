@@ -1,4 +1,4 @@
-program EJ6P4;
+program EJ6P4;https://github.com/Hernan404/FACULTAD/edit/main/CADP/PRACTICA%204/%20%20%20%20%20%20%20%20%20%20%5BREVISAR%5D%20Ejercicio6.pas
 const 
 	dimf = 100;
 type 
