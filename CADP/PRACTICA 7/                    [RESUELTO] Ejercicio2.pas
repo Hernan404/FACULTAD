@@ -1,4 +1,4 @@
-<{mplementar un programa que lea y almacene información de clientes de una empresa aseguradora
+{implementar un programa que lea y almacene información de clientes de una empresa aseguradora
 automotriz. De cada cliente se lee: código de cliente, DNI, apellido, nombre, código de póliza contratada
 (1..6) y monto básico que abona mensualmente. La lectura finaliza cuando llega el cliente con código 1122,
 el cual debe procesarse.
@@ -14,142 +14,142 @@ estructura.}
 
 program EJ2P7;
 type 
-	poliza = 1..6;
-	cliente = record 
-		codigo:integer;
-		DNI:integer;
-		apellido:string;
-		nombre:string;
-		cod_poliza:poliza;
-		monto:real;
-	end;
+    poliza = 1..6;
+    cliente = record 
+        codigo: integer;
+        DNI: integer;
+        apellido: string;
+        nombre: string;
+        cod_poliza: poliza;
+        monto: real;
+    end;
 
-	lista = ^nodo; 
-	nodo = record
-		data:cliente;
-		sig:lista;
-	end;
+    lista = ^nodo; 
+    nodo = record
+        data: cliente;
+        sig: lista;
+    end;
 
-	vector = array [poliza] of integer;
+    vector = array [poliza] of real;
 
-procedure inivector (var v:vector);
+procedure inivector(var v: vector);
 begin 
-	// se dispone por la talba de valor adicional;
+    // Aquí se inicializa el vector con los valores adicionales por cada póliza
+    v[1] := 50.0; // Ejemplo de valores, cambiar por los reales
+    v[2] := 75.0;
+    v[3] := 100.0;
+    v[4] := 125.0;
+    v[5] := 150.0;
+    v[6] := 175.0;
 end;
 
-procedure leer(var r:cliente);
+procedure leer(var r: cliente);
 begin 
-	with r do begin 
-		readln(codigo);
-		readln(DNI);
-		readln(apellido);
-		readln(nombre);
-		readln(cod_poliza);
-		readln(monto);
-	end;
+    with r do begin 
+        writeln('Ingrese el código de cliente:');
+        readln(codigo);
+        writeln('Ingrese el DNI:');
+        readln(DNI);
+        writeln('Ingrese el apellido:');
+        readln(apellido);
+        writeln('Ingrese el nombre:');
+        readln(nombre);
+        writeln('Ingrese el código de póliza (1..6):');
+        readln(cod_poliza);
+        writeln('Ingrese el monto básico que abona mensualmente:');
+        readln(monto);
+    end;
 end;
 
-procedure armarnodo (var L:lista; r:cliente);
+procedure armarnodo(var L: lista; r: cliente);
 var 
-	aux:lista;
+    aux: lista;
 begin 
-	new(aux);
-	aux^.data:= r;
-	aux^.sig:= L;
-	L:= aux;
+    new(aux);
+    aux^.data := r;
+    aux^.sig := L;
+    L := aux;
 end;
 
-procedure cargardatos(L:lista);
+procedure cargardatos(var L: lista);
 var 
-	r:cliente;
+    r: cliente;
 begin 
-	leer(r);
-	repeat 
-		armarnodo(L,r);
-		leer(r);
-	until (r.codigo = 1122);
+    leer(r);
+    while (r.codigo <> 1122) do begin 
+        armarnodo(L, r);
+        leer(r);
+    end;
+    armarnodo(L, r); // Procesa el cliente con código 1122
 end;
 
-procedure imprimirA(montoAD:real; r:cliente);
-begin 
-	writeln('nombreA: ',r.nombre ,'apellido A', r.apellido ,'DNI A', r.DNI , 'MONTO ADICIONAL A', montoAD);
-end;
-
-procedure imprimirB(r:cliente);
-begin 
-	writeln('APELLIDO B', r.apellido , 'NOMBRE B', r.nombre);
-end;
-
-function cumpleB(dni:integer):boolean;
+function cumpleB(dni: integer): boolean;
 var 
-	dig9:integer;
+    dig9: integer;
 begin 
-	dig9:= 0;
-
-	while (dni > 0) do begin 
-		dni:= dni mod 10;
-		if (dni = 9) then 
-			dig9:= dig9 +1;
-
-		dni:= dni div 10;
-	end;
-
-	cumpleB:= (dig9 >= 2);
-
+    dig9 := 0;
+    while (dni > 0) do begin 
+        if (dni mod 10 = 9) then 
+            dig9 := dig9 + 1;
+        dni := dni div 10;
+    end;
+    cumpleB := (dig9 >= 2);
 end;
 
-procedure eliminar (var pri:lista; var exito:boolean);
+procedure eliminar(var pri: lista; var exito: boolean);
 var 
-	ant, act: lista;
-	cod:integer;
+    ant, act: lista;
+    cod: integer;
 begin 
-	exito:= false;
-	writeln('ingrese codigo a eliminar');
-	readln(cod);
-
     exito := false;
+    writeln('Ingrese código a eliminar:');
+    readln(cod);
     act := pri;
-    {Recorro mientras no se termine la lista y no encuentre el elemento}
-    while  (act <> NIL)  and (act^.data.codigo <> cod) do 
-    begin
+    ant := nil; // Inicializar ant
+
+    while (act <> nil) and (act^.data.codigo <> cod) do begin
         ant := act;
-        act := act^.sig
+        act := act^.sig;
     end;   
-    if (act <> NIL) then 
-    begin
+
+    if (act <> nil) then begin
         exito := true; 
         if (act = pri) then  
             pri := act^.sig
         else  
-            ant^.sig:= act^.sig;
-        dispose (act);
+            ant^.sig := act^.sig;
+        dispose(act);
     end;
 end;
 
-procedure procesardatos(L:lista);
+procedure procesardatos(var L: lista);
 var 
-	v:vector; montoAD:real;  exito:boolean;
+    v: vector; montoAD: real; exito: boolean;
 begin 
+    inivector(v);
+    while (L <> nil) do begin 
+        montoAD := L^.data.monto + v[L^.data.cod_poliza];
 
-	inivector(v);
-	while (L <> nil) do begin 
-		montoAD:= L^.data.monto + v[L^.data.cod_poliza];
-		imprimirA(montoAD,L^.data);
+        writeln('Nombre: ', L^.data.nombre, ' Apellido: ', L^.data.apellido, ' DNI: ', L^.data.DNI, ' Monto Completo: ', montoAD:0:2);
 
-		if (cumpleB(L^.data.DNI)) then 
-			imprimirB(L^.data);
+        if cumpleB(L^.data.DNI) then 
+            writeln('Cliente con dos dígitos 9 en el DNI - Apellido: ', L^.data.apellido, ' Nombre: ', L^.data.nombre);
+        
+        L := L^.sig;
+    end;
 
-		
-	L:=L^.sig;
-	end;
-	eliminar(L,exito);
+    eliminar(L, exito);
+    if exito then
+        writeln('Cliente eliminado correctamente.')
+    else
+        writeln('El código ingresado no corresponde a ningún cliente.');
 end;
 
-
 var 
-	L:lista;
+    L: lista;
 begin 
-	L:= nil;
-	cargardatos(L);
-	procesardatos(L);
+    L := nil;
+    cargardatos(L);
+    procesardatos(L);
 end.
+
