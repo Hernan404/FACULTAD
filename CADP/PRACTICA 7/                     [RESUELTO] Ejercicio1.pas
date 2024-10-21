@@ -9,13 +9,27 @@ b. Informar los dos códigos de género más elegidos.
 c. Realizar un módulo que reciba un DNI, lo busque y lo elimine de la estructura. El DNI puede no existir.
 Invocar dicho módulo en el programa principal}
 
+{Una productora nacional realiza un casting de personas para la selección de actores extras de una nueva
+película, para ello se debe leer y almacenar la información de las personas que desean participar de dicho
+casting. De cada persona se lee: DNI, apellido y nombre, edad y el código de género de actuación que
+prefiere (1: drama, 2: romántico, 3: acción, 4: suspenso, 5: terror). La lectura finaliza cuando llega una
+persona con DNI 33555444, la cual debe procesarse.
+Una vez finalizada la lectura de todas las personas, se pide:
+a. Informar la cantidad de personas cuyo DNI contiene más dígitos pares que impares.
+b. Informar los dos códigos de género más elegidos.
+c. Realizar un módulo que reciba un DNI, lo busque y lo elimine de la estructura. El DNI puede no existir.
+Invocar dicho módulo en el programa principal}
+
 program EJ1P7;
+const 
+    generos = 5;
 type 
+    rango_generos = 1..5;
     casting = record 
         DNI:integer;
         apellidoYnombre:string;
         edad:integer;
-        codigo:1..5;
+        codigo:rango_generos;
     end;
 
     lista = ^nodo;
@@ -24,7 +38,7 @@ type
         sig:lista;
     end;
 
-    vector = array [1..5] of integer;
+    vector = array [rango_generos] of integer;
 
 procedure armarlista (var L:lista; c:casting);
 var 
@@ -38,7 +52,7 @@ end;
 
 procedure inivector (var v:vector);
 var 
-    i:integer;
+    i:rango_generos;
 begin 
     for i:= 1 to 5 do begin 
         v[i]:= 0;
@@ -61,29 +75,25 @@ var
 begin 
     leer(c);
      repeat
-        leer(c);
         armarlista(L,c);
+        leer(c);
      until (c.DNI <> 33555444); 
 end;
 
 function puntoA (num:integer):boolean;
 var 
-    digito,par,impar:integer;
+    par,impar:integer;
 begin
 	par:= 0;
 	impar:= 0;
-	digito:= num mod 10;
-	while (digito > 0) do begin 
+	while (num mod 10 > 0) do begin 
 			
-		if (digito mod 2 = 0) then begin  
-			par:= par +1;
-		end
-		else begin 
+		if (num mod 2 = 0) then   
+			par:= par +1
+		else  
 			impar:= impar +1;
-		end;
 
-		num:= digito div 10;
-		
+		num:= num div 10;
 	end;
 	puntoA:= (par > impar);
 	
@@ -118,22 +128,19 @@ end;
 
 procedure puntoB (v:vector ;var max1,max2,p1,p2:integer);
 var 
-    i:integer;
+    i:rango_generos;
 begin  
-    
-
-    for i:= 1 to 5 do begin
+    for i:= 1 to generos do begin
         if (v[i] > max1) then begin
             max2:= max1;
             p2:= p1;
-            max1:= i;
-            p1:= v[i];
-
+            max1:= v[i];
+            p1:= i;
         end 
         else begin 
             if (v[i] > max2) then 
-                max2:= i;
-                p2:= v[i];
+                max2:= v[i];
+                p2:= i;
         end;
     end;
 end;
@@ -153,8 +160,10 @@ begin
     inivector(v);
     cantA:= 0;
     while (L <> nil) do begin 
-        if puntoA(L^.data.DNI) then 
+
+        if (puntoA(L^.data.DNI)) then 
             cantA:= cantA +1;
+
         puntoB(v,max1,max2,p1,p2);
 
 	L:= L^.sig;
