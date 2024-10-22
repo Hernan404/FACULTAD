@@ -27,7 +27,7 @@ type
         especie: rango_especie;
         nombre: string;
         cantPartos: rango_partos;
-        cantCrias: integer;
+        cantCrias: array[1..partos] of integer; // Almacena la cantidad de crías por parto
     end;
 
     vespecie = array [rango_especie] of integer;
@@ -70,9 +70,19 @@ begin
   mayorCantidad := p1;
 end;
 
+function totalCrias(r: coneja): integer;
+var
+    i, total: integer;
+begin
+    total := 0;
+    for i := 1 to r.cantPartos do
+        total := total + r.cantCrias[i];
+    totalCrias := total;
+end;
+
 procedure variaCrias(r: coneja; var L2: lista);
 begin 
-    if (r.cantCrias > 35) then 
+    if (totalCrias(r) > 35) then 
         armarlista2(L2, r);
 end;
 
@@ -121,4 +131,3 @@ begin
     cargardatos(L); // se dispone
     procesardatos(L, L2);
 end.
-
