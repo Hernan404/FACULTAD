@@ -13,6 +13,7 @@ impares en su DNI.
 d) Realizar un módulo que elimine de la lista que se dispone una película cuyo código se recibe como
 parámetro (el mismo puede no existiDDDDDDDr)}
 
+
 program EJ9P7;
 const 
     generos = 8;
@@ -21,14 +22,14 @@ type
 
     pelicula = record 
         codigo: integer;
-        titulo: string[50];
+        titulo: string[50]; // Se especifica el tamaño máximo del título
         codigo_genero: rango_generos;
         puntaje_prom: real;
     end;
 
     critico = record 
         DNI: integer;
-        apeynom: string[50];
+        apeynom: string[50]; // Se especifica el tamaño máximo del nombre
         codigo: integer;
         puntaje: real;
     end;
@@ -46,14 +47,6 @@ type
     end;
 
     vector = array [rango_generos] of real;
-
-procedure cargarpelicula(var L: lista); // se dispone
-var 
-    p: pelicula;
-begin 
-    // Suponiendo que este procedimiento se encarga de cargar la lista de películas inicialmente
-    // Añade tus propias películas aquí para probar
-end;
 
 procedure leer_pelicula(var p: pelicula); 
 begin 
@@ -144,14 +137,13 @@ end;
 procedure procesardatos(var L: lista; L2: lista2);
 var 
     v: vector;
-    cant, codACT: integer;
+    cant, codACT, i: integer;
     promedio, max: real;
     cod1: rango_generos;
-    pelicula: ^pelicula;
 begin 
     // Inicializar vector de puntajes y contador de géneros
-    for codACT := 1 to generos do
-        v[codACT] := 0;
+    for i := 1 to generos do
+        v[i] := 0;
 
     max := -1;
 
@@ -208,7 +200,7 @@ var
 begin 
     L := nil; 
     L2 := nil;
-    cargarpelicula(L); // se dispone 
+    //cargarpelicula(L); // se dispone 
     cargarcriticas(L2); 
     procesardatos(L, L2);
     write('Ingrese el código de película a eliminar: '); 
