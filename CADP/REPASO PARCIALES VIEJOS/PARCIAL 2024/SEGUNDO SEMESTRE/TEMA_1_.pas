@@ -94,24 +94,20 @@ begin
     end;
 end;
 
-function cumpleDigito(cod: integer): boolean;
+function cumple2 (cod: integer): boolean;
 var
-    dig9: boolean;
-    cantdigitos: integer;
+    primerDigito: integer;
 begin
-    dig9 := false; 
-    cantdigitos := 0;
-
-    while (cod > 0) do begin 
-        if (cod mod 10 = 9) then begin 
-            cantdigitos := cantdigitos + 1;
-            dig9 := true; 
-        end;
+    // Extraer el primer dígito dividiendo sucesivamente
+    while (cod >= 10) do
         cod := cod div 10;
-    end;
+        
+    primerDigito := cod; // Al final del bucle, 'cod' contendrá el primer dígito
 
-    cumpleDigito := (dig9 = true) and (cantdigitos = 1);
+    // Verificar si el primer dígito es 9
+    cumplePrimerDigito9 := (primerDigito = 9);
 end;
+
 
 
 function cumple2(r:pieza):boolean; 
