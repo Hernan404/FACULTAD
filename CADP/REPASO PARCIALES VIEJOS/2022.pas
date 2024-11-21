@@ -15,116 +15,175 @@ B) realizar un modulo que reciba la estructura de datos generada en el inciso an
 	
 }
 
-
-program SADS;
+program gestion_alumnos;
 const 
-	notas = 10;
-	turnos = 4;
-	clases = 12;
+    turnos = 4;
+    notas = 10;
+    clases = 12;
 type 
-	rango_turnos = 1..4;
-	rango_clases = 1..12;
+    rango_turnos = 1..turnos;
+    rango_clases = 1..clases;
+    rango_notas = 4..notas;
 
-	alumnos = record 
-			DNI:integer;
-			nya:string;
-			nota:integer;
-			turno:rango_turnos;
-			presente:rango_clases;
-	end;
+    alumno = record 
+        dni: integer;
+        nombre: string;
+        apellido: string;
+        nota: rango_notas;
+        turnos: rango_turnos;
+        asistencia: rango_clases;
+    end;
 
-	lista = ^nodo;
-	nodo = record 
-		data:alumnos;
-		sig:lista;
-	end;
+    lista = ^nodo;
+    nodo = record 
+        data: alumno;
+        sig: lista;
+    end;
 
-	vturno = array [rango_turnos] of integer;
-	vclase = array [rango_clases] of string;
+    vasistencias = array [rango_clases] of integer;
+    vturnos = array [rango_turnos] of integer;
+    vpresente = array [rango_clases] of string;
 
-
-
-procedure cargardatos(var L:lista); // se dispone;
-
-procedure iniclases(var vc:vclase); // se dispone 
-
-procedure initurnos(var vt:vturno); // se dispone
-
-procedure puntoB(vt:vturno; max:integer; p1:rango_turnos);
-
-procedure armarlista2(var L2:lista; r:alumnos);
-var 
-	aux:lista;
+// Procedimiento para cargar datos (se supone que está implementado externamente)
+procedure cargardatos(var L: lista; var vp: vpresente); 
 begin 
-	new(aux);
-	aux^.data:= r;
-	aux^.sig:= L2;
-	L2:= aux;
+    // Implementación proporcionada externamente
 end;
 
-procedure armarlista(var L:lista; r:alumnos);  // se dispone
-
-
-function cumpleC(dni:integer):boolean;
+// Inicializar vector de asistencias
+procedure inivector(var v: vasistencias);
 var 
-	haycero:boolean;
+    i: integer;
 begin 
-	haycero:= false;
-	while (dni > 0) do begin 
-		dni:= dni mod 10;
-		if (dni = 0) then 
-			haycero:= true;
-	end;
-	cumpleC:= (not haycero);
+    for i := 1 to clases do 
+        v[i] := 0;
 end;
 
-
-procedure evaluarasistencia (L:lista; var L2:lista);
+// Función para verificar si un alumno está habilitado
+function habilitados(r: alumno; var v: vasistencias; vp: vpresente): boolean;
 var 
-	asistencias:integer; vc:vclase;
+    i: integer;
+    exito: boolean;
 begin 
-	asistencias:= 0;
-	iniclases(vc);
-	if (vc[L^.data.presente] = 'presente') then begin
-		asistencias:= asistencias +1;
-	L:= L^.sig;
-	end;
-	if (asistencias > 8) and (asistencias <= 12) then 
-		armarlista2(L2,r)
+    exito := false;
+
+    for i := 1 to clases do begin 
+        if (vp[i] = 'presente') then 
+            v[i] := v[i] + 1;
+    end;
+
+    for i := 1 to clases do begin 
+        if (v[i] >= 8) then 
+            exito := true;
+    end;
+
+    habilitados := exito;
+end;    
+
+// Función para verificar si un DNI cumple con la condición de no tener ceros
+function cumpledigito(dni: integer): boolean;
+var 
+    dig0: integer;
+begin 
+    dig0 := 0;
+    while (dni > 0) do begin 
+        if (dni mod 10 = 0) then 
+            dig0 := dig0 + 1;
+        dni := dni div 10;
+    end;
+    cumpledigito := (dig0 = 0);
 end;
 
-procedure procesardatos(L2:lista);
+// Procedimiento para encontrar el turno con más alumnos
+procedure punto2(var max, p1: integer; vt: vturnos);
 var 
-	max,t1,cantC:integer;
-	vt:vturno;
+    i: integer;
 begin 
-	max:= -1; t1:= 0; cantC:= 0;
-	initurnos(vt);
-	while (L2 <> nil) do begin 
-		
-		//punto A
-		if (L2^.data.nota >= 8) then 
-			writeln(L2^.data.nya,L2^.data.dni);
-
-		//PUNTO B
-		vt[L2^.data.turno]:= vt[L2^.data.turno] +1;
-
-		//punto C
-		if (cumpleC(L2^.data.DNI)) then 
-			cantC:= cantC +1;
-		L:= L^.sig;
-		
-	end;
-	puntoB(vt,max,t1);
+    for i := 1 to turnos do begin 
+        if (vt[i] > max) then begin 
+            max := vt[i];
+            p1 := i;
+        end;
+    end;
 end;
 
-
-	
+// Agregar alumno a una lista enlazada
+procedure armarlista(var L: lista; r: alumno);
 var 
-	L2,L:lista;
+    aux: lista;
 begin 
-	L:= nil; L2:= nil;
-	cargardatos(L); // se dispone
-	evaluarasistencia(L,L2);
-	procesardatos(L2);
+    new(aux);
+    aux^.data := r;
+    aux^.sig := L;
+    L := aux;
+end;
+
+// Agregar alumno a una segunda lista enlazada
+procedure armarlista2(var L2: lista; r: alumno);
+var 
+    aux: lista;
+begin 
+    new(aux);
+    aux^.data := r;
+    aux^.sig := L2;
+    L2 := aux;
+end;
+
+// Procesar habilitados
+procedure procesarHabilitados(L2: lista);
+var 
+    vt: vturnos; 
+    cantC, max, p1, i: integer;
+begin 
+    cantC := 0;
+    max := 0;
+    p1 := 0;
+
+    // Inicializar vector de turnos
+    for i := 1 to turnos do 
+        vt[i] := 0;
+
+    while (L2 <> nil) do begin 
+        if (L2^.data.nota >= 8) then begin 
+            writeln(L2^.data.nombre, ' ', L2^.data.apellido);
+            writeln('DNI: ', L2^.data.dni);
+        end; 
+
+        vt[L2^.data.turnos] := vt[L2^.data.turnos] + 1;
+
+        if (cumpledigito(L2^.data.dni)) then 
+            cantC := cantC + 1;
+
+        L2 := L2^.sig;
+    end;
+
+    punto2(max, p1, vt);
+    writeln('Turno con más alumnos: ', p1);
+    writeln('Cantidad de alumnos con DNI válido: ', cantC);
+end;
+
+// Procesar datos y crear la lista de habilitados
+procedure procesardatos(L: lista; var L2: lista);
+var 
+    v: vasistencias;
+begin 
+    inivector(v);
+    while (L <> nil) do begin 
+        if (habilitados(L^.data, v)) then 
+            armarlista2(L2, L^.data);
+        L := L^.sig;
+    end;
+end;
+
+var 
+    L, L2: lista; 
+    vp: vpresente;
+begin 
+    L := nil; 
+    L2 := nil;
+    cargardatos(L, vp);
+
+    procesardatos(L, L2);
+    procesarHabilitados(L2);
 end.
+
