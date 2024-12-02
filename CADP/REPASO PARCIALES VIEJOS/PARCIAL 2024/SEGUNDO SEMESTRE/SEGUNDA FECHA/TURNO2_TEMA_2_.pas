@@ -57,8 +57,7 @@ var
   aux: lista;
 begin
   new(aux);
-  aux^.data.numero := numVenta;
-  aux^.data.cantProductos := 0; // No necesitamos más datos para esta lista
+  aux^.data.numero := numVenta;// Almaceno solo lo que tengo disponible, en este caso solo el numero
   aux^.sig := L;
   L := aux;
 end;
