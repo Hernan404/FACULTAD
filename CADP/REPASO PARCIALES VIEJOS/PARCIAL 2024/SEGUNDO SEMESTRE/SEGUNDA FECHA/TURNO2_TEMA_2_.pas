@@ -41,23 +41,22 @@ type
   lista = ^nodo;
   nodo = record
     data: venta;
+    total:real;
     sig: lista;
   end;
-
-var
-  precios: vPrecios;
 
 procedure cargarDatos(var L: lista); 
 begin
   // Aquí iría la carga de datos.
 end;
 
-procedure armarLista(var L: lista; numVenta: integer; total: real);
+procedure armarLista(var L: lista; r:venta; total: real);
 var
   aux: lista;
 begin
   new(aux);
-  aux^.data.numero := numVenta;// Almaceno solo lo que tengo disponible, en este caso solo el numero
+  aux^.data.numero := r:numero;
+  aux^.total:= total;
   aux^.sig := L;
   L := aux;
 end;
@@ -106,9 +105,9 @@ var
   total, sumaProm: real;
   min1, min2: real;
   p1, p2, cantProm: integer;
-  nuevaLista: lista;
+  L2: lista;
 begin
-  nuevaLista := nil;
+  L2 := nil;
   min1 := 99999;
   min2 := 99999;
   p1 := 0;
@@ -122,7 +121,7 @@ begin
 
     // Punto A: Ventas con menos de 4 productos
     if L^.data.cantProductos < 4 then
-      armarLista(nuevaLista, L^.data.numero, total);
+      armarLista(L2, L^.data, total);
 
     // Punto B: Ventas más baratas
     ventasMasBaratas(L^.data, total, min1, min2, p1, p2);
