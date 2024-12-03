@@ -53,6 +53,8 @@ type
 
   vchicos = array[rango_chicos] of chico;
 
+  vseleccion = array [rango_seleccion] of integer;
+
 var
   vc: vchicos; // Vector de chicos
 
@@ -86,95 +88,84 @@ begin
   L := aux;
 end;
 
-// Procedimiento para pegar figuritas en el álbum de un chico
 procedure pegarfiguritas(num: rango_chicos; vp: vfiguritas; var vc: vchicos);
 var
   i: integer;
 begin
-  for i := 1 to 5 do
-  begin
-    if (vc[num].album[vp[i].numero] = true) then
-    begin
-      // Si ya tiene la figurita, agregarla a repetidas
-      agregarRepetida(vc[num].repetidas, vp[i]);
+  for i := 1 to 5 do begin
+    if (vc[num].album[vp[i].numero] = true) then begin
+      L:= vc[num].repetidas;
+      agregarRepetida(L, vp[i]);
     end
-    else
-    begin
-      // Si no la tiene, marcarla como presente en el álbum
+    else begin
       vc[num].album[vp[i].numero] := true;
     end;
   end;
 end;
 
-// Procedimiento para determinar el chico con más figuritas repetidas
 procedure chicoConMasRepetidas(vc: vchicos; var apellido, nombre: string);
 var
-  i, count, max: integer;
-  aux: lista;
+  i, cant, max: integer;
+  L: lista;
 begin
   max := -1;
-  for i := 1 to chicos do
-  begin
-    count := 0;
-    aux := vc[i].repetidas;
-    while aux <> nil do begin
-      count := count + 1;
-      aux := aux^.sig;
+
+  for i := 1 to chicos do begin
+    cantRepes := 0;
+    L := vc[i].repetidas;
+
+    while (L <> nil) do begin
+      cantRepes := cantRepes + 1;
+      L := L^.sig;
     end;
 
-    if (count > max) then begin
-      max := count;
+    if (cantRepes > max) then begin
+      max := cantRepes;
       apellido := vc[i].apellido;
       nombre := vc[i].nombre;
     end;
   end;
 end;
 
-// Procedimiento para determinar el código de selección con menos repetidas
-procedure seleccionConMenosRepetidas(vc: vchicos; var codigo_min: rango_seleccion);
+procedure seleccionConMenosRepetidas(vc: vchicos; vs:vseleccion; var codigo_min: rango_seleccion);
 var
-  i, j: integer;
-  vcantRepetidas: array[rango_seleccion] of integer;
-  aux: lista;
+  i: integer;
+  L: lista;
 begin
-  // Inicializar el contador de repetidas por selección
-  for i := 1 to seleccion do
-    vcantRepetidas[i] := 0;
+  inivectorSele(vs);
 
   // Contar las repetidas por selección
-  for i := 1 to chicos do
-  begin
-    aux := vc[i].repetidas;
-    while aux <> nil do
-    begin
-      vcantRepetidas[aux^.data.codigo] := vcantRepetidas[aux^.data.codigo] + 1;
-      aux := aux^.sig;
+  for i := 1 to chicos do begin
+    L := vc[i].repetidas;
+
+    while L <> nil do begin
+      vs[L^.data.codigo] := vs[L^.data.codigo] + 1;
+
+    L := L^.sig;
     end;
   end;
 
   // Encontrar el código de selección con menos repetidas
-  codigo_min := 1;
-  for i := 2 to seleccion do
-  begin
-    if vcantRepetidas[i] < vcantRepetidas[codigo_min] then
-      codigo_min := i;
+  min := 1;
+  for i := 2 to seleccion do begin
+
+    if (vs[i] < vs[min]) then
+        min := i;
   end;
 end;
 
-// Programa principal
 var
   apellido, nombre: string;
+  vs:vseleccion; vc:vchicos;
   codigo_min: rango_seleccion;
 begin
-  // Cargar los datos iniciales
   cargardatos(vc);
 
-  // Determinar el chico con más figuritas repetidas
   chicoConMasRepetidas(vc, apellido, nombre);
 
-  // Determinar el código de selección con menos figuritas repetidas
-  seleccionConMenosRepetidas(vc, codigo_min);
+  seleccionConMenosRepetidas(vc,vs, codigo_min);
 end.
+
 
 
 
