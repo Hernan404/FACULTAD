@@ -93,7 +93,7 @@ var
 begin
   for i := 1 to 5 do
   begin
-    if vc[num].album[vp[i].numero] then
+    if (vc[num].album[vp[i].numero] = true) then
     begin
       // Si ya tiene la figurita, agregarla a repetidas
       agregarRepetida(vc[num].repetidas, vp[i]);
