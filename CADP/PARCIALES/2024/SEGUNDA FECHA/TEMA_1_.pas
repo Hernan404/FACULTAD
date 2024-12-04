@@ -1,4 +1,4 @@
-un supermercado esta procesando las compras que realizaron sus clientes. para ello, dispone de una 
+{un supermercado esta procesando las compras que realizaron sus clientes. para ello, dispone de una 
 estructura de datos con todas las compras sin ningun orden en particular, de cada compra se conoce codigo, mes, año (entre 2014 y 2024), monto y el DNI del cliente. 
 un cliente puede haber realizado mas de una compra.
 realizar un programa lea de teclado un año y luego:
@@ -9,7 +9,7 @@ quedar ordenada por DNI del cliente
 B. una vez almacenada la informacion, procese los datos del inciso a. e informe:
     1. para cada cliente, el monto total facturado entre todas sus compras 
     2. los dos meses con menor facturacion
-    3. la cantidad de compras con codigo multiplo de 10
+    3. la cantidad de compras con codigo multiplo de 10}
 
 
 
