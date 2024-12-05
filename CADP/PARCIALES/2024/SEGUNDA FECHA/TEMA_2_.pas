@@ -1,4 +1,4 @@
-un supermercado esta procesando las compras que realizaron sus clientes. para ello, dispone de una
+{un supermercado esta procesando las compras que realizaron sus clientes. para ello, dispone de una
 estructura dedatos con todas las ocmpras realizadas, sin ningun orden en particular. de cada compra 
 se conoce: codigo, año (entre 1980 y 2024); monto y DNI del cliente un cliente 
 puede haber realizado mas de una compra 
@@ -10,7 +10,7 @@ estructura debe quedar ordenada por el DNI del cliente
 B. una vez almacenada la estructura del inciso A, procesar estos datos e informar.
     1. el año con menor facturacion 
     2. los dos DNI de los clientes que realizaron mayor cantidad de compras 
-    3. monto total facturado de compras con codigo multiplo de 10
+    3. monto total facturado de compras con codigo multiplo de 10}
 
 
 program TEMA2;
