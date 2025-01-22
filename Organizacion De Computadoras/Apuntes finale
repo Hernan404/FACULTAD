@@ -1,0 +1,147 @@
+
+
+
+
+* MAQUINA VON NEUMANN
+** Constitucion de Arquitectura
+- Unidad aritmetico logica
+        procesa operaciones aritmetico logicas
+
+- Unidad de control
+        interpreta las instrucciones
+
+- Dispositivos E/S
+        comunican las instrucciones al interior
+
+- Memoria
+        almacena las instrucciones
+
+** Grupos de instrucicones
+1. transferencia
+2. salto incondicional
+3. salto condicional
+4. aritmeticas
+5. mod. de instrucciones
+
+* CICLOS DE INSTRUCCION
+** Que es
+        - es el ciclo que recorre una instruccion para ser ejecutada consta de varias fases
+
+** Fases del ciclo de instruccion
+- Calculo de direccion instruccion
+        determina la direccion de la siguiente instruccion a ejecutarse
+
+
+* INTERRUPCIONES
+** Que es
+
+** Tipos de interrupcion
+
+* INSTRUCCIONES
+** Que es
+
+** Conjunto de instrucciones
+
+** Formato
+
+** Representaciones de los codigos de operacion
+
+* MEMORIA
+** Que es
+
+** Tipos de memoria
+
+** Jerarquia de memoria
+
+** RAM DINAMICA Y ESTATICA
+
+* DIRECCIONAMIENTOS DE MEMORIA
+** Que es
+
+** Direccionamiento 2D
+
+** Direccionamiento 2 1/2 D
+
+** Direccionamiento 3D
+
+** Aspectos
+
+
+* PREGUNTAS FINALES VIEJOS
+** PREGUNTAS DE CALCULO DE BITS
+*** Dada la representacion 418 (en hexadecimal) de un sistema en punto flotante con 8 bits en exceso 128 (en ese orden de izq a der): a) determine el valor decimal representado y b) calcule el error absoluto maximo
+
+
+
+        - la hexadecimal nos da 3 caracteres en base 16
+        la representacion en exceso 128 se compone de:
+
+                1. un bit de signo
+                2. 7 bits de exponente
+                3. 1 bit de mantisa (un bit en este caso)
+
+        - convierto el valor 418 a binario de uno en uno
+                4 = 0100
+                1 = 0001
+                8 = 1000
+
+        - lo junto
+                418 = 0100 0001 1000
+
+        - Descompongo descartando '1000' porque necesito los primeros 8 nada mas
+                primer bit: 0 = positivo
+                siguientes 7 bits (exponente) 1000001
+
+        - paso a decimal los 7 bits
+                1000001 = 65
+
+        - resto el decimal por el exceso
+                65 - 128 =
+                 = -63 = exponente
+
+        - ultimo bit (sacar mantisa)
+                si el primer bit del exponente es 1 hago 1+1/2, si es 0 es 0 = 1.0
+                        1 + 1/2 = 1.5
+        - calculo el valor decimal
+
+          ecuacion: valor = (-1)^signo x (1 + mantisa) x 2^exponente
+
+                valor = (-1)^0 x 1.5 x 2^-63 = 1.5 x 2^-63
+
+        - error absoluto maximo
+                   0.5 x 2^-63
+
+*** dado un sistema en punto flotante con 6 bits de mantisa fraccionaria en BCS y exponente de 4 bits en exceso 8 (en ese orden de izq a der) A) cual es el rango de representacion del sistema? B) represente un punto flotante el numero decimal 322.
+
+
+
+
+** PREGUNTAS TEORICAS RANDOM
+*** Que es una puerta logica? describa el circuito logico secuencial denominado 'bienestable RS', realice la tabla de comportamiento grafico de interconexion de puertas logicas que lo represente.
+
+        una puerta es un circuito electronico compuesto por varias entradas y una salida que funciona con una señal booleana las mas utilizadas son AND, OR, NOT, NOR, NAND
+
+
+*** Que es un ciclo de instruccion? describa el funcionamiento del modo de direccionamiento indirecto via registro
+
+        el ciclo de instruccion es el proceso que lleva a cabo una maquina para procesar una instruccion.
+
+        esta compuesto por:
+          1. busqueda
+          2. decodificacion
+          3. ejecucion
+          4. almacenamiento
+
+        el direccionamiento indirecto una vez que se hace la decodificacion y se identifica que hay que usar direccionamiento indirecto via registro, consulta que contenido tiene el registro en la instruccion, luego el valor del registro se usa con una direccion de memoria, que luego se usa para encontrar el dato que se necesita para la instruccion
+
+
+
+*** describa las caracteristicas principales de la organizacion 2 1/2D de memoria semiconductora b) realice un esquema del chip con esta organizacion c) mencione los valores tipicos de capacidades de almacenamiento y tiempo de acceso
+
+        la organizacion 2 1/2 D, es una forma de organizar las celdas de memoria, optimizar la densidad y la conectividad entre los componentes, son una mejora con respecto a la organizacion 2D que tiene dificultades economicas y tecnicas en su implementacion
+
+*** describa las caracteristicas del almacenamiento externo conocido como disco rigido considerar el tipo de comunicacion entre cpu y el periferico el formato de almacenamiento, cant de informacion almacenada, etc.
+
+
+** PREGUNTAS DE CALCULO BYTES
+*** Un video musical monocromatico de youtube dura 200 segundos. a) calcule cuantos bytes de memoria se necesitan para lamacenar el video completo si cada imagen es de 800 por 500 pieles. b) cual debe ser la velocidad de transferecnia (en bytes/segundos) si la imagen debe ser cambiada 25 veces por segundo
