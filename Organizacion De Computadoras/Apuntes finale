@@ -25,33 +25,87 @@
 
 * CICLOS DE INSTRUCCION
 ** Que es
-        - es el ciclo que recorre una instruccion para ser ejecutada consta de varias fases
+- es el ciclo que recorre una instruccion para ser ejecutada consta de varias fases
 
 ** Fases del ciclo de instruccion
-- Calculo de direccion instruccion
-        determina la direccion de la siguiente instruccion a ejecutarse
+1. Instruction adress calculation
+        - determina la direccion de la siguiente instruccion a ejecutarse
+2. Instruccion Fetch
+        - leo la instruccion de su posicion en la memoria
+3. Instruction Operation Decoding
+        - determino el tipo de operacion a realizar
+
+4. Open Adress calculation
+        - si implica referencia al operando en la memoria E/S, determina direccion
+5. Operand Fetch
+        - busca el operando o E/S
+6. Data Operation
+        - ejecuta la instruccion
+7. Open Adress Calculation
+        - calcula el resultado
+8. Operand store
+        - guarda el resultado
 
 
 * INTERRUPCIONES
 ** Que es
 
+
 ** Tipos de interrupcion
 
 * INSTRUCCIONES
 ** Que es
+        - es una indicacion del programador hacia la cpu
 
 ** Conjunto de instrucciones
-
+        - el conjunto de las instrucciones seria la forma de controlar la cpu para el programador
 ** Formato
+        - siendo cada instruccion una secuencia de bits, esta secuencia tiene un formato que esta compuesto por:
+
+                1. codigo de operacion
+                2. referencia a operando fuente
+                3. referencia a operando resultado
+                4. referencia a la siguiente instruccion
 
 ** Representaciones de los codigos de operacion
+        para interpretar las instrucciones binarias usamos abreviaturas, las mas comunes siendo MOV, ADD, SUB.
+
+        operaciones Aritmeticas: ADD,ADC,SUB,SBB,CMP,NEG,INC,DEC
+
+        operaciones Logicas: AND, NOT, XOR, OR
 
 * MEMORIA
 ** Que es
 
 ** Tipos de memoria
+*** RAM
+- memoria de acceso aleatorio, pierde su contenido al paagar el dispositivo, permite leer y escribir datos por bytes
+*** ROM
+- memoria de solo lectura, es no volatil y puede ser modificada una vez programada
+*** PROM
+- variante de ROM que puede escribirse electronicamente
+*** EPROM
+- variable de ROM que puede borrar y reporgramar con luz ultravioleta
+*** EEPROM
+- variable de ROM que puede borrarse electronicamente por bytes
+*** FLASH
+- operacion en bloques, combina rapidez y reutilizacion
+
+
 
 ** Jerarquia de memoria
+*** REGISTROS
+- capacidad de 6 a 200 bytes, accesos en 2 a 20 nanosegundos
+*** MEMORIA CACHE
+- capacidad de 4k - 64k bytes, acceso a 20 - 100 nanosegundso
+*** MEMORIA PRINCIPAL
+- capacidad 100k - 50m bytes, acceso a 100 - 300 nanosegundos
+*** MEMORIA SECUNDARIA DISCO
+- capacidad 1m - 1g, 5 - 50 milisegundos
+*** MEMORIA AUXILIAR DISCO
+- capacidad 50m - 1g, acceso 100 milisegundos
+*** MEMORIA AUXILIAR CINTA
+- capacidad ilimitada, ? minutos
 
 ** RAM DINAMICA Y ESTATICA
 
