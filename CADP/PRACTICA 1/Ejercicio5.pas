@@ -13,6 +13,7 @@ var
 
 begin
 	cant:= 0;
+ 
 	writeln('ingrese numero');
 	readln(num1);
  	
