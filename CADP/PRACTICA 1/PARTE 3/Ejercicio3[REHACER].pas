@@ -1,4 +1,4 @@
-Un fabricante de tanques de agua está analizando las ventas de sus tanques durante el 2020. La
+{Un fabricante de tanques de agua está analizando las ventas de sus tanques durante el 2020. La
 empresa fabrica tanques a medida, que pueden ser rectangulares (tanques ‘R’) o cilíndricos (tanques
 ‘C’) .
 - De cada tanque R se conoce su ancho (A), su largo (B) y su alto (C)
@@ -10,7 +10,7 @@ lectura, el programa debe informar:
 - Volumen promedio de todos los tanques cilíndricos vendidos
 - Volumen promedio de todos los tanques rectangulares vendidos
 - Cantidad de tanques cuyo alto sea menor a 1.40 metros
-- Cantidad de tanques cuyo volumen sea menor a 800 metros cúbicos
+- Cantidad de tanques cuyo volumen sea menor a 800 metros cúbicos}
 
 
 
