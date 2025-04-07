@@ -1,11 +1,11 @@
-Realizar un programa que analice las inversiones de las empresas más grandes del país. Para cada
+{Realizar un programa que analice las inversiones de las empresas más grandes del país. Para cada
 empresa se lee su código (un número entero), la cantidad de inversiones que tiene, y el monto
 dedicado a cada una de las inversiones. La lectura finaliza al ingresar la empresa con código 100,
 que debe procesarse.
 El programa deberá informar:
 ● Para cada empresa, el monto promedio de sus inversiones
 ● Código de la empresa con mayor monto total invertido
-● Cantidad de empresas con inversiones de más de $50000
+● Cantidad de empresas con inversiones de más de $50000}
 
 program EJ1P1P3;
 var 
