@@ -1,4 +1,4 @@
-La cátedra de CADP está analizando los resultados de las autoevaluaciones que realizaron los
+L{a cátedra de CADP está analizando los resultados de las autoevaluaciones que realizaron los
 alumnos durante el cuatrimestre. Realizar un programa que lea, para cada alumno, su legajo, su
 condición (I para INGRESANTE, R para RECURSANTE), y la nota obtenida en cada una de las 5
 autoevaluaciones. Si un alumno no realizó alguna autoevaluación en tiempo y forma, se le cargará la
@@ -24,7 +24,7 @@ total de alumnos RECURSANTES.
 - Código de los dos alumnos con mayor cantidad de autoevaluaciones con nota 0 (cero)
 Nota: recuerde que, para poder rendir el EXAMEN PARCIAL, el alumno deberá obtener “Presente” en al menos
 el 75% del total de las autoevaluaciones propuestas. Se considera “Presente” la autoevaluación que se entrega
-en tiempo y forma y con al menos el 40% de respuestas correctas.
+en tiempo y forma y con al menos el 40% de respuestas correctas.}
 
 program EJ2P1P3;
 
