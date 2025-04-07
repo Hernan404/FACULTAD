@@ -1,11 +1,10 @@
- Realizar un programa que lea números enteros desde teclado. La lectura debe finalizar cuando se ingrese el
+{Realizar un programa que lea números enteros desde teclado. La lectura debe finalizar cuando se ingrese el
 número 100, el cual debe procesarse. Informar en pantalla:
 ● El número máximo leído.
 ● El número mínimo leído.
-● La suma total de los números leídos.
+● La suma total de los números leídos.}
 
-Program EJ5P1P2;
-
+program EJ5P1P2;
 var
    num,min,max,suma:integer;
 
@@ -27,6 +26,4 @@ until num = 100;
 	writeln('el maximo es ', max);
 	writeln('el minimo es ', min);
 	writeln('la suma total es ', suma);
-	
-
 end.
