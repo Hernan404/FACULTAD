@@ -1,4 +1,4 @@
-L{a cátedra de CADP está analizando los resultados de las autoevaluaciones que realizaron los
+{a cátedra de CADP está analizando los resultados de las autoevaluaciones que realizaron los
 alumnos durante el cuatrimestre. Realizar un programa que lea, para cada alumno, su legajo, su
 condición (I para INGRESANTE, R para RECURSANTE), y la nota obtenida en cada una de las 5
 autoevaluaciones. Si un alumno no realizó alguna autoevaluación en tiempo y forma, se le cargará la
