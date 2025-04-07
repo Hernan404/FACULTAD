@@ -1,11 +1,9 @@
-Realizar un programa que lea 1000 números enteros desde teclado. Informar en pantalla cuáles son los dos
-números mínimos leídos.
-a. Modifique el ejercicio anterior para que, en vez de leer 1000 números, la lectura finalice al leer el
-número 0, el cual debe procesarse.
-b. Modifique el ejercicio anterior para que, en vez de leer 1000 números, la lectura finalice al leer el
-número 0, el cual no debe procesarse.
-
-
+{Realizar un programa que lea desde teclado la información de alumnos ingresantes a la carrera Analista en
+TIC. De cada alumno se lee nombre y nota obtenida en el módulo EPA (la nota es un número entre 1 y 10).
+La lectura finaliza cuando se lee el nombre “Zidane Zinedine“, que debe procesarse. Al finalizar la lectura
+informar:
+● La cantidad de alumnos aprobados (nota 8 o mayor).
+● La cantidad de alumnos que obtuvieron un 7 como nota.}
 program EJ4P1P2; 
 var 
     num:integer;
