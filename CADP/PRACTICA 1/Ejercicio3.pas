@@ -1,5 +1,6 @@
-Realizar un programa que lea 3 números enteros y los imprima en orden descendente.
-program ej3p1;
+{Realizar un programa que lea 3 números enteros y los imprima en orden descendente. Por ejemplo: si se
+ingresan los valores 4, -10 y 12, deberá imprimir: 12 4 -10}
+program EJ3|P1;
 var 
     num1,num2,num3:integer;
 begin 
@@ -22,7 +23,6 @@ begin
         else 
             writeln(num2, num3, num1)
     end
-
     else
     begin 
         if (num1 > num2) then 
