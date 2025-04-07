@@ -6,7 +6,7 @@ número de orden, dentro de la secuencia, en el que fue leído. Por ejemplo: si 
 secuencia: 3 5 6 2 3 10 98 8 -12 9, deberá informar:
 El mayor número leído fue el 98, en la posición 7}
 
-program EJ3|P1|Parte2;
+program EJ3P1P2;
 
 var
 	aprobado, con7, nota:integer;
