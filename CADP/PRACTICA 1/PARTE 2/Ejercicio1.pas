@@ -1,5 +1,7 @@
-program EJ1P2;
+{Realizar un programa que lea 10 números enteros e informe la suma total de los números leídos.
+a. Modifique el ejercicio 1 para que además informe la cantidad de números mayores a 5.}
 
+program EJ1|P1|Parte2;
 var
 	num1:integer;
 	i: integer;
