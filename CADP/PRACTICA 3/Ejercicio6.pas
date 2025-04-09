@@ -1,4 +1,4 @@
-Una empresa importadora de microprocesadores desea implementar un sistema de software para analizar la
+{Una empresa importadora de microprocesadores desea implementar un sistema de software para analizar la
 información de los productos que mantiene actualmente en stock. Para ello, se conoce la siguiente información de
 los microprocesadores: marca (Intel, AMD, NVidia, etc), línea (Xeon, Core i7, Opteron, Atom, Centrino, etc.),
 cantidad de cores o núcleos de procesamiento (1, 2, 4, 8), velocidad del reloj (medida en Ghz) y tamaño en
@@ -9,7 +9,7 @@ importadora e informe:
 ● Marca y línea de todos los procesadores de más de 2 cores con transistores de a lo sumo 22 nm.
 ● Las dos marcas con mayor cantidad de procesadores con transistores de 14 nm.
 ● Cantidad de procesadores multicore (de más de un core) de Intel o AMD, cuyos relojes alcancen velocidades de
-al menos 2 Ghz.
+al menos 2 Ghz.}
 
 program EJ6P3;
 type 
