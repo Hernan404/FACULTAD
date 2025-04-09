@@ -1,4 +1,4 @@
-La Comisión Provincial por la Memoria desea analizar la información de los proyectos presentados en el
+{La Comisión Provincial por la Memoria desea analizar la información de los proyectos presentados en el
 programa Jóvenes y Memoria durante la convocatoria 2020. Cada proyecto posee un código único, un título, el
 docente coordinador (DNI, nombre y apellido, email), la cantidad de alumnos que participan del proyecto, el
 nombre de la escuela y la localidad a la que pertenecen. Cada escuela puede presentar más de un proyecto. La
@@ -9,7 +9,7 @@ debe procesarse), e informe:
 localidad.
 ● Nombres de las dos escuelas con mayor cantidad de alumnos participantes.
 ● Título de los proyectos de la localidad de Daireaux cuyo código posee igual cantidad de dígitos pares e
-impares.
+impares.}
 
 
 program EJ9P3;
