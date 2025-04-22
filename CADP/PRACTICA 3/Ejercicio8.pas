@@ -12,6 +12,7 @@ localidad.
 impares.}
 
 
+
 program EJ9P3;
 type
 	data_doc = record 
@@ -27,7 +28,7 @@ type
 	 cantalu:integer;
 	 nom_esc:string;
 	 localidad:string;	
-	 anio:integer;
+	 anio:integer; //AGREGO VARIABLE AÑO PORQUE EL INCISO NO TIENE MUCHO SENTIDO
 	end;
 	
 
