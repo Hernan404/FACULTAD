@@ -1,8 +1,8 @@
-Implementar un programa que lea la fecha de todos los casamientos realizados en 2019. La lectura
+{Implementar un programa que lea la fecha de todos los casamientos realizados en 2019. La lectura
 finaliza al ingresar el año 2020, que no debe procesarse, e informe la cantidad de casamientos
 realizados durante los meses de verano (enero, febrero y marzo) y la cantidad de casamientos
 realizados en los primeros 10 días de cada mes. Nota: utilizar el módulo realizado en b) para la lectura
-de fecha.
+de fecha.}
 
 program EJ2P3;
 type 
