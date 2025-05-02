@@ -14,156 +14,152 @@ b. La cantidad de alumnos que gastan en transporte más de $80 por día.
 c. Los dos medios de transporte más utilizados.
 d. La cantidad de alumnos que combinan bicicleta con algún otro medio de transporte}
 
+
 program EJ14P6;
+const  
+  alumnos = 1300;
+  rango_medios = 5;
 type 
-	viaje = record 
-		codigo: integer;
-		dia: 1..31;
-		facultad: string;
-		medio: 1..5;
-	end;
+  rango_alumnos = 1..alumnos;
 
-	lista = ^nodo;
-	nodo = record
-		data: viaje;
-		sig: lista;
-	end;
+  alumno = record 
+    codigo:rango_alumnos;
+    dia:1..31;
+    facultad:string;
+    medio:rango_medios;
+  end;
 
-	vector = array [1..5] of integer;
-	vdia = array [1..31] of integer;
-	vgasto = array [1..31] of real;
 
-procedure leer(var r: viaje);
+  vmedios = array [rango_medios] of integer;
+  vviajes = array [1..31] of integer;
+
+
+procedure cargardatos(L:lista);
+var 
+  r:alumno;
 begin 
-	with r do begin 
-		writeln('Código de alumno:');
-		readln(codigo);
-		if (codigo <> -1) then begin 
-			writeln('Día del mes:');
-			readln(dia);
-			writeln('Facultad a la que pertenece:');
-			readln(facultad);
-			writeln('Medio de transporte (1-5):');
-			readln(medio);
-		end;
-	end;
-end;
+  with r do begin 
+    readln(codigo);
+    readln(dia);
+    readln(facultad);
+    readln(medio);
+  end;
+end; 
 
-procedure armarnodo(var L: lista; r: viaje);
+procedure cargarlista(var L:lista; r:alumno);
 var 
-	aux: lista;
-begin
-	new(aux);
-	aux^.data := r;
-	aux^.sig := L;
-	L := aux;
-end;
-
-procedure cargardatos(var L: lista); // Pasar por referencia
-var 
-	r: viaje;
+  aux:lista;
 begin 
-	leer(r);
-	while (r.codigo <> -1) do begin 
-		armarnodo(L, r);
-		leer(r);
-	end;
-end;
+  new(aux);
+  aux^.data:= r;
+  aux^.sig:= L;
+  L:= aux; 
+end; 
 
-procedure inivector(var v: vector; var vd: vdia; var vt: vector; var vg: vgasto);
+procedure inivectores (var vv:vviajes; vc:vmedios);
 var 
-	i: integer;
+  i,x:integer;
 begin 
-	// Precios de los medios de transporte
-	v[1] := 90;  // Colectivo urbano
-	v[2] := 150; // Colectivo interurbano
-	v[3] := 30;  // Tren universitario
-	v[4] := 200; // Tren Roca
-	v[5] := 300; // Bicicleta
+  for i:= 1 to medios do 
+    vc[i]:= 0;
+  for x:=1 to 31 do 
+    vv[i]:= 0;
+end; 
 
-	// Inicializar vector de viajes por día
-	for i := 1 to 31 do 
-		vd[i] := 0;
-
-	// Inicializar vector de tipos de transporte utilizados
-	for i := 1 to 5 do 
-		vt[i] := 0;
-
-	// Inicializar vector de gasto diario por día
-	for i := 1 to 31 do 
-		vg[i] := 0.0;
-end;
-
-procedure mayor(vt: vector; var max1, max2, p1, p2: integer);
+procedure puntoC(vc:vmedios; max1:integer; max2:integer; p1:integer; p2:integer);
 var 
-	i: integer;
+  i:integer;
 begin 
-	for i := 1 to 5 do begin 
-		if (vt[i] > max1) then begin 
-			max2 := max1;
-			p2 := p1;
-			max1 := vt[i];
-			p1 := i;
-		end else if (vt[i] > max2) then begin 
-			max2 := vt[i];
-			p2 := i;
-		end;
-	end;
-end;
+  for i:=1 to 31 do begin 
+    if (vc[i] > max1) then begin 
+        max2:= max1;
+        p2:= p1;
+        max1:= v[i];
+        p1:= i;
+    end 
+    else if (vc[i] > max2) then begin 
+            max2:= v[i];
+            p2:= i; 
+    end;
+  end; 
+end; 
 
-procedure procesardatos(L: lista);
+procedure procesardatos(L:lista);
 var 
-	v: vector; vt: vector; vd: vdia; vg: vgasto;
-	ant: viaje;
-	cantA, cantB, max1, max2, p1, p2, cantC, currentCode: integer;
+  // cantidad de medios usados 
+  vc:vmedios;
 
-begin
-	cantA := 0; cantB := 0; cantC := 0; max1 := -1; max2 := -1; p1 := 0; p2 := 0;
-	inivector(v, vd, vt, vg);
-	ant.codigo := 0;
+  // gasto por dia 
+  vg:vgastos;
 
-	while (L <> nil) do begin 
-		// PUNTO A: Contar viajes por día
-		vd[L^.data.dia] := vd[L^.data.dia] + 1;
+  // cantidad de viajes por dia 
+  vv:vviajes;
 
-		// PUNTO B: Acumular el gasto diario en el vector de gasto
-		vg[L^.data.dia] := vg[L^.data.dia] + v[L^.data.medio];
-
-		// PUNTO C: Contar usos de medios de transporte
-		vt[L^.data.medio] := vt[L^.data.medio] + 1;
-
-		// PUNTO D: Contar alumnos que combinan bicicleta con otro medio de transporte
-		if (ant.codigo <> 0) and (L^.data.codigo = ant.codigo) and (L^.data.medio <> 5) and (ant.medio = 5) then
-			cantC := cantC + 1;
-
-		ant := L^.data;
-		L := L^.sig;
-	end;
-
-	// Contar alumnos que realizan más de 6 viajes por día
-	for currentCode := 1 to 31 do 
-		if (vd[currentCode] > 6) then
-			cantA := cantA + 1;
-
-	// Determinar la cantidad de alumnos que gastan más de $80 por día
-	for currentCode := 1 to 31 do
-		if (vg[currentCode] > 80) then
-			cantB := cantB + 1;
-
-	// Determinar los dos medios de transporte más utilizados
-	mayor(vt, max1, max2, p1, p2);
-
-	// Resultados
-	writeln('La cantidad de alumnos que realizan más de 6 viajes por día: ', cantA);
-	writeln('La cantidad de alumnos que gastan en transporte más de $80 por día: ', cantB);
-	writeln('Los dos medios de transporte más utilizados: ', p1, ', ', p2);
-	writeln('La cantidad de alumnos que combinan bicicleta con algún otro medio de transporte: ', cantC);
-end;
-
-var 
-	L: lista;
+  codigoACT, diaACT, i, totalViajes: integer;
+  usoBici, usoOtro: boolean;
+  gasto: real;
+  max1,max2,p1,p2:integer;
+  cantA,puntoB,cantD:integer; 
 begin 
-	L := nil;
-	cargardatos(L);
-	procesardatos(L);
-end.
+  cantA:= 0; puntoB:= 0; cantD:= 0; 
+  max1:= -1; max2:= -1; p1:= 0; p2:= 0; 
+  cantA 
+  inivectores(vc,vv);
+
+  while (L <> nil) do begin
+     codigoACT:= L^.data.codigo; 
+     while (L <> nil) and (L^.data.codigo = codigoACT) do begin 
+          diaACT:= L^.data.dia;
+          viajes:= 0;
+          gasto:= 0;
+          usoBici:= false;
+          usoOtro:= false; 
+
+          while (L <> nil) and (L^.data.dia = diaACT) and L^.data.codigo = codigoACT) then begin 
+                viajes:= viajes + 1; 
+
+                // cantidad de viajes por medio 
+                vc[L^.data.medio]:= vc[L^.data.medio] +1;
+
+                // gastos por dia 
+                gasto:= gasto + precios[L^.data.medio];
+
+               // viajes por dia 
+                vv[diaACT]:= vv[diaACT] +1; 
+
+              if (L^.data.medio = 5) then 
+                  usoBici := true
+              else 
+                  usoOtro := true;
+              
+           L:= L^.sig;
+          end;
+      
+          if (viajes > 6) then 
+            cantA:= cantA +1; 
+          if (gasto > 80) then 
+            puntoB:= puntoB +1;
+
+          if (usoBici) and (usoOtro) then 
+            cantD:= cantD +1; 
+      L := L^.sig;
+    end;
+
+  L:= L^.sig;
+  end; 
+  puntoC(vc,max1,max2,p1,p2);
+
+  writeln(cantA);
+  writeln(puntoB);
+  writeln(p1,p2);
+  writeln(cantD);
+end;
+
+var 
+  L:lista; 
+begin 
+  cargardatos(L);
+  procesardatos(L);
+end. 
+
+
