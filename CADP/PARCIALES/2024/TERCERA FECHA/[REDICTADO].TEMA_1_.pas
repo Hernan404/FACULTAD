@@ -1,3 +1,5 @@
+
+
 {una empresa de alquiler de vehiculos dispone de una estructura donde tiene almaacenado toda la informacion de cada alquiler realizado durante el año 2023.
 
 de cada alquiler se conoce: patente de vehiculo, tipo de vehiculo (1..8), kms del automovil al retirarlo,
@@ -46,20 +48,27 @@ type
     sig:lista;
   end; 
 
-  lista2 = ^nodo;
-  nodo = record 
+  lista2 = ^nodo2;
+  nodo2 = record 
     patente:string;
     total:real;
   end; 
 
-
+  vMeses = array [1..12] of integer; 
   vMontos = array [rango_tipos] of real;
 
 procedure leer(var r:alquiler); // se dispone 
 procedure armarlista (var L:lista; r:alquiler); // se dispone 
 procedure tablaMontos (var vM:vMontos); // se dispone 
 
-
+procedure inivector(var vm:vmes);
+var 
+	i:integer;
+begin 
+	for i:=1 to 12 do begin 
+		vm[i]:= 0; 
+	end; 
+end; 
 
 procedure armarlista2(var L2:lista2; total_kms:real; patente:string);
 var 
@@ -71,61 +80,85 @@ begin
   act:= L2;
   ant:= L2;
 
-  while (act <> nil) and (act^.data.pantente < patente) do begin 
+  while (act <> nil) and (act^.data.patente < patente) do begin 
       ant:= act; 
     act:= act^.sig;
   end; 
 
   if (ant = act) then 
-      pri:= nue;
+      L2:= nue;
   else 
     ant^sig:= nue; 
   nue^.sig:= act; 
 end; 
 
+function cumpleC(r:alquiler):boolean;
+begin 
+	cumpleC:= (r.ciudad_retiro <> r.ciudad_vuelta);
+end;
+
+procedure puntoB (dinero:real; max:real; patente:string; p1:string); 
+begin 
+	if (dinero > max) then 
+		max:= dinero; 
+		p1:= patente; 
+end;
+
+procedure puntoD (vm:vmes; min:integer); 
+var 
+	i:integer;
+begin 
+	for i:=1 to 12 do begin 
+		if (vm[i] < min) then begin 
+			min:= vm[i];
+			m1:= i; 
+		end; 
+	end;
+end; 
+
 procedure procesardatos(L:lista);
 var 
-  L2:lista2; vm:vMontos; 
-begin 
-    L2:= nil; 
+	patenteACT: string;
+  	total_kms, dinero, cant_alquileres, distinto: integer;
 
+begin
+  L2 := nil;
+  dinero := 0;
+  cant_alquileres := 0;
+  distinto := 0;
+  max := -1;
 
-    while (L <> nil) do begin 
-      // punto A 
-      patenteACT:= L^.data.patente;
-      total_kms:= 0; 
-      while (L <> nil) and (patenteACT = L^.data.patente) do begin 
-          total_kms:= total_kms + (L^.data.kms_retiro - L^.data.kms_vuelta);
-          armarlista2(L2,total_kms,L^.data.patente);
+	inivector(vm);
+	while (L <> nil) do begin 
+			patenteACT:= L^.data.patente; 
+			total_kms:= 0; 
+		while (L <> nil) do begin 
+			total_kms:= total_kms + (L^.data.kms_retiro - L^.data.kms_vuelta);
 
-          dinero:= dinero + (L^.data.diasAlquiler + vm[L^.data.tipo])
+			dinero:= dinero + (v[L^.data.retiro] * L^.data.diasAlquiler);
 
-      
-          if (dinero > max) then begin 
-              max:= dinero;
-              p1:= patenteACT; 
-          end; 
-      end; 
-      L:= L^.sig;
-   
+			cant_alquileres:= cant_alquileres + 1; 
 
-      cant_alquileres:= cant_alquileres + 1; 
-      
+			if (cumpleC(L^.data)) then 
+				distinto:= distinto + 1; 
 
-      // punto C 
-      if (L^.data.ciudad_retiro <> L^.data.ciudad_vuelta) then 
-          cantPorcentaje:= cantPorcentaje + 1; 
+			vm[L^.data.fecha.mes]:= vm[L^.data.fecha.mes] + 1;
 
-      // punto D 
-      if (cant_alquileres < min) then 
-          min:= cant_alquileres
-          
-    L:= L^.sig;
-    end; 
-    
-    porcentaje:= (cant_alquileres/cantPorcentaje)*100; 
+		L:= L^.sig;
+		end; 
 
-    
+		armarlista2(L2,total_kms,patenteACT);
+
+		porcentaje:= (distinto/cant_alquileres) * 100;
+
+		puntoB(dinero,max,patenteACT,p1);
+
+		puntoD(vm,min,m1); 
+
+		writeln('punto B',p1);
+		writeln('punto C', porcentaje);
+		writeln('punto D', min); 
+	end; 
 end; 
 
 var 
@@ -135,3 +168,4 @@ begin
   cargardatos(L);
   procesardatos(L);
 end. 
+
