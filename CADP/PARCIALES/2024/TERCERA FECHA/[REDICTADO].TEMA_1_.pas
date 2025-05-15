@@ -1,5 +1,3 @@
-
-
 {una empresa de alquiler de vehiculos dispone de una estructura donde tiene almaacenado toda la informacion de cada alquiler realizado durante el año 2023.
 
 de cada alquiler se conoce: patente de vehiculo, tipo de vehiculo (1..8), kms del automovil al retirarlo,
@@ -168,4 +166,7 @@ begin
   cargardatos(L);
   procesardatos(L);
 end. 
+
+
+
 
