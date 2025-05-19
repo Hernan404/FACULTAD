@@ -12,143 +12,126 @@ B. a partir de la estructura generada en A. se requiere:
     3. utilizando la lista generada en B) calcular e informar los dos codigos de piezas mas costosas cuyo codigo de modelo 
     sea menor que 5 }
 
+
+
 program TEMA2;
 const 
-    modelos = 10;
-    MAX_PIEZAS = 30000;
+	piezas = 900000;
+	modelos = 10;
 type 
-    rango_modelos = 1..modelos;
+	rango_modelos = 1..modelos;
+	rango_piezas = 1..piezas;
 
-    pieza = record 
-        descripccion: string;
-        cantstock: integer;
-        costo: real;
-        codigoModelo: rango_modelos;
-        stockmin: integer;
-        peso: real;
-    end;
+	pieza = record 
+		descripccion:string;
+		codigo_piezas:integer;
+		cant_stock:integer;
+		costo:real;
+		codigo_modelo:rango_modelos;
+		stock_min:integer;
+		peso:real;
+	end; 
 
-    lista = ^nodo;
-    nodo = record 
-        data: pieza;
-        sig: lista;
-    end;
+	lista = ^nodo;
+	nodo = record
+		data:pieza;
+		sig:lista;
+	end; 
 
-procedure leer(var r: pieza);
+	vector = array [rango_piezas] of pieza;
+
+procedure cargardatos(var v:vector);
+var 
+	i:integer; 
 begin 
-    with r do begin 
-        readln(descripccion);
-        readln(cantstock);
-        readln(costo);
-        readln(codigoModelo);
-        readln(stockmin);
-        readln(peso);
-    end;
-end;
+	for i:=1 to piezas do begin 
+		readln(v[i].descripccion);
+		readln(v[i].cant_stock);
+		readln(v[i].codigo_piezas);
+		readln(v[i].costo);
+		readln(v[i].codigo);
+		readln(v[i].stock_min);
+		readln(v[i].peso);
+	end; 
+end; 
 
-procedure armarlista(var pri: lista; r: pieza); 
+procedure armarlista(var L:lista; r:pieza);
+var 
+	ant,act,nue:lista;
+begin 
+	new(nue);
+	nue^.data:= r;
+	nue^.sig:= nil;
+
+	if (L <> nil) then begin 
+		act:= L;
+		while (act^.sig <> nil) do 
+			act:= act^.sig;
+		act^.sig:= nue;
+	end
+	else 
+		L:= nue; 
+end; 
+
+procedure mascostosos (codigo_piezas:integer; costo:real; var max1,max2:real; var p1,p2:integer);
+begin 
+	if (costo > max1) then begin 
+		max2:= max1;
+		p2:= p1; 
+		p1:= codigo_piezas;
+	end 
+	else if (costo > max2) then begin 
+		max2:= costo;
+		p2:= codigo_piezas;
+	end; 
+end; 
+
+function cumple2(peso:real; codigo:integer):boolean; 
+var 
+	cant:integer;
+begin 
+	cant:= 0; 
+	while (codigo > 0) do begin 
+		if (codigo mod 2 = 0) then 
+			cant:= cant +1; 
+		codigo:= codigo div 10; 
+	end; 
+
+	cumple2:= (peso > 1) and (cant >= 3);
+end; 
+
+procedure procesardatos(v:vector);
+var 
+	L:lista;
+	i:integer; p1,p2:integer; cant2:integer;
+	max1,max2:real; promedio:real; 
+begin 
+	L:= nil; max1:= -1; max2:= -1; p1:= 0; p2:= 0; 
+	cant2:= 0; 
+	promedio:= 0; 
+
+	for i:=1 to piezas do begin 
+		if (v[i].cant_stock = v[i].stock_min) then 
+			armarlista(L,v[i]);
+		
+		if (cumple2(v[i].peso,v[i].codigo)) then 
+			cant2:= cant2 + 1; 
+	end; 
+	promedio:= piezas/cant2;
+
+	while (L <> nil) do begin 
+		if (L^.data.codigo_modelo < 5) then 
+			mascostosos(L^.data.codigo_piezas,L^.data.costo,max1,max2,p1,p2);
+	L:= L^.sig; 
+	end;
+
+	writeln('punto 2', promedio);
+	writeln('punto 3', p1,p2); 
+end; 
+
 var  
-   act, nue : lista;
+	v:vector;
 begin 
-   new(nue);
-   nue^.data := r;
-   nue^.sig := NIL;
-   if pri <> NIL then begin
-       act := pri;
-       while (act^.sig <> NIL) do
-           act := act^.sig;
-       act^.sig := nue;
-   end else
-       pri := nue;
-end;
-
-procedure cargardatos(var L: lista);
-var 
-    r: pieza; 
-    i: integer;
-begin 
-    for i := 1 to MAX_PIEZAS do begin 
-        leer(r);
-        armarlista(L, r);
-    end;
-end;
-
-function cumpleB(r: pieza): boolean;
-var 
-    cantmultiplos: integer;
-    cod: integer;
-begin 
-    cantmultiplos := 0;
-    cod := r.codigoModelo;
-
-    while (cod > 0) do begin 
-        if (((cod mod 10) mod 2) = 0) then
-            cantmultiplos := cantmultiplos + 1;
-        cod := cod div 10;
-    end;
-
-    cumpleB := (r.peso > 1) and (cantmultiplos >= 3);
-end;
-
-procedure procesardatos(L, L2: lista);
-var 
-    cantpiezas: integer; 
-    prom: real; 
-begin 
-    prom := 0; 
-    cantpiezas := 0;
-    while (L <> nil) do begin 
-        if (L^.data.cantstock = L^.data.stockmin) then 
-            armarlista(L2, L^.data);
-        
-        cantpiezas := cantpiezas + 1;
-        if (cumpleB(L^.data)) then 
-            prom := prom + 1; // Incrementar el contador de piezas que cumplen la condición
-
-        L := L^.sig;
-    end;
-    if cantpiezas > 0 then
-        writeln('Promedio de piezas que cumplen B: ', prom / cantpiezas:0:2);
-end;
-
-procedure mascostos(L2: lista; var p1, p2: real; var max1, max2: real);
-begin 
-    p1 := -1;
-    p2 := -1;
-    max1 := -1;
-    max2 := -1;
-
-    while (L2 <> nil) do begin 
-        if (L2^.data.codigoModelo < 5) then begin
-            if (L2^.data.costo > max1) then begin
-                max2 := max1;
-                p2 := p1;
-                max1 := L2^.data.costo;
-                p1 := L2^.data.codigoModelo;
-            end else if (L2^.data.costo > max2) then begin
-                max2 := L2^.data.costo;
-                p2 := L2^.data.codigoModelo;
-            end;
-        end;
-        L2 := L2^.sig;
-    end;
-end;
-
-procedure procesarSegundalista(L2: lista);
-var 
-    p1, p2: real;
-    max1, max2: real;
-begin
-    mascostos(L2, p1, p2, max1, max2);
-    writeln('Los dos códigos de piezas más costosas son: ', p1:0:2, ' y ', p2:0:2);
-end;
-
-var 
-    L, L2: lista;
-begin 
-    L := nil;
-    L2 := nil;
-    cargardatos(L);
-    procesardatos(L, L2);
-    procesarSegundalista(L2);
+	cargardatos(v);
+	procesardatos(v);
 end.
