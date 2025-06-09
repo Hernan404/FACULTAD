@@ -152,11 +152,11 @@ begin
 		puntoB(dinero,max,patenteACT,p1);
 
 		puntoD(vm,min,m1); 
-
-		writeln('punto B',p1);
-		writeln('punto C', porcentaje);
-		writeln('punto D', min); 
 	end; 
+	writeln('punto B',p1);
+	writeln('punto C', porcentaje);
+	writeln('punto D', min); 
+	
 end; 
 
 var 
