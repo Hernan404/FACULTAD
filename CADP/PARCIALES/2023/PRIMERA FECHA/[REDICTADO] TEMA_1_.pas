@@ -17,15 +17,11 @@ type
 		nombre_ingredientes:string;
 	end;
 
-	puntoA = record 
-		nombreA:string;
-		precio:real;
-	end;
-
-	listaA = ^nodo;
+	lista2 = ^nodo2;
 	data = record
-		data:puntoA;
-		sig:listaA;
+		nombre:string;
+		precio:real;
+		sig:lista2;
 	end;
 
 	lista = ^nodo; 
@@ -52,15 +48,12 @@ begin
 	// se dispone
 end;
 
-procedure inivector(var v:vector; var vI:vingredientes);
+procedure inivector(var v:vector);
 var 
 	i:integer;
 begin 
 	for i:=1 to 4 do begin 
 		v[i]:= 0;
-	end;
-	for i:=1 to 10 do begin 
-		vI[i]:= 0;
 	end;
 end;
 
@@ -82,43 +75,44 @@ begin
 	end;
 end;
 
-procedure armarlistaA(L:lista; var LP:listaA);
+procedure armarlistaA(var L2:lista2; precio, nombre);
 var 
 	aux:lista;
 begin 
 	new(aux);
-	aux^.data.nombre:= L^.data.nombre;
-	aux^.data.precio:= L^.data.precio;
-	aux^.sig:= LP;
-	LP:= aux;
+	aux^.data.nombre:= nombre;
+	aux^.data.precio:= precio;
+	aux^.sig:= L2;
+	L2:= aux;
 end;
 
 procedure procesardatos(L:lista);
 var 
-	LP:ListaA; i:integer;
-	vI:vingredientes; v:vector; cantplatos:integer; max1,max2,c1,c2; promedio:real;
+	L2:Lista2; i:integer;
+	v:vector; cantplatos:integer; max1,max2,c1,c2; promedio:real;
 begin 
 	cantplatos:= 0; max1:= -1; max2:= -1; c1:= 0; c2:= 0; promedio:= 0;
 	
-	inivector(v,vI);
+	inivector(v);
 	while (L <> nil) do begin
-		cantplatos:= cantplatos +1; 
+		cantplatos:= cantplatos + L^.data.cant_ingredientes;
 
 		//punto A
 		for i:=1 to L^.data.cant_ingredientes do begin 
 			if (L^.data.nombre_ingredientes = 'perejil') then  
-				armarlistaA(L,LP);
+				armarlistaA(L2,L^.data.precio, L^.data.nombre_ingredientes);
 		end;
 
 
 		//punto B
-		puntoB(v,max1,max2,c1,c2);
+		v[L^.data.categoria]:= v[L^.data.categoria] +1; 
 
 		//punto C
 		if (L^.data.cant_ingredientes > 5) then 
-			promedio:= L^.data.cant_ingredientes;
+			promedio:= promedio + 1;
 	L:= L^.sig;
 	end;
+	puntoB(v,max1,max2,c1,c2);
 	writeln('b) informar las dos categorias con mayor cantidad de platos ofrecidos: ', c1, c2);
 	writeln('c) informar el precio promedio de los platos con mas de 5 ingredientes:', promedio/cantplatos:2:0);
 end;
