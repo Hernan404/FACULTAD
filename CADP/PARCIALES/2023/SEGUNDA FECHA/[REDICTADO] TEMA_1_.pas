@@ -32,21 +32,15 @@ type
 		sig:lista;
 	end;
 	
-	resA = record 
-		numtotal: integer;
-		preciototal: real;
-	end;
-	
-	listaTotal = ^nodo2;
+	lista2 = ^nodo2;
 	nodo2 = record
-		data:resA;
-		sig:listaTotal;
+		numero:integer;
+		costo:real;
+		sig:lista2;
 	end;
 
 	vdias = array [dias] of integer;
-	vcate = array [categorias] of integer;
 	vprecio = array [categorias] of real;
-	
 	
 	
 procedure cargardatos(L:lista);
@@ -68,31 +62,25 @@ begin
 	// se dispone
 end;
 
-procedure inivectores (var vd:vdias; var vc:vcate; var vp:vprecio);
+procedure inivectores (var vd:vdias);
 var 
 	i:integer;
 begin 
 	for i:=1 to 31 do 
 		vd[i]:= 0;
-		
-	for i:=1 to 4 do 
-		vc[i]:= 0;
-	
-	// aqui va el vector vprecio que se dispone
-	
-end;
+end; 
 
-procedure armarlista2(var pri:listaTotal; ra:resA);
+procedure armarlista2(var pri:lista2; numero:integer; precio:real);
 var 
-    ant, nue, act: listaTotal;
+    ant, nue, act: lista2;
 begin
     new (nue);
-    nue^.data.numtotal:= ra.numtotal;
-    nue^.data.preciototal:= ra.preciototal;
+    nue^.data.numero:= numero;
+    nue^.data.precioTotal:= precio;
     act := pri;
     ant := pri;
     {Recorro mientras no se termine la lista y no encuentro la posición correcta}
-    while (act<>NIL) and (act^.data.numtotal < ra.numtotal) do //De menor a mayor
+    while (act<>NIL) and (act^.data.numero < numero) do //De menor a mayor
     begin
         ant := act;
         act := act^.sig ;
@@ -122,7 +110,7 @@ begin
 			d2:= d1;
 			max1:= vd[i];
 		end
-		else if (max1 > max2) then begin 
+		else if (v[i] > max2) then begin 
 				max2:= vd[i];
 				d2:= i;
 		end;
@@ -139,28 +127,31 @@ begin
 	
 	inivectores(vd,vc,vp);
 	while (L <> nil) do begin 
-		//calculo precios
+		numeroACT:= L^.data.numero;
+		tiempo:= 0;
+		precio:= 0; 
+
 		tiempo:= L^.data.hora_fin - L^.data.hora_inicio;
 		precio:= vc[L^.data.categoria] * tiempo;
-		
+
 		//punto A
-		puntoA(L2,ra,L^.data,precio);
+		armarlista2(L2,L^.data.numero,precio);
 		
 		cant:= cant +1;
 		
 		//punto B
-		vd[L^.data.dia]:= vd[L^.data.dia] + 1; 
-		if ((L^.data.DNI mod 2 = 0) then 
-			puntoB(max1,max2,d1,d2,vd);
-		
+		if ((L^.data.DNI mod 2 = 0)) then 
+			vd[L^.data.dia]:= vd[L^.data.dia] + 1; 
+
 		//punto C
 		if (L^.data.hora_inicio < 12) and (L^.data.dia <= 15) then 
 			porcentaje:= porcentaje +1;
 	
-	L:= L^.sig;
 	end;
+	puntoB(max1,max2,d1,d2,vd);
+
 	writeln('punto B ', d1 ,' y ', d2);
-	writeln('punto C ', (cant/porcentaje)*100:2:0);
+	writeln('punto C ', (porcentaje/cant)*100:2:0);
 end;
 	
 //codigo principal 
