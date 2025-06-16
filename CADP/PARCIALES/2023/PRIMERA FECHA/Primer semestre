@@ -1,0 +1,7 @@
+{una empresa de ventas de pasajeros en colectivo esta analizando la informacion de los viajes realizados a mar del plata en el ultimo año. para ello se dispone de una estructura de datos con la informacion de todos los viajes realizados. de cada viaje se conoce el codigo de viaje, el numero de coche (entre 1000 y 2500), el mes en que se realizo el viaje, la cnatida de pasajes vendidos y el dni del chofer. la informacion no se encuentra ordenada por ningun criterio.
+ademas la empresa dispone de una estructura de datos con informacion sobre la capiacidad maxima de cada coche;
+
+realizar un programa que procese la infromacion  de los viajes e: 
+A. informar el numero de coche con le cual se realizaron mas viajes.
+B. genere una lista con los viajes realizados en el mes 2 por un chofer con DNI multiplo de 10 donde la cantidad de pasajes vendidos no alcanza la capacidad maxima del coche;
+C. para cada coche, informe el promedio de pasajeros que viajaron entre todos sus viajes.}
