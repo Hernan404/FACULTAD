@@ -3,9 +3,9 @@ PASOS EN UN PARCIAL
 - Reconocer fuentes de inforamacion: se lee, esto se dispone, se obtiene esta estructura.
 - Seleccionar estruturas de datos: Vector, registro, lista
 - Diseñar estrategias para resolver el problema
-  => Leo y cargo, luego proceso todo en una sola pasada
-  => recorro una estructura para generar otra
-  => hago corte de control?
-  => luego de procesar todos los datos tengo que volver a recorrer la estructura?
-  => que imprimo? en que momento se imprime cada resultado?
-  => que me conviene modularizar?
+- Leo y cargo, luego proceso todo en una sola pasada
+- recorro una estructura para generar otra
+- hago corte de control?
+- luego de procesar todos los datos tengo que volver a recorrer la estructura?
+- que imprimo? en que momento se imprime cada resultado?
+- que me conviene modularizar?
