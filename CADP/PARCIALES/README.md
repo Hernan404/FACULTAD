@@ -1,6 +1,6 @@
 PASOS EN UN PARCIAL
 - Identificar "Objetos de informacion" del problema
-- Reconocer fuentes de inforamacion: se lee, esto se dispone, se obtiene esta estructura.
+- Reconocer fuentes de informacion: se lee, esto se dispone, se obtiene esta estructura.
 - Seleccionar estruturas de datos: Vector, registro, lista
 - Diseñar estrategias para resolver el problema
 - Leo y cargo, luego proceso todo en una sola pasada
